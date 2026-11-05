@@ -1,0 +1,52 @@
+# =========================================================
+# Byte-compiled / Python cache
+# =========================================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================================================
+# Virtual environments
+# =========================================================
+.venv/
+venv/
+env/
+ENV/
+
+# =========================================================
+# macOS system files
+# =========================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# =========================================================
+# LaTeX auxiliary and build files
+# =========================================================
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.vrb
+
+# =========================================================
+# GitHub 100MB file limit protection (Large Raw Datasets)
+# =========================================================
+# Raw FAA aircraft registry master dumps (>100MB)
+data/d7_faa_aircraft/MASTER.txt
+data/d7_faa_aircraft/DEREG.txt
+*.zip
+*.tar.gz
