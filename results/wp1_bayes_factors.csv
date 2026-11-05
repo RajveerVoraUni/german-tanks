@@ -1,0 +1,21 @@
+k,L_mult,L_val,detection_prob,metric_type,median_log_bf
+5,0.5,11030,0.974,Power (1 - Type II error),0.21576646852171813
+5,0.9,19854,0.568,Power (1 - Type II error),0.3364632302163311
+5,1.0,22061,0.25,False Alarm Rate (Type I error),0.3987913837521471
+5,1.1,24267,0.0,False Alarm Rate (Type I error),0.2103142930239303
+10,0.5,11030,1.0,Power (1 - Type II error),100.0
+10,0.9,19854,0.716,Power (1 - Type II error),0.23184785479715994
+10,1.0,22061,0.234,False Alarm Rate (Type I error),0.31648041929208237
+10,1.1,24267,0.0,False Alarm Rate (Type I error),0.09391353514965423
+20,0.5,11030,1.0,Power (1 - Type II error),100.0
+20,0.9,19854,0.896,Power (1 - Type II error),0.29034677474022874
+20,1.0,22061,0.216,False Alarm Rate (Type I error),0.30022640358268887
+20,1.1,24267,0.0,False Alarm Rate (Type I error),0.028606350602605926
+50,0.5,11030,1.0,Power (1 - Type II error),100.0
+50,0.9,19854,0.992,Power (1 - Type II error),0.07134728326457125
+50,1.0,22061,0.192,False Alarm Rate (Type I error),0.26486928039557245
+50,1.1,24267,0.0,False Alarm Rate (Type I error),0.0015763585166779668
+100,0.5,11030,1.0,Power (1 - Type II error),100.0
+100,0.9,19854,1.0,Power (1 - Type II error),100.0
+100,1.0,22061,0.204,False Alarm Rate (Type I error),0.2696617639254744
+100,1.1,24267,0.0,False Alarm Rate (Type I error),1.2236335997949586e-05

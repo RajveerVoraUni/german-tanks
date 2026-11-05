@@ -1,0 +1,81 @@
+k,label_type,method,estimator,bias,rmse,coverage_95,mean_interval_width,log_score,crps
+5,raw_gapped,Frequentist UMVUE,UMVUE,23163.681,24344.523192979566,0.027,30924.332,,
+5,raw_gapped,Frequentist MLE,MLE (m),15627.0675,16827.458456656488,,,,
+5,raw_gapped,Bayes (Flat),Posterior Mean (SE loss),28188.423333333336,29391.258718552508,0.0275,40269.6525,9.484901944829678,5306.35788533381
+5,raw_gapped,Bayes (Flat),Posterior Median (Abs loss),22702.187,23876.00611105216,0.0275,52860.003,9.484901944829678,5306.35788533381
+5,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Mean (SE loss),24879.756476375034,26049.360970276368,0.027,30580.735,9.47945815384433,4175.39951918552
+5,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Median (Abs loss),21218.824,22395.291541192313,0.027,40142.5875,9.47945815384433,4175.39951918552
+5,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Mean (SE loss),26305.788372672992,27363.106002824425,0.0275,34891.088,9.483901864642434,5067.687043171056
+5,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Median (Abs loss),22483.7095,23633.46851059954,0.0275,42706.357,9.483901864642434,5067.687043171056
+5,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Mean (SE loss),15741.9587593112,16806.88074722454,0.0285,22.869,5.912009902475882,1.7676741520543338
+5,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Median (Abs loss),15741.324,16806.464814707466,0.0285,24.5505,5.912009902475882,1.7676741520543338
+5,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Mean (SE loss),15630.148444977947,16825.871529389005,0.0,2.6385,351.58957985394926,110.41011583015465
+5,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Median (Abs loss),15629.7185,16825.51229667317,0.0,3.0215,351.58957985394926,110.41011583015465
+5,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Mean (SE loss),22121.153129473754,22122.107866043298,0.0,749.461,,6272.071055638387
+5,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Median (Abs loss),22118.3605,22119.275691430314,0.0,755.3745,,6272.071055638387
+5,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Mean (SE loss),18433.100927259795,19410.526967761492,0.0275,8323.751,9.194969963805336,1407.659960666167
+5,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Median (Abs loss),17595.9585,18627.44741972179,0.028,10121.8755,9.194969963805336,1407.659960666167
+10,raw_gapped,Frequentist UMVUE,UMVUE,23282.469500000003,23616.631475747345,0.0,14397.1485,,
+10,raw_gapped,Frequentist MLE,MLE (m),19161.245,19496.28914219319,,,,
+10,raw_gapped,Bayes (Flat),Posterior Mean (SE loss),24312.900625,24647.707539481486,0.0,16276.908,,2423.981722923804
+10,raw_gapped,Bayes (Flat),Posterior Median (Abs loss),22460.5395,22794.395681230508,0.0,20762.7205,,2423.981722923804
+10,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Mean (SE loss),23740.112406348682,24074.499706329898,0.0,14395.775,,2168.8344774374573
+10,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Median (Abs loss),22119.0655,22452.86062666626,0.0,18282.9825,,2168.8344774374573
+10,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Mean (SE loss),24285.927715925052,24619.048027112036,0.0,16225.419,,2421.668293650082
+10,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Median (Abs loss),22458.4185,22792.119790565775,0.0,20649.362,,2421.668293650082
+10,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Mean (SE loss),19162.49559686783,19497.419721609145,0.0,4.6195,,0.4511485842529653
+10,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Median (Abs loss),19162.059,19497.007303994116,0.0,5.8175,,0.4511485842529653
+10,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Mean (SE loss),19161.616991660936,19496.64422911657,0.0,2.013,,0.07990376563656724
+10,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Median (Abs loss),19161.245,19496.28914219319,0.0,2.1555,,0.07990376563656724
+10,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Mean (SE loss),22204.221197543382,22206.26193529132,0.0,660.507,,2945.8552682231084
+10,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Median (Abs loss),22198.467,22200.438138086374,0.0,672.6225,,2945.8552682231084
+10,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Mean (SE loss),21263.85970528199,21567.784551724406,0.0,6306.791,,1049.9355293976384
+10,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Median (Abs loss),20616.464,20929.369220834153,0.0,7718.7775,,1049.9355293976384
+20,raw_gapped,Frequentist UMVUE,UMVUE,23170.265400000004,23264.97137019515,0.0,6959.839,,
+20,raw_gapped,Frequentist MLE,MLE (m),21017.348,21112.028684709578,,,,
+20,raw_gapped,Bayes (Flat),Posterior Mean (SE loss),23409.534,23504.268459261544,0.0,7354.7055,,1163.5094605557579
+20,raw_gapped,Bayes (Flat),Posterior Median (Abs loss),22617.056,22711.714804743388,0.0,9171.2375,,1163.5094605557579
+20,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Mean (SE loss),23283.626966302327,23378.345751014163,0.0,6958.829,,1103.828273575038
+20,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Median (Abs loss),22535.6595,22630.31322446731,0.0,8668.988,,1103.828273575038
+20,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Mean (SE loss),23409.52550013447,23504.259621588342,0.0,7354.6985,,1163.5090987099456
+20,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Median (Abs loss),22617.056,22711.714804743388,0.0,9171.237,,1163.5090987099456
+20,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Mean (SE loss),21018.40855755745,21113.072471692314,0.0,4.0985,,0.3608501760808519
+20,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Median (Abs loss),21017.9515,21112.598894937117,0.0,5.145,,0.3608501760808519
+20,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Mean (SE loss),21017.693483144776,21112.37029809054,0.0,2.0,,0.0707055365615081
+20,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Median (Abs loss),21017.348,21112.028684709578,0.0,2.02,,0.0707055365615081
+20,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Mean (SE loss),22310.93636326318,22313.93803041751,0.0,547.9655,,1211.5260550371465
+20,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Median (Abs loss),22301.708,22304.632441333797,0.0,567.471,,1211.5260550371465
+20,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Mean (SE loss),22459.31422862828,22550.035873637647,0.0,4344.437,,716.819401642514
+20,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Median (Abs loss),22009.573,22101.511729404396,0.0,5333.72,,716.819401642514
+50,raw_gapped,Frequentist UMVUE,UMVUE,23191.994730000006,23207.731506593398,0.0,2738.4225,,
+50,raw_gapped,Frequentist MLE,MLE (m),22305.6615,22321.388021727053,,,,
+50,raw_gapped,Bayes (Flat),Posterior Mean (SE loss),23228.946114583334,23244.68354947913,0.0,2795.021,,456.6306691254396
+50,raw_gapped,Bayes (Flat),Posterior Median (Abs loss),22936.8595,22952.591865201193,0.0,3444.054,,456.6306691254396
+50,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Mean (SE loss),23210.103171693838,23225.840261717407,0.0,2737.4215,,447.4005643815362
+50,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Median (Abs loss),22924.164,22939.896059485534,0.0,3372.813,,447.4005643815362
+50,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Mean (SE loss),23228.94611458337,23244.683549479163,0.0,2795.021,,456.6306691254396
+50,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Median (Abs loss),22936.8595,22952.591865201193,0.0,3444.054,,456.6306691254396
+50,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Mean (SE loss),22306.649687232253,22322.374008508847,0.0,4.0015,,0.3281592781853533
+50,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Median (Abs loss),22305.9155,22321.628813652915,0.0,5.0055,,0.3281592781853533
+50,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Mean (SE loss),22305.992093471876,22321.71805457555,0.0,2.0,,0.06580868079097504
+50,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Median (Abs loss),22305.6615,22321.388021727053,0.0,2.0,,0.06580868079097504
+50,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Mean (SE loss),22578.351115247253,22581.830797793024,0.0,313.6025,,223.12064483693376
+50,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Median (Abs loss),22563.9085,22567.382120939506,0.0,343.928,,223.12064483693376
+50,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Mean (SE loss),23046.843214036413,23062.404646473424,0.0,2233.3915,,368.3270963873881
+50,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Median (Abs loss),22815.608,22831.22083174704,0.0,2742.6085,,368.3270963873881
+100,raw_gapped,Frequentist UMVUE,UMVUE,23172.667494999998,23176.591317337254,0.0,1360.989,,
+100,raw_gapped,Frequentist MLE,MLE (m),22725.7995,22729.721636823888,,,,
+100,raw_gapped,Bayes (Flat),Posterior Mean (SE loss),23181.797454081632,23185.721316420106,0.0,1373.8975,,226.5906294421478
+100,raw_gapped,Bayes (Flat),Posterior Median (Abs loss),23039.6395,23043.562849904527,0.0,1686.903,,226.5906294421478
+100,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Mean (SE loss),23177.19131434828,23181.115155609983,0.0,1359.989,,224.31078004743293
+100,raw_gapped,Bayes (1/n (Scale-Inv)),Posterior Median (Abs loss),23036.5015,23040.425517066735,0.0,1669.6305,,224.31078004743293
+100,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Mean (SE loss),23181.797454081716,23185.72131642019,0.0,1373.8975,,226.5906294421478
+100,raw_gapped,Bayes (Truncated (Omega=100k)),Posterior Median (Abs loss),23039.6395,23043.562849904527,0.0,1686.903,,226.5906294421478
+100,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Mean (SE loss),22726.766207569413,22730.687828913382,0.0,4.0,,0.31860434592567494
+100,raw_gapped,Bayes (Poisson (mu=N_true)),Posterior Median (Abs loss),22725.8535,22729.772789328537,0.0,5.0,,0.31860434592567494
+100,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Mean (SE loss),22726.12533774181,22730.04734041373,0.0,2.0,,0.06428497936950188
+100,raw_gapped,Bayes (Poisson (mu=0.5*N_true)),Posterior Median (Abs loss),22725.7995,22729.721636823888,0.0,2.0,,0.06428497936950188
+100,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Mean (SE loss),22802.88029104636,22805.13639184131,0.0,178.2025,,47.57063403265206
+100,raw_gapped,Bayes (Poisson (mu=2.0*N_true)),Posterior Median (Abs loss),22788.4795,22790.77977892595,0.0,208.521,,47.57063403265206
+100,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Mean (SE loss),23133.262960078708,23137.173575300814,0.0,1226.1325,,202.73045750694686
+100,raw_gapped,Bayes (NegBin (mu=N_true)),Posterior Median (Abs loss),23006.7005,23010.614125822456,0.0,1503.8185,,202.73045750694686
