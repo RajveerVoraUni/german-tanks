@@ -45,12 +45,12 @@
 \setbeamercolor{background canvas}{bg=navybg}
 \begin{frame}[c,plain]
   \centering
-  {\Large \textbf{\color{white} Bayesian Inference on the German Tank Problem}}\\[0.3cm]
-  {\large \textbf{\color{white} Theoretical Foundations \& Modern Applications}}\\[0.2cm]
-  {\small \color{accentcyan} Decision Theory, Exploratory Data Analysis, and Statistical Monitoring}\\[0.8cm]
+  {\Large \textbf{\color{white} Bayesian Inference on the German Tank Problem}}\\[0.25cm]
+  {\large \textbf{\color{white} Theoretical Foundations \& Modern Applications}}\\[0.20cm]
+  {\small \color{accentcyan} Decision Theory, Exploratory Data Analysis, and Statistical Monitoring}\\[0.7cm]
   
-  {\normalsize \textbf{\color{white} Bayesian Inference Course Project}}\\[0.15cm]
-  {\footnotesize \color{white!75} Core Theoretical Foundations \& Applied Extensions}\\[0.1cm]
+  {\normalsize \textbf{\color{white} Bayesian Inference Course Project}}\\[0.12cm]
+  {\footnotesize \color{white!75} Core Theoretical Foundations \& Applied Extensions}\\[0.08cm]
   {\scriptsize \color{white!50} November 2026}
 \end{frame}
 }
@@ -58,47 +58,47 @@
 % =========================================================
 % Slide 2: Motivating Discrete Population Ceiling Inference
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Motivating Discrete Population Ceiling Inference}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Motivating Discrete Population Ceiling Inference}}\\[0.08cm]
     {\scriptsize \color{subgray} Sequential serial numbers provide the primary statistical discriminant for hidden capacity.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.31\textwidth}
-      {\small \textbf{\color{headernavy} 1. Espionage Bias}}\\[0.08cm]
-      {\scriptsize Conventional intelligence relied on prisoner interrogations and reconnaissance, overestimating capacity by \textbf{500\%} (1,400--1,800 units/mo).}
+      {\small \textbf{\color{headernavy} 1. Espionage Inflation}}\\[0.08cm]
+      {\scriptsize Conventional military intelligence relied on spy networks and prisoners, overstating production by a factor of \textbf{6--8$\times$} (1,000--1,550 tanks/mo).}
     \end{column}
     
     \begin{column}{0.31\textwidth}
       {\small \textbf{\color{headernavy} 2. Order Statistics}}\\[0.08cm]
-      {\scriptsize Statisticians analyzed sequential chassis and gearbox stamps $s_1, \dots, s_k$, estimating production at \textbf{250--350} units/mo.}
+      {\scriptsize Statisticians analyzed captured chassis and gearbox serials ($k \approx 5$--$50$), estimating production at \textbf{169--327} tanks/mo.}
     \end{column}
     
     \begin{column}{0.31\textwidth}
-      {\small \textbf{\color{headernavy} 3. Ground Truth}}\\[0.08cm]
-      {\scriptsize Post-war Albert Speer Ministry archives confirmed statistical estimates were accurate within \textbf{10\%} (276 units/mo).}
+      {\small \textbf{\color{headernavy} 3. Speer Truth}}\\[0.08cm]
+      {\scriptsize Post-war Albert Speer Ministry ledgers confirmed estimates rapidly converged within \textbf{5\%--10\%} of actual production numbers.}
     \end{column}
   \end{columns}
   
-  \vspace{0.3cm}
+  \vspace{0.25cm}
   \begin{center}
     \resizebox{0.82\textwidth}{!}{
     \begin{tabular}{lcccc}
       \toprule
       \textbf{Production Month} & \textbf{Conventional Spy Est.} & \textbf{Statistical Est. ($\hat{N}$)} & \textbf{Speer Ministry True ($N$)} & \textbf{Statistical Error} \\
       \midrule
-      June 1940   & 1,000 & \textbf{169} & 122 & $+38.5\%$ \\
-      June 1941   & 1,550 & \textbf{244} & 271 & $\mathbf{-9.9\%}$ \\
-      August 1942 & 1,550 & \textbf{327} & 342 & $\mathbf{-4.4\%}$ \\
+      June 1940 (Early Marks)   & 1,000 & \textbf{169} & 122 & $+38.5\%$ \\
+      June 1941 (Panzer III/IV) & 1,550 & \textbf{244} & 271 & $\mathbf{-9.9\%}$ \\
+      August 1942 (Panzer III/IV) & 1,550 & \textbf{327} & 342 & $\mathbf{-4.4\%}$ \\
       \bottomrule
     \end{tabular}}
   \end{center}
   
   \vspace{0.15cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Empirical Takeaway: } \textit{Statistical order statistics eliminated 80\% error from conventional military intelligence.}}
+    {\footnotesize \textbf{\color{headernavy} Empirical Takeaway: } \textit{Discrete order statistics eliminated massive intelligence bias, converging to within 4.4\% error.}}
   \end{center}
 \end{frame}
 
@@ -118,34 +118,34 @@
 % =========================================================
 % Slide 4: Exploratory Data Analysis
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Exploratory Data Analysis: Real-World Invoices vs.\ WWII Tanks}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Exploratory Data Analysis: Real-World Invoices vs.\ WWII Tanks}}\\[0.08cm]
     {\scriptsize \color{subgray} Examining temporal progression, 51.2\% missing integer voids, and ECDF gap departure.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.54\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/eda_serial_distributions.png}
+      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/eda_serial_distributions.png}
     \end{column}
     
     \begin{column}{0.44\textwidth}
-      {\small \textbf{\color{accentred} 51.2\% Missing Voids}}\\[0.04cm]
-      {\scriptsize 22,061 invoices span 45,223 slots ($s_{\min}=536365, s_{\max}=581587$), leaving 23,162 unrecorded integer voids.}\\[0.2cm]
+      {\small \textbf{\color{accentred} 51.2\% Address Voids}}\\[0.04cm]
+      {\scriptsize 22,061 invoices span 45,223 integer slots ($s_{\min}=536365, s_{\max}=581587$), leaving 23,162 unrecorded integer voids.}\\[0.18cm]
       
       {\small \textbf{\color{accentblue} Long-Tailed Gap Sizes}}\\[0.04cm]
-      {\scriptsize Median gap $\Delta s = 1.0$, mean $2.05$, max $76$; cancelled carts and billing blocks create heavy-tailed voids.}\\[0.2cm]
+      {\scriptsize Median gap $\Delta s = 1.0$, mean $2.05$, max $76$; credit cancellations (C-prefix) and cart drops create void blocks.}\\[0.18cm]
       
-      {\small \textbf{\color{accentgreen} ECDF Uniform Divergence}}\\[0.04cm]
-      {\scriptsize Departure from linearity $F(x)=x$ breaks naive continuous estimators, requiring rank re-indexing.}
+      {\small \textbf{\color{accentgreen} Empirical Uniformity}}\\[0.04cm]
+      {\scriptsize ECDF tracks diagonal uniform CDF ($D = 0.012$); random voids preserve order uniformity. Thinning resolves estimands.}
     \end{column}
   \end{columns}
   
   \vspace{0.15cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Key EDA Finding: } \textit{Commercial serials arrive monotonically, but missing void blocks break naive contiguous estimators.}}
+    {\footnotesize \textbf{\color{headernavy} Key EDA Finding: } \textit{Serials arrive monotonically; integer voids represent cancelled transactions, preserving order uniformity.}}
   \end{center}
 \end{frame}
 
@@ -157,92 +157,87 @@
 \begin{frame}[c,plain]
   \centering
   {\scriptsize \textbf{\color{accentcyan} SECTION 02}}\\[0.25cm]
-  {\LARGE \textbf{\color{white} Mathematical Foundations \& Exact Bayesian Inference}}\\[0.35cm]
-  {\small \color{white!70} Likelihood sufficiency, combinatorial summation, and closed-form discrete posteriors}
+  {\LARGE \textbf{\color{white} Mathematical Foundations \& Bayesian Formulations}}\\[0.35cm]
+  {\small \color{white!70} Sufficiency, loss geometries, boundary admissibility, and exact reference posteriors}
 \end{frame}
 }
 
 % =========================================================
-% Slide 6: Sufficient Statistics & Exact Posteriors
+% Slide 6: Minimal Sufficiency & Exact Posteriors
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Sufficient Statistics \& Exact Discrete Posteriors}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Sufficient Statistics \& Exact Discrete Posteriors}}\\[0.08cm]
     {\scriptsize \color{subgray} Sample maximum $m = \max s_i$ is minimal sufficient; lower order statistics are ancillary.}
   \end{center}
-  \vspace{0.15cm}
-  
-  \begin{center}
-    \colorbox{cardbg}{%
-      \parbox{0.92\linewidth}{%
-        \centering \scriptsize
-        \textbf{Minimal Sufficient Likelihood:} \quad
-        $P(M = m \mid N, k) = \frac{\binom{m-1}{k-1}}{\binom{N}{k}}, \quad m \in \{k, \dots, N\}$
-      }%
-    }
-  \end{center}
-  \vspace{0.05cm}
+  \vspace{0.30cm}
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentblue} Reference Flat Prior $\pi(N) \propto 1$}}\\[0.08cm]
-      \scriptsize
+      {\small \textbf{\color{headernavy} Minimal Sufficiency \& Completeness}}\\[0.08cm]
+      {\scriptsize Ordered likelihood factorizes cleanly via Lehmann-Scheff{\'e}:
+      \begin{equation*}
+        P(\mathbf{s} \mid N, k) = \frac{1}{\binom{N}{k}} \mathbb{I}(N \ge m), \quad m = \max_{1 \le i \le k} s_i
+      \end{equation*}
       \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{Exact Posterior ($n \ge m$):} \ $P(N = n \mid m, k) = \frac{k-1}{k}\frac{\binom{m-1}{k-1}}{\binom{n}{k}}$
-        \item \textbf{Expectation ($k \ge 3$):} \ $\mathbb{E}[N \mid m, k] = \frac{(k-1)(m-1)}{k-2}$
-        \item \textbf{Variance ($k \ge 4$):} \ $\text{Var}(N \mid m, k) = \frac{(k-1)(m-1)(m-k+1)}{(k-2)^2(k-3)}$
-        \item \textbf{Propriety:} Proper for all $k \ge 2$; improper for $k=1$.
-      \end{itemize}
+        \setlength{\itemsep}{0.06cm}
+        \item Likelihood ratio test proves $m$ is \textbf{minimal sufficient} and \textbf{complete}.
+        \item Spacings $(s_{(1)}, \dots, s_{(k-1)})$ given $m$ are ancillary for $N$.
+        \item Sampling without replacement reduces variance by finite-population correction $\frac{N-k}{N}$.
+      \end{itemize}}
     \end{column}
     
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentred} Scale-Invariant Prior $\pi(N) \propto 1/N$}}\\[0.08cm]
-      \scriptsize
+      {\small \textbf{\color{headernavy} Reference Discrete Posteriors}}\\[0.08cm]
+      {\scriptsize Exact posterior probability mass function for $n \ge m$:
+      \begin{equation*}
+        P(N = n \mid m, k) = \frac{\binom{n}{k}^{-1} \pi(n)}{\sum_{j=m}^\infty \binom{j}{k}^{-1} \pi(j)}
+      \end{equation*}
       \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{Haar Invariance:} Invariant under scale changes $s \mapsto cs$.
-        \item \textbf{Pareto Approximation:} \ $p(N \mid m, k) \approx \frac{k m^k}{N^{k+1}}$ for $N \ge m$.
-        \item \textbf{Expectation ($k \ge 2$):} \ $\mathbb{E}[N \mid m, k] \approx \frac{k}{k-1}m$, \quad $\text{Med} = 2^{1/k}m$.
-        \item \textbf{Propriety for $k=1$:} Proper even for a single observation.
-      \end{itemize}
+        \setlength{\itemsep}{0.06cm}
+        \item \textbf{Flat Prior ($\pi \propto 1$):} Proper for $k \ge 2$:
+        \begin{equation*}
+          P(N = n \mid m, k) = \frac{k - 1}{k} \frac{\binom{m-1}{k-1}}{\binom{n}{k}}, \quad n \ge m
+        \end{equation*}
+        \item \textbf{Reciprocal Prior ($\pi \propto 1/N$):} Scale-invariant Haar measure; proper for $k \ge 1$; Pareto limit: $p(N) \approx k m^k / N^{k+1}$.
+      \end{itemize}}
     \end{column}
   \end{columns}
   
-  \vspace{0.2cm}
+  \vspace{0.18cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Physical Support Advantage: } \textit{Bayesian posteriors strictly enforce $P(N < m) = 0$, eliminating frequentist boundary leakage.}}
+    {\footnotesize \textbf{\color{headernavy} Theoretical Core: } \textit{Sample maximum $m$ captures all sample information; reciprocal prior yields scale-invariant inference.}}
   \end{center}
 \end{frame}
 
 % =========================================================
 % Slide 7: Bayesian Decision Theory Across Loss Functions
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Bayesian Decision Theory Across Loss Functions}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Bayesian Decision Theory Across Loss Functions}}\\[0.08cm]
     {\scriptsize \color{subgray} Point estimators shift systematically with the decision-maker's loss geometry.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.52\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/expert_loss_functions.png}
+      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/expert_loss_functions.png}
     \end{column}
     
     \begin{column}{0.46\textwidth}
       {\small \textbf{\color{accentred} 0--1 Loss (MAP Estimator)}}\\[0.03cm]
-      {\scriptsize Mode $\hat{N}_{\text{MAP}} = m = 100$. Maximizes boundary point mass, but causes severe downward bias ($-16.7\%$ at $k=5$).}\\[0.15cm]
+      {\scriptsize Mode $\hat{N}_{\text{MAP}} = m = 100$. Maximizes boundary point mass, but causes severe downward bias ($-16.7\%$ at $k=5$).}\\[0.14cm]
       
       {\small \textbf{\color{accentgreen} $L_1$ Absolute Loss (Median)}}\\[0.03cm]
-      {\scriptsize $\hat{N}_{\text{med}} \approx m \cdot 2^{1/(k-1)} = 118$. Optimal median minimizes absolute error with only $-0.9\%$ bias.}\\[0.15cm]
+      {\scriptsize $\hat{N}_{\text{med}} \approx m \cdot 2^{1/(k-1)} = 118$. Optimal median minimizes absolute error with only $-0.9\%$ bias.}\\[0.14cm]
       
       {\small \textbf{\color{accentblue} $L_2$ Squared Loss (Mean)}}\\[0.03cm]
-      {\scriptsize $\hat{N}_{\text{mean}} = \frac{(k-1)(m-1)}{k-2} = 132.0$. Skewed Pareto tail pulls expectation rightward.}\\[0.15cm]
+      {\scriptsize $\hat{N}_{\text{mean}} = \frac{(k-1)(m-1)}{k-2} = 132.0$. Skewed Pareto tail pulls expectation rightward.}\\[0.14cm]
       
       {\small \textbf{\color{headernavy} Check Loss $L_q$ ($q=0.90$)}}\\[0.03cm]
-      {\scriptsize Underestimation penalized $9\times$ more heavily $\implies \hat{N}_{0.90} = 171$, adding a principled \textbf{+48\% defense safety margin}.}
+      {\scriptsize Underestimation penalized $9\times$ more heavily $\implies \hat{N}_{0.90} = 175$, adding a principled \textbf{+75\% defensive safety margin}.}
     \end{column}
   \end{columns}
   
@@ -255,28 +250,28 @@
 % =========================================================
 % Slide 8: Physical Boundary Admissibility & Coverage Matching
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Physical Boundary Admissibility: Wald vs.\ Bayesian HPD}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Physical Boundary Admissibility: Wald vs.\ Bayesian HPD}}\\[0.08cm]
     {\scriptsize \color{subgray} Asymptotic Gaussian intervals assign probability mass to physically impossible values.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.52\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/expert_boundary_wald_vs_bayes.png}
+      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/expert_boundary_wald_vs_bayes.png}
     \end{column}
     
     \begin{column}{0.46\textwidth}
-      {\small \textbf{\color{accentred} Frequentist Wald Collapse}}\\[0.03cm]
-      {\scriptsize Wald interval $\hat{N} \pm 1.96 \cdot \text{SE}$ yields $[24.7, 93.3]$ for $m=50, k=5$. It places \textbf{30.8\% impossible mass} on $N < m=50$.}\\[0.18cm]
+      {\small \textbf{\color{accentred} Frequentist Wald Boundary Collapse}}\\[0.03cm]
+      {\scriptsize Wald interval $\hat{N} \pm 1.96 \cdot \text{SE}$ yields $[40.1, 77.9]$ for $m=50, k=5$. It places \textbf{17.5\% impossible mass} on $N < m=50$.}\\[0.14cm]
       
-      {\small \textbf{\color{accentblue} Exact Bayesian Admissibility}}\\[0.03cm]
-      {\scriptsize Bayesian posterior is strictly supported on $n \ge m$, assigning zero probability to impossible population sizes.}\\[0.18cm]
+      {\small \textbf{\color{accentgreen} Exact Frequentist Pivotal CI}}\\[0.03cm]
+      {\scriptsize Exact pivotal interval $[m, m \cdot \alpha^{-1/k}] = [50.0, 91.0]$ respects the boundary and achieves exact 95\% coverage.}\\[0.14cm]
       
-      {\small \textbf{\color{accentgreen} Exact Calibration Matching}}\\[0.03cm]
-      {\scriptsize Despite truncating the lower tail, Bayesian 95\% HPD achieves exact \textbf{95.1\% frequentist coverage} under reference priors.}
+      {\small \textbf{\color{accentblue} Bayesian Credible Coherence}}\\[0.03cm]
+      {\scriptsize Reciprocal prior 95\% credible interval matches $[50.0, 91.0]$ exactly, while providing the full posterior for risk optimization.}
     \end{column}
   \end{columns}
   
@@ -289,330 +284,281 @@
 % =========================================================
 % Slide 9: Posterior Propriety, Moments & Non-Uniform Deployment
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Propriety, Moments \& Non-Uniform Deployment Tilt}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Propriety, Moments \& Non-Uniform Deployment Tilt}}\\[0.08cm]
     {\scriptsize \color{subgray} Evaluating convergence thresholds and the impact of front-line combat deployment.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.50\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/expert_deployment_tilt.png}
+      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/expert_deployment_tilt.png}
     \end{column}
     
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{headernavy} Moment Existence Boundaries}}\\[0.03cm]
-      \scriptsize
+      {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.06cm}
         \item \textbf{$k = 1$:} Flat improper ($\sum 1/N = \infty$); Reciprocal proper ($\mathcal{O}(N^{-2})$).
         \item \textbf{$k = 2$:} Proper; mean exists under reciprocal, diverges under flat.
         \item \textbf{$k = 3$:} Mean exists for both ($\mathbb{E}=\frac{(k-1)(m-1)}{k-2}$); variance diverges under flat.
         \item \textbf{$k \ge 4$:} Both mean and variance exist in closed form.
-      \end{itemize}
+      \end{itemize}}
       
-      \vspace{0.12cm}
+      \vspace{0.10cm}
       {\small \textbf{\color{accentred} Combat Deployment Tilt ($w(s) \propto s^\gamma$)}}\\[0.03cm]
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.06cm}
-        \item $\gamma = 1.0$ (newer tanks rushed to front): sample max is pulled upward $\implies +2.41\%$ estimation bias.
-        \item $\gamma = -0.5$ (aging fleet over-represented) $\implies -4.65\%$ bias.
-        \item When $\gamma \ne 0$, $m$ is no longer sufficient; lower order statistics $(s_{(1)}, \dots, s_{(k-1)})$ identify $\gamma$.
+        \item $\gamma > 0$ (newer tanks deployed first) pushes $m \to N$, inducing $+2.41\%$ bias.
+        \item $\gamma < 0$ (survivorship bias) produces $-4.65\%$ negative bias.
+        \item When $\gamma \ne 0$, $m$ is \textbf{no longer sufficient}; spacings identify $\gamma$.
       \end{itemize}}
     \end{column}
   \end{columns}
   
   \vspace{0.15cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Theoretical Rigor: } \textit{Scale-invariant priors guarantee posterior propriety; lower order statistics reveal capture heterogeneity.}}
+    {\footnotesize \textbf{\color{headernavy} Key Insight: } \textit{Non-uniform capture breaks single-statistic sufficiency, requiring full-sample MCMC inference.}}
   \end{center}
 \end{frame}
 
 % =========================================================
-% Slide 10: Estimator Bias vs Sample Size k
+% Slide 10: Section 03 Divider (Deep Navy)
 % =========================================================
-\begin{frame}
+{
+\setbeamercolor{background canvas}{bg=navybg}
+\begin{frame}[c,plain]
+  \centering
+  {\scriptsize \textbf{\color{accentcyan} SECTION 03}}\\[0.25cm]
+  {\LARGE \textbf{\color{white} Core Empirical Validation \& Monte Carlo Diagnostics}}\\[0.35cm]
+  {\small \color{white!70} Multi-estimator calibration, scoring rules, informative prior risks, and integer voids}
+\end{frame}
+}
+
+% =========================================================
+% Slide 11: Estimator Bias Convergence
+% =========================================================
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Estimator Bias: Finite-Sample Shrinkage vs.\ Unbiasedness}}\\[0.06cm]
-    {\scriptsize \color{subgray} Evaluating mean bias convergence across $R = 2,000$ replications ($N_{\mathrm{true}} = 22,061$).}
+    {\large \textbf{\color{headernavy} Estimator Bias: Finite-Sample Shrinkage vs.\ Unbiasedness}}\\[0.08cm]
+    {\scriptsize \color{subgray} Evaluating mean bias convergence across $R = 4,000$ replications ($N_{\mathrm{true}} = 20,000$).}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[c,onlytextwidth]
-    \begin{column}{0.52\textwidth}
+    \begin{column}{0.54\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/benchmark_bias.png}
+      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/benchmark_bias.png}
     \end{column}
     
-    \begin{column}{0.46\textwidth}
-      {\small \textbf{\color{accentblue} UMVUE Unbiasedness}}\\[0.03cm]
-      {\scriptsize Strictly unbiased by Lehmann--Scheff{\'e} construction: bias is $-45.5$ at $k=5$, $+35.9$ at $k=10$, and $+0.2$ at $k=50$.}\\[0.15cm]
+    \begin{column}{0.44\textwidth}
+      {\small \textbf{\color{accentgreen} UMVUE Exact Unbiasedness}}\\[0.03cm]
+      {\scriptsize $\hat{N} = m(1 + 1/k) - 1$ exhibits near-zero bias across all $k$ ($-48.0 \pm 54.6$ at $k=5$, $+1.6 \pm 6.1$ at $k=50$).}\\[0.14cm]
       
-      {\small \textbf{\color{accentgreen} Scale-Invariant Reciprocal ($1/N$)}}\\[0.03cm]
-      {\scriptsize Minimal small-sample bias: posterior mean exhibits slight positive shrinkage ($+866.3$ at $k=5$), while posterior median achieves $-986.7$ bias.}\\[0.15cm]
+      {\small \textbf{\color{accentblue} Bayes Reciprocal Minimal Bias}}\\[0.03cm]
+      {\scriptsize Scale-invariant reciprocal prior exhibits modest bias ($+784.3$ mean, $-900.0$ median at $k=5$), rapidly decaying to $+10.6$ at $k=50$.}\\[0.14cm]
       
-      {\small \textbf{\color{accentred} Informative Prior Misspecification}}\\[0.03cm]
-      {\scriptsize When prior mean is set to half the true ceiling ($\mu = 0.5 N_{\mathrm{true}}$), bias is severe and non-vanishing: $\mathbf{-3,646.2}$ ($k=5$) to $\mathbf{-8,421.3}$ ($k=50$).}
+      {\small \textbf{\color{accentred} Flat Prior Tail Inflation}}\\[0.03cm]
+      {\scriptsize Heavy Pareto tail inflates posterior mean by $+2,168.6$ at $k=5$, while posterior median reduces bias to $-226.5$.}
     \end{column}
   \end{columns}
   
   \vspace{0.15cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Bias Takeaway: } \textit{Reciprocal prior converges rapidly to zero bias, avoiding the catastrophic shrinkage of misspecified priors.}}
+    {\footnotesize \textbf{\color{headernavy} Bias Takeaway: } \textit{Posterior median provides the lowest absolute bias, while UMVUE achieves exact frequentist mean-unbiasedness.}}
   \end{center}
 \end{frame}
 
 % =========================================================
-% Slide 11: Estimator RMSE & Variance Contraction
+% Slide 12: Estimator RMSE & Variance Contraction
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Estimator RMSE \& Variance Contraction Rates}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Estimator RMSE \& Variance Contraction Rates}}\\[0.08cm]
     {\scriptsize \color{subgray} Root Mean Squared Error scales as $\mathcal{O}(1/k)$, dropping over an order of magnitude.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[c,onlytextwidth]
-    \begin{column}{0.52\textwidth}
+    \begin{column}{0.54\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/benchmark_rmse.png}
+      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/benchmark_rmse.png}
     \end{column}
     
-    \begin{column}{0.46\textwidth}
-      {\small \textbf{\color{headernavy} $\mathcal{O}(1/k)$ Error Contraction}}\\[0.03cm]
-      {\scriptsize Both UMVUE and Bayesian estimators exhibit inverse-linear error scaling:
-      \begin{itemize}
-        \setlength{\itemsep}{0.04cm}
-        \item $k = 5$: $\text{RMSE} = 3,685$ ($16.7\%$ relative error)
-        \item $k = 10$: $\text{RMSE} = 1,955$ ($8.9\%$ relative error)
-        \item $k = 50$: $\text{RMSE} = 404$ ($1.8\%$ relative error)
-        \item $k = 100$: $\text{RMSE} = 199$ ($0.9\%$ relative error)
-      \end{itemize}}
+    \begin{column}{0.44\textwidth}
+      {\small \textbf{\color{accentgreen} Theory vs.\ Empirical Concordance}}\\[0.03cm]
+      {\scriptsize At $k=5$, theoretical UMVUE standard deviation is $3,380.3$; empirical simulation matches at $3,455.2$. At $k=50$, drops to $386.8$ (Th: $391.7$).}\\[0.14cm]
       
-      \vspace{0.12cm}
-      {\small \textbf{\color{accentgreen} Efficiency Parity}}\\[0.03cm]
-      {\scriptsize Bayes Reciprocal matches UMVUE root-mean-squared efficiency across every sample size ($3,932$ at $k=5 \to 404$ at $k=50$).}
+      {\small \textbf{\color{accentblue} Median RMSE Superiority}}\\[0.03cm]
+      {\scriptsize Posterior median under reciprocal prior achieves RMSE of $3,427.5$ at $k=5$, outperforming both mean ($3,683.3$) and flat prior ($4,409.0$).}\\[0.14cm]
+      
+      {\small \textbf{\color{headernavy} Asymptotic Convergence}}\\[0.03cm]
+      {\scriptsize For $k \ge 50$, all point estimators converge to identical efficiency ($\approx 387$).}
     \end{column}
   \end{columns}
   
   \vspace{0.15cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Efficiency Finding: } \textit{Every quadrupling of sample size contracts RMSE by half, achieving sub-1\% precision at $k=100$.}}
+    {\footnotesize \textbf{\color{headernavy} Efficiency Rule: } \textit{For small samples ($k \le 10$), posterior medians outperform posterior means in total error.}}
   \end{center}
 \end{frame}
 
 % =========================================================
-% Slide 12: 95% HPD Coverage Calibration
+% Slide 13: 95% HPD Credible Calibration & Informative Trap
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} 95\% HPD Credible Calibration \& The Informative Trap}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} 95\% Credible Calibration \& The Informative Trap}}\\[0.08cm]
     {\scriptsize \color{subgray} Scale-invariant objective priors achieve exact 95\% coverage, while informative priors collapse.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.30cm}
   
   \begin{columns}[c,onlytextwidth]
-    \begin{column}{0.52\textwidth}
+    \begin{column}{0.54\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/benchmark_coverage.png}
+      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/benchmark_coverage.png}
     \end{column}
     
-    \begin{column}{0.46\textwidth}
-      {\small \textbf{\color{accentgreen} Objective Bayes Calibration}}\\[0.03cm]
-      {\scriptsize Both Flat and Reciprocal priors achieve exact frequentist coverage:
-      \begin{itemize}
-        \setlength{\itemsep}{0.04cm}
-        \item Bayes Reciprocal: \textbf{95.2\% at $k=5$}, \textbf{95.1\% at $k=50$}.
-        \item Bayes Flat: \textbf{95.1\% at $k=5$}, \textbf{95.0\% at $k=50$}.
-      \end{itemize}}
+    \begin{column}{0.44\textwidth}
+      {\small \textbf{\color{accentgreen} Perfect Reference Calibration}}\\[0.03cm]
+      {\scriptsize Reciprocal prior achieves \textbf{94.4\% $\pm$ 0.36\%} coverage at $k=5$ and \textbf{95.6\% $\pm$ 0.33\%} at $k=50$, matching exact nominal rates.}\\[0.14cm]
       
-      \vspace{0.15cm}
-      {\small \textbf{\color{accentred} The Informative Prior Collapse}}\\[0.03cm]
-      {\scriptsize When hyperparameter $\mu = 0.5 N_{\mathrm{true}}$ departs from the true scale:
-      \begin{itemize}
-        \setlength{\itemsep}{0.04cm}
-        \item Coverage \textbf{collapses to 0.1\% at $k=5$} and \textbf{0.45\% at $k=20$}.
-        \item Prior exerts overwhelming false shrinkage away from data.
-      \end{itemize}}
+      {\small \textbf{\color{accentred} Informative Misspecification Collapse}}\\[0.03cm]
+      {\scriptsize Fixed Poisson($\mu=10k$) has tiny $\text{CV} \approx 1\%$, collapsing 95\% coverage to \textbf{$< 1.0\%$} when true $N=20k$.}\\[0.14cm]
+      
+      {\small \textbf{\color{accentblue} Hyperprior Solution}}\\[0.03cm]
+      {\scriptsize Gamma-Poisson hierarchical hyperprior restores nominal coverage to \textbf{94.8\% $\pm$ 0.35\%}.}
     \end{column}
   \end{columns}
   
   \vspace{0.15cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Calibration Finding: } \textit{Scale-invariant objective Bayes guarantees nominal 95\% coverage without subjective scale risk.}}
-  \end{center}
-\end{frame}
-
-% =========================================================
-% Slide 13: Interval Width Contraction & Scoring Rules
-% =========================================================
-\begin{frame}
-  \begin{center}
-    {\large \textbf{\color{headernavy} Credible Interval Width \& Proper Scoring Rules}}\\[0.06cm]
-    {\scriptsize \color{subgray} Reciprocal prior produces strictly sharper intervals while maintaining perfect calibration.}
-  \end{center}
-  \vspace{0.2cm}
-  
-  \begin{columns}[c,onlytextwidth]
-    \begin{column}{0.52\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/benchmark_interval_width.png}
-    \end{column}
-    
-    \begin{column}{0.46\textwidth}
-      {\small \textbf{\color{accentblue} Interval Sharpness (Width)}}\\[0.03cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.04cm}
-        \item \textbf{$k=5$:} Reciprocal HPD width $= 15,048$ vs Flat width $= 20,398$. Reciprocal is \textbf{26.2\% sharper}!
-        \item \textbf{$k=10$:} Reciprocal width contracts to $7,014$.
-        \item \textbf{$k=50$:} Width contracts to $1,520$.
-      \end{itemize}}
-      
-      \vspace{0.15cm}
-      {\small \textbf{\color{headernavy} Scoring Rules (Log-Score \& CRPS)}}\\[0.03cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.04cm}
-        \item Log-score penalizes under-confidence and misspecification.
-        \item Reciprocal achieves optimal log-score ($9.40$ at $k=5 \to 6.42$ at $k=50$).
-        \item Misspecified Poisson log-score \textbf{explodes to 376.6}.
-      \end{itemize}}
-    \end{column}
-  \end{columns}
-  
-  \vspace{0.15cm}
-  \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Sharpness Finding: } \textit{Reciprocal prior produces strictly narrower intervals than flat prior without undercovering.}}
+    {\footnotesize \textbf{\color{headernavy} Calibration Finding: } \textit{Objective reference priors guarantee calibration; informative priors require hyperpriors to avoid catastrophic failure.}}
   \end{center}
 \end{frame}
 
 % =========================================================
 % Slide 14: Empirical Benchmark Leaderboard
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Monte Carlo Benchmark: Empirical Performance Leaderboard}}\\[0.06cm]
-    {\scriptsize \color{subgray} Comprehensive evaluation across $R = 2,000$ Monte Carlo replications on $N_{\mathrm{true}} = 20,000$.}
+    {\large \textbf{\color{headernavy} Monte Carlo Benchmark: Empirical Performance Leaderboard}}\\[0.08cm]
+    {\scriptsize \color{subgray} Comprehensive evaluation across $R = 4,000$ Monte Carlo replications on $N_{\mathrm{true}} = 20,000$ (Seed 42).}
   \end{center}
-  \vspace{0.15cm}
+  \vspace{0.25cm}
   
   \begin{center}
     \resizebox{0.92\linewidth}{!}{
-    \begin{tabular}{lcccccc}
+    \begin{tabular}{llccccc}
       \toprule
-      \textbf{Estimator / Prior} & \textbf{Sample $k$} & \textbf{Mean Bias} & \textbf{RMSE} & \textbf{95\% HPD Cov.} & \textbf{Mean Width} & \textbf{Log-Score} \\
+      \textbf{Estimator / Framework} & \textbf{Point Estimator} & \textbf{Sample $k$} & \textbf{Mean Bias $\pm$ SE} & \textbf{RMSE (Emp / Th)} & \textbf{95\% Cov $\pm$ SE} & \textbf{Mean Width} \\
       \midrule
-      UMVUE (Frequentist)      & 5  & $-1.8$    & 8,241.1 & 94.8\% (Wald) & 32,840 & --- \\
-      Bayes Flat (HPD)         & 5  & $+6,664.2$ & 14,812.5 & \textbf{95.1\%} & 36,419 & 9.42 \\
-      Bayes Reciprocal ($1/N$) & 5  & $\mathbf{-1.2}$ & \textbf{8,241.1} & \textbf{95.2\%} & \textbf{29,812} & \textbf{9.40} \\
-      Poisson ($\mu = 20k$)    & 5  & $+81.4$   & 4,210.6 & \textbf{96.4\%} & 16,104 & 5.91 \\
-      Poisson ($\mu = 10k$)    & 5  & $\mathbf{-8,421.3}$ & 8,912.4 & $\mathbf{0.45\%}$ & 3,114 & 323.9 \\
+      UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 5  & $-48.0 \pm 54.6$  & 3,455.2 / 3,380.3 & 90.0\% $\pm$ 0.47\% (Wald) & 13,219 \\
+      Exact Frequentist CI     & --- (Pivotal Bound)        & 5  & ---               & ---               & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
+      Bayes Flat Prior         & Posterior Mean             & 5  & $+2,168.6 \pm 69.7$& 4,409.0 / 4,363.9 & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
+      Bayes Flat Prior         & Posterior Median           & 5  & $-226.5 \pm 54.2$ & 3,431.3 / ---     & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
+      Bayes Reciprocal ($1/N$) & Posterior Mean             & 5  & $+784.3 \pm 58.2$ & 3,683.3 / 3,618.6 & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
+      Bayes Reciprocal ($1/N$) & Posterior Median           & 5  & $-900.0 \pm 54.2$ & 3,427.5 / ---     & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
       \midrule
-      UMVUE (Frequentist)      & 50 & $+0.2$    & 404.1   & 94.9\% & 1,570 & --- \\
-      Bayes Flat (HPD)         & 50 & $+408.1$  & 412.3   & \textbf{95.0\%} & 1,582 & 6.44 \\
-      Bayes Reciprocal ($1/N$) & 50 & $\mathbf{-0.4}$ & \textbf{404.1} & \textbf{95.1\%} & \textbf{1,520} & \textbf{6.42} \\
+      UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 50 & $+1.6 \pm 6.1$    & 386.8 / 391.7     & 95.0\% $\pm$ 0.34\% (Wald) & 1,536 \\
+      Exact Frequentist CI     & --- (Pivotal Bound)        & 50 & ---               & ---               & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
+      Bayes Reciprocal ($1/N$) & Posterior Mean             & 50 & $+10.6 \pm 6.1$   & 387.1 / 391.7     & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
+      Bayes Flat Prior         & Posterior Mean             & 50 & $+17.9 \pm 6.1$   & 387.5 / 391.7     & \textbf{95.8\%} $\pm$ 0.32\% & 1,236 \\
       \bottomrule
     \end{tabular}}
   \end{center}
-  \vspace{0.15cm}
+  \vspace{0.20cm}
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{accentgreen} Top Tabular Performer: Bayes Reciprocal}}\\[0.03cm]
-      {\scriptsize Matches UMVUE minimal bias and RMSE while strictly enforcing physical boundary admissibility ($P(N < m) = 0$).}
+      {\scriptsize Achieves lowest median RMSE ($3,427.5$), valid exact coverage ($94.4\%$), and strictly enforces physical admissibility ($P(N < m) = 0$).}
     \end{column}
     
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentred} Severe Penalty on Misspecification}}\\[0.03cm]
-      {\scriptsize Misspecified Poisson drops coverage to 0.45\% and inflates log-score to 323.9, proving the danger of ad-hoc fixed priors.}
+      {\small \textbf{\color{headernavy} Exact Pivotal Interval Concordance}}\\[0.03cm]
+      {\scriptsize Exact frequentist pivotal interval $[m, m \cdot \alpha^{-1/k}]$ achieves $94.4\% \pm 0.36\%$, matching the Bayesian reciprocal credible interval.}
     \end{column}
   \end{columns}
   
   \vspace{0.15cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Benchmark Takeaway: } \textit{Objective Bayes with reciprocal prior achieves the best balance of calibration, sharpness, and admissibility.}}
+    {\footnotesize \textbf{\color{headernavy} Benchmark Takeaway: } \textit{Objective Bayes with reciprocal prior achieves the optimal balance of calibration, sharpness, and admissibility.}}
   \end{center}
 \end{frame}
 
 % =========================================================
 % Slide 15: Critical Pitfalls & Resolutions
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Critical Methodological Pitfalls \& Resolutions}}\\[0.06cm]
-    {\scriptsize \color{subgray} Informative prior misspecification crashes coverage; rank re-indexing fixes integer voids.}
+    {\large \textbf{\color{headernavy} Critical Methodological Pitfalls \& Resolutions}}\\[0.08cm]
+    {\scriptsize \color{subgray} Informative prior misspecification crashes coverage; thinning models resolve integer voids.}
   \end{center}
-  \vspace{0.25cm}
+  \vspace{0.32cm}
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.47\textwidth}
-      {\small \textbf{\color{accentred} Pitfall 1: Informative Prior Trap}}\\[0.14cm]
+      {\small \textbf{\color{accentred} Pitfall 1: Dogmatic Informative Prior Trap}}\\[0.14cm]
       \scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.14cm}
-        \item \textbf{Ad-Hoc Tuning:} Introductory texts suggest setting fixed hyperparameters (e.g. $\mu = 1000$).
-        \item \textbf{Scale Mismatch:} When prior scale deviates by 50\% ($\mu = 0.5 N_{\text{true}}$), prior shrinks posteriors excessively.
-        \item \textbf{Coverage Collapse:} 95\% credible coverage \textbf{collapses to 0.45\%} ($k=20$), log-score explodes from $8.01$ to $323.9$.
-        \item \textbf{Remedy:} Use scale-invariant reference priors or hierarchical hyperpriors whenever domain scale is uncertain.
+        \item \textbf{Mean-Variance Coupling:} Single-parameter $\text{Poisson}(\mu)$ ties variance to mean ($\sigma = \sqrt{\mu} \approx 141$ for $\mu=20k$, $\text{CV} \approx 0.7\%$), behaving as a dogmatic spike.
+        \item \textbf{Scale Mismatch Collapse:} When prior scale deviates by 50\% ($\mu = 0.5 N_{\text{true}}$), 95\% credible coverage \textbf{collapses to $< 1.0\%$}.
+        \item \textbf{Principled Remedy:} Hierarchical Gamma-Poisson prior ($\mu \sim \text{Gamma}(\alpha, \beta)$) expands hyper-variance, restoring \textbf{94.8\%} coverage.
       \end{itemize}
     \end{column}
     \hfill
     \begin{column}{0.47\textwidth}
-      {\small \textbf{\color{accentblue} Pitfall 2: Real-World Integer Voids}}\\[0.14cm]
+      {\small \textbf{\color{accentblue} Pitfall 2: Address Spans vs.\ Transaction Counts}}\\[0.14cm]
       \scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.14cm}
-        \item \textbf{Missing Voids:} 22,061 retail invoices span 45,223 slots ($51.2\%$ unrecorded gap rate).
-        \item \textbf{Naive Rule Failure:} Estimating raw invoice keys yields $+23,162$ bias ($+105\%$ error) and \textbf{0.0\% coverage}.
-        \item \textbf{Rank Re-Indexing Solution:} Map observed sequential keys to contiguous ranks $\{1, \dots, 22061\}$:
-        \begin{itemize}
-          \setlength{\itemsep}{0.08cm}
-          \scriptsize
-          \item Bias drops from $+23,162 \to \mathbf{-4.2}$.
-          \item 95\% HPD coverage restored from $0.0\% \to \mathbf{95.2\%}$.
-        \end{itemize}
+        \item \textbf{Estimand Disambiguation:} 22,061 invoices span 45,223 slots ($51.2\%$ gap rate). Raw max estimates address capacity $N_{\text{span}}$, not transaction volume $N_{\text{count}}$.
+        \item \textbf{Oracle vs.\ Operational:} Rank re-indexing is a retrospective oracle (requires all valid keys). In field operations, all keys are unobserved.
+        \item \textbf{Bernoulli Thinning Solution:} Model voids via retention rate: $N_{\text{count}} \sim \text{Binomial}(N_{\text{span}}, \rho)$ with $\hat{\rho} \approx 0.488$, resolving both estimands simultaneously.
       \end{itemize}
     \end{column}
   \end{columns}
   
   \vspace{0.25cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Operational Rule: } \textit{Never fix informative hyperparameters without hyperpriors; always rank-reindex gapped sequential identifiers.}}
+    {\footnotesize \textbf{\color{headernavy} Operational Rule: } \textit{Never fix informative hyperparameters without hyperpriors; use thinning models to disambiguate address capacity from transaction counts.}}
   \end{center}
 \end{frame}
 
 % =========================================================
 % Slide 16: Decision Theory: Bayes Factors for Regulatory Caps
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Decision Theory: Bayes Factors for Regulatory Caps}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Decision Theory: Bayes Factors for Regulatory Caps}}\\[0.08cm]
     {\scriptsize \color{subgray} Testing regulatory treaty compliance and production limits: $H_0: N \le L$ vs. $H_1: N > L$.}
   \end{center}
-  \vspace{0.25cm}
+  \vspace{0.35cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.47\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/wp1_bayes_factors.png}
+      \includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{figures/wp1_bayes_factors.png}
       \vspace{0.05cm}
       {\scriptsize \textit{Bayes Factor Power Curve vs Certified Cap $L$}}
     \end{column}
     \hfill
     \begin{column}{0.49\textwidth}
-      {\small \textbf{\color{headernavy} Closed-Form Bayes Factor ($BF_{01}$)}}\\[0.08cm]
+      {\small \textbf{\color{headernavy} Closed-Form Bayes Factor ($BF_{01}$)}}\\[0.10cm]
       \resizebox{\linewidth}{!}{$
         \displaystyle BF_{01} = \frac{P(\mathcal{D} \mid H_0)}{P(\mathcal{D} \mid H_1)} = \frac{\sum_{n=m}^L \binom{n}{k}^{-1} \pi(n)}{\sum_{n=L+1}^\Omega \binom{n}{k}^{-1} \pi(n)} \cdot \frac{\pi(H_1)}{\pi(H_0)}
       $}
       
-      \vspace{0.12cm}
+      \vspace{0.14cm}
       \scriptsize
       \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
+        \setlength{\itemsep}{0.10cm}
         \item \textbf{Strict Enforcement:} When $m > L$, $H_0$ is physically impossible ($BF_{01} = 0$, infinite evidence for violation).
         \item \textbf{Detection Power:} Reaches 100\% violation detection power for $k \ge 10$ whenever true production exceeds cap by $\ge 10\%$.
         \item \textbf{Type I Control:} False alarm rate strictly bounded below $1.2\%$ across all sample sizes.
@@ -620,20 +566,20 @@
     \end{column}
   \end{columns}
   
-  \vspace{0.15cm}
+  \vspace{0.18cm}
   \begin{center}
     {\footnotesize \textbf{\color{headernavy} Hypothesis Testing: } \textit{Bayes factors eliminate arbitrary p-value thresholds, quantifying exact posterior betting odds for treaty compliance.}}
   \end{center}
 \end{frame}
 
 % =========================================================
-% Slide 17: Section 03 Divider (Deep Navy)
+% Slide 17: Section 04 Divider (Deep Navy)
 % =========================================================
 {
 \setbeamercolor{background canvas}{bg=navybg}
 \begin{frame}[c,plain]
   \centering
-  {\scriptsize \textbf{\color{accentcyan} SECTION 03}}\\[0.25cm]
+  {\scriptsize \textbf{\color{accentcyan} SECTION 04}}\\[0.25cm]
   {\LARGE \textbf{\color{white} Modern Applications Across 5 Domains}}\\[0.35cm]
   {\small \color{white!70} Extending the discrete population estimation framework to modern engineering and sciences}
 \end{frame}
@@ -642,40 +588,51 @@
 % =========================================================
 % Slide 18: Conceptual Architecture: 5 Modern Domains
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} From Battlefield Serials to Modern Data Science}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} From Battlefield Serials to Modern Data Science}}\\[0.08cm]
     {\scriptsize \color{subgray} A single core discrete inference principle translates directly across five modern domains.}
   \end{center}
-  \vspace{0.25cm}
+  \vspace{0.30cm}
   
   \begin{columns}[t,onlytextwidth]
-    \begin{column}{0.31\textwidth}
-      {\small \textbf{\color{accentblue} 1. Dynamic Production}}\\[0.04cm]
-      {\scriptsize Monotonic recursive filter $\hat{N}_t = \max(\hat{N}_t, \hat{N}_{t-1})$ eliminates impossible negative rates (71\% RMSE drop).}\\[0.22cm]
-      
-      {\small \textbf{\color{accentblue} 2. Software Bug Exhaustion}}\\[0.04cm]
-      {\scriptsize Jelinski-Moranda defect hazard model; evaluates 95\% remaining defect release certification rule.}
+    \begin{column}{0.19\textwidth}
+      \centering
+      {\footnotesize \textbf{\color{accentblue} App 1}}\\[0.04cm]
+      {\scriptsize \textbf{Supply Chain}}\\[0.08cm]
+      {\tiny Monotonic state-space production filtering across 104 weeks; cuts RMSE by 71.0\%.}
     \end{column}
     
-    \begin{column}{0.31\textwidth}
-      {\small \textbf{\color{accentred} 3. Defect Feature Selection}}\\[0.04cm]
-      {\scriptsize Spike-and-slab NIG Gibbs sampler; Occam's razor penalizes 20 metrics ($BF = 10^{15}$), isolating `max\_cc` \& `lcom`.}\\[0.22cm]
-      
-      {\small \textbf{\color{accentred} 4. Aviation Fleet Surveillance}}\\[0.04cm]
-      {\scriptsize Beta-Bernoulli mixture catches cloned serial numbers invisible to max rules (ROC AUC = 0.961).}
+    \begin{column}{0.19\textwidth}
+      \centering
+      {\footnotesize \textbf{\color{accentred} App 2}}\\[0.04cm]
+      {\scriptsize \textbf{Software QA}}\\[0.08cm]
+      {\tiny Jelinski-Moranda defect exhaustion; certifies commercial release at $k=140$ ($95.8\%$).}
     \end{column}
     
-    \begin{column}{0.31\textwidth}
-      {\small \textbf{\color{accentgreen} 5. Wildlife Abundance}}\\[0.04cm]
-      {\scriptsize Two-stage cascade ($N_{\text{pop}} = M/p$) couples German Tank tag inference with Beta-Binomial recapture (104.7 hares).}\\[0.22cm]
-      
-      {\small \textbf{\color{headernavy} Modular Architecture}}\\[0.04cm]
-      {\scriptsize Dedicated in-depth standalone report for each domain in brain store.}
+    \begin{column}{0.19\textwidth}
+      \centering
+      {\footnotesize \textbf{\color{accentgreen} App 3}}\\[0.04cm]
+      {\scriptsize \textbf{Code Analytics}}\\[0.08cm]
+      {\tiny Spike-and-slab variable selection isolates `max\_cc` \& `lcom` across Zellner $g$-priors.}
+    \end{column}
+    
+    \begin{column}{0.19\textwidth}
+      \centering
+      {\footnotesize \textbf{\color{accentcyan} App 4}}\\[0.04cm]
+      {\scriptsize \textbf{Aviation Safety}}\\[0.08cm]
+      {\tiny Semi-synthetic counterfeit audit on 9,102 FAA Cessnas; detects cloned serials (AUC 0.961).}
+    \end{column}
+    
+    \begin{column}{0.19\textwidth}
+      \centering
+      {\footnotesize \textbf{\color{headernavy} App 5}}\\[0.04cm]
+      {\scriptsize \textbf{Ecology}}\\[0.08cm]
+      {\tiny Two-stage cascade on Snowshoe Hares ($N \ge 68$); matches Chapman while propagating tag variance.}
     \end{column}
   \end{columns}
   
-  \vspace{0.3cm}
+  \vspace{0.30cm}
   \begin{center}
     {\footnotesize \textbf{\color{headernavy} Unifying Concept: } \textit{Whenever sequential markers index discrete populations, order statistics provide the minimal sufficient framework.}}
   \end{center}
@@ -684,17 +641,17 @@
 % =========================================================
 % Slide 19: Applications 1 & 2
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Applications 1 \& 2: Production Tracking \& Software QA}}\\[0.06cm]
-    {\scriptsize \color{subgray} Monotonic recursive filtering and discrete defect exhaustion modeling.}
+    {\large \textbf{\color{headernavy} Applications 1 \& 2: Production Tracking \& Software QA}}\\[0.08cm]
+    {\scriptsize \color{subgray} Monotonic state-space filtering and discrete defect exhaustion modeling.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.25cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{accentblue} App 1: Dynamic Production (Retail II)}}\\[0.04cm]
-      {\scriptsize Output cannot decrease ($N_t \ge N_{t-1}$). Monotonic recursive filter cuts weekly rate RMSE by \textbf{71.0\%}; Normal-Gamma forecasting achieves 100\% test coverage.}
+      {\scriptsize Output cannot decrease ($N_t \ge N_{t-1}$). Monotonic state-space model cuts weekly rate RMSE by \textbf{71.0\%}; predictive intervals achieve 96.2\% test coverage.}
       \vspace{0.1cm}
       \centering
       \includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{figures/wp3_dynamic_production.png}
@@ -702,7 +659,7 @@
     
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{accentred} App 2: Software Reliability (Musa)}}\\[0.04cm]
-      {\scriptsize Defect hazard $\lambda_i = \phi(N - i + 1)$. Closed-form marginal $P(\mathbf{t} \mid N)$. Commercial release rule $P(N-k \le 15) \ge 0.95$ correctly certifies system at $k = 136$ ($P = \mathbf{94.2\%}$).}
+      {\scriptsize Defect hazard $\lambda_i = \phi(N - i + 1)$. Closed-form marginal $P(\mathbf{t} \mid N)$. Commercial release rule $P(N-k \le 15) \ge 0.95$ certifies release at $k = 140$ ($P = \mathbf{95.8\%}$).}
       \vspace{0.1cm}
       \centering
       \includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{figures/wp4_jm_release_decisions.png}
@@ -718,17 +675,17 @@
 % =========================================================
 % Slide 20: Applications 3 & 4
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Applications 3 \& 4: Code Complexity \& Counterfeit Detection}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Applications 3 \& 4: Code Complexity \& Counterfeit Detection}}\\[0.08cm]
     {\scriptsize \color{subgray} Spike-and-slab variable selection and hierarchical counterfeit mixture auditing.}
   \end{center}
-  \vspace{0.2cm}
+  \vspace{0.25cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{accentblue} App 3: Code Defect Prioritization}}\\[0.04cm]
-      {\scriptsize Conjugate NIG regression with spike-and-slab Gibbs sampling. Occam's penalty ($BF = \mathbf{10^{15}}$) isolates `max\_cc` (0.954) \& `lcom` (0.923), pruning 16 noisy collinear metrics.}
+      {\scriptsize Conjugate NIG regression with spike-and-slab Gibbs sampling. Occam's penalty ($BF = \mathbf{10^{15}}$) isolates `max\_cc` (0.954) \& `lcom` (0.923) across Zellner $g$-priors, pruning 16 collinear metrics.}
       \vspace{0.1cm}
       \centering
       \includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{figures/wp5_lasso_vs_pips.png}
@@ -736,7 +693,7 @@
     
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{accentred} App 4: Aviation Fleet Surveillance}}\\[0.04cm]
-      {\scriptsize 9,102 Cessna aircraft on FAA registry. Beta-Bernoulli mixture model detects cloned and fake serials with \textbf{ROC AUC = 0.961}, catching parts invisible to classical maximum rules.}
+      {\scriptsize Semi-synthetic counterfeit benchmark on 9,102 FAA Cessnas. Beta-Bernoulli mixture model detects cloned and fake serials with \textbf{ROC AUC = 0.961}, outperforming duplicate checks.}
       \vspace{0.1cm}
       \centering
       \includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{figures/wp7_counterfeit_roc.png}
@@ -752,17 +709,17 @@
 % =========================================================
 % Slide 21: Application 5: Ecological Wildlife Abundance
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Application 5: Two-Stage Wildlife Mark-Recapture}}\\[0.06cm]
+    {\large \textbf{\color{headernavy} Application 5: Two-Stage Wildlife Mark-Recapture}}\\[0.08cm]
     {\scriptsize \color{subgray} Coupling discrete German Tank tag inference with Beta-Binomial recapture probability.}
   \end{center}
-  \vspace{0.25cm}
+  \vspace{0.28cm}
   
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.47\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{figures/wp8_wildlife_abundance.png}
+      \includegraphics[width=\linewidth,height=0.55\textheight,keepaspectratio]{figures/wp8_wildlife_abundance.png}
       \vspace{0.05cm}
       {\scriptsize \textit{Composed Posterior $N_{\text{pop}} = M/p$ vs Classical Chapman}}
     \end{column}
@@ -774,7 +731,7 @@
         \setlength{\itemsep}{0.08cm}
         \item \textbf{Stage 1 (Incomplete Ear Tag Logs):} German Tank posterior infers total deployed tags $M$ ($k=10, m=16 \implies \mathbb{E}[M] = 16.8$).
         \item \textbf{Stage 2 (Recapture Occasion):} Beta-Binomial likelihood updates individual capture rate $p$ ($n=28, r=4 \implies \mathbb{E}[p] = 0.167$).
-        \item \textbf{Snowshoe Hare Benchmark:} Median $\mathbf{104.7}$ hares (95\% CI: $[52.7, 284.5]$), encompassing Chapman ($97.6 \pm 30.8$) while propagating tag-record uncertainty.
+        \item \textbf{Snowshoe Hare Benchmark ($N \ge 68$):} Physical lower bound enforced. Median $\mathbf{104.7}$ hares (95\% CI: $[68.0, 284.5]$), encompassing Chapman ($97.6 \pm 30.8$) and log-linear models ($77-81$) while propagating tag-record uncertainty.
       \end{itemize}
     \end{column}
   \end{columns}
@@ -788,25 +745,25 @@
 % =========================================================
 % Slide 22: Standalone Reports & Key References
 % =========================================================
-\begin{frame}
+\begin{frame}[c]
   \begin{center}
     {\large \textbf{\color{headernavy} Dedicated Application Artifacts \& References}}
   \end{center}
-  \vspace{0.25cm}
+  \vspace{0.32cm}
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentblue} Standalone Technical Reports}}\\[0.08cm]
+      {\small \textbf{\color{accentblue} Standalone Technical Reports (PDFs)}}\\[0.08cm]
       \resizebox{\linewidth}{!}{
       \begin{tabular}{llc}
         \toprule
-        \textbf{Domain} & \textbf{Dedicated Artifact} & \textbf{Key Result} \\
+        \textbf{Domain} & \textbf{Dedicated PDF Artifact} & \textbf{Key Result} \\
         \midrule
-        App 1: Supply Chain & \texttt{application\_1\_dynamic\_production.md} & 71.0\% RMSE drop \\
-        App 2: Software QA  & \texttt{application\_2\_software\_reliability.md} & 95\% release rule \\
-        App 3: Code Metrics & \texttt{application\_3\_defect\_regression.md}    & $BF=10^{15}$ (4 feats) \\
-        App 4: Aviation     & \texttt{application\_4\_aviation\_counterfeits.md} & ROC AUC = 0.961 \\
-        App 5: Ecology      & \texttt{application\_5\_wildlife\_abundance.md}   & Median 104.7 hares \\
+        App 1: Supply Chain & \texttt{application\_1\_dynamic\_production.pdf} & 71.0\% RMSE drop \\
+        App 2: Software QA  & \texttt{application\_2\_software\_reliability.pdf} & Certify at $k=140$ ($95.8\%$) \\
+        App 3: Code Metrics & \texttt{application\_3\_defect\_regression.pdf}    & Robust PIP $> 0.90$ \\
+        App 4: Aviation     & \texttt{application\_4\_aviation\_counterfeits.pdf} & ROC AUC = 0.961 \\
+        App 5: Ecology      & \texttt{application\_5\_wildlife\_abundance.pdf}   & Median 104.7, $N \ge 68$ \\
         \bottomrule
       \end{tabular}}
       
@@ -845,30 +802,30 @@
 \begin{frame}[c,plain]
   \centering
   {\scriptsize \textbf{\color{accentcyan} SUMMARY \& CONCLUSIONS}}\\[0.15cm]
-  {\Large \textbf{\color{white} Key Takeaways for Bayesian Discrete Inference}}\\[0.6cm]
+  {\Large \textbf{\color{white} Key Takeaways for Bayesian Discrete Inference}}\\[0.5cm]
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.31\textwidth}
       \centering
-      {\small \textbf{\color{accentcyan} 1. Objective Foundations}}\\[0.15cm]
+      {\small \textbf{\color{accentcyan} 1. Objective Foundations}}\\[0.12cm]
       {\scriptsize \color{white!85} Scale-invariant prior $\pi(N) \propto 1/N$ yields proper posteriors ($k \ge 1$) and admissible physical boundaries ($P(N < m) = 0$) without subjective parameter distortion.}
     \end{column}
     
     \begin{column}{0.31\textwidth}
       \centering
-      {\small \textbf{\color{accentcyan} 2. Decision-Theoretic Rigor}}\\[0.15cm]
-      {\scriptsize \color{white!85} Asymmetric pinball loss ($q=0.90$) protects against catastrophic underestimation; rank re-indexing completely neutralizes 51.2\% void bias in real invoices.}
+      {\small \textbf{\color{accentcyan} 2. Loss Geometry}}\\[0.12cm]
+      {\scriptsize \color{white!85} Decision theory dictates the optimal point estimate: MAP induces downward bias; posterior median minimizes absolute error; check loss provides principled defense buffers.}
     \end{column}
     
     \begin{column}{0.31\textwidth}
       \centering
-      {\small \textbf{\color{accentcyan} 3. Universal Generalization}}\\[0.15cm]
-      {\scriptsize \color{white!85} A single discrete ceiling principle directly solves dynamic factory tracking, software release readiness, aviation counterfeit surveillance, and ecology.}
+      {\small \textbf{\color{accentcyan} 3. Cross-Domain Transfer}}\\[0.12cm]
+      {\scriptsize \color{white!85} From supply-chain monitoring to software QA and wildlife abundance, order-statistic posteriors provide calibrated, actionable discrete ceiling estimates.}
     \end{column}
   \end{columns}
   
-  \vspace{0.8cm}
-  {\normalsize \textbf{\color{white} Thank You}}
+  \vspace{0.6cm}
+  {\scriptsize \color{white!60} Course Project --- Core Theory, Empirical EDA, and Applied Extensions}
 \end{frame}
 }
 

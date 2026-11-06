@@ -44,7 +44,7 @@ In conventional wartime intelligence, discrete serial inference operated under t
 
 Because manufacturing is an irreversible physical accumulation process, the true cumulative population size must satisfy strict monotonicity:
 \begin{equation}
-N_t \ge N_{t-1} \ge \dots \ge N_1 \ge \max_{1 \le \tau \le t} m_\tau.
+N_t \ge N_{t-1} \ge \dots \ge N_1, \quad \text{with } N_t \ge \max_{1 \le \tau \le t} m_\tau.
 \end{equation}
 
 \subsection{Failure of the Independent Batch Estimator}
@@ -60,7 +60,7 @@ becomes negative. In an operational manufacturing or supply chain audit, negativ
 
 \section{Bayesian Methodology}
 
-\subsection{Stage 1: Monotonic Forward Recursive Filtering}
+\subsection{Stage 1: Monotonic Forward Recursive Filtering \& Joint State-Space Model}
 To enforce the physical boundary condition without discarding historical order statistics, we define the forward monotonic filter:
 \begin{equation}
 \hat{N}_t^{\text{constr}} = \max\left( \hat{N}_t^{\text{raw}}, \, \hat{N}_{t-1}^{\text{constr}} \right), \quad \text{with } \hat{N}_1^{\text{constr}} = \hat{N}_1^{\text{raw}}.
@@ -69,6 +69,12 @@ Under this recursive projection, cumulative estimates are guaranteed non-decreas
 \begin{equation}
 \Delta \hat{N}_t^{\text{constr}} = \hat{N}_t^{\text{constr}} - \hat{N}_{t-1}^{\text{constr}} \ge 0 \quad \forall t \ge 2.
 \end{equation}
+
+While this recursive filter provides a fast, computationally lightweight operational heuristic, a fully coherent Bayesian formulation specifies $\{N_t\}_{t=1}^T$ as a joint monotonic latent Markov state-space process:
+\begin{equation}
+P(N_{1:T} \mid \mathcal{D}_{1:T}) \propto \pi(N_1) \prod_{t=1}^T P(m_t \mid N_t, k_t) \prod_{t=2}^T P(N_t \mid N_{t-1}) \mathbb{I}(N_t \ge N_{t-1})
+\end{equation}
+where increments $\Delta N_t = N_t - N_{t-1} \sim \text{Poisson}(\lambda_t)$. This joint posterior preserves physical monotonicity across all horizons while fully propagating parameter uncertainty across time epochs.
 
 \subsection{Stage 2: Conjugate Normal-Inverse-Gamma Rate Modeling}
 Having extracted regularized non-negative weekly production increments $\lambda_t = \Delta \hat{N}_t^{\text{constr}}$, we model the underlying production intensity through a conjugate Normal-Inverse-Gamma hierarchy:
@@ -136,7 +142,7 @@ Naive Independent German Tank       & 41,208 & 515.1 & 1,642.3 & --- \\
 \begin{enumerate}
     \item \textbf{71.0\% Noise Reduction:} Enforcing monotonic recursive filtering cuts weekly production rate Root Mean Squared Error from 1,642.3 to 476.3 units/week.
     \item \textbf{Physical Admissibility:} Erroneous negative production rates are completely eliminated from the monitoring trajectory.
-    \item \textbf{Calibrated Predictive Uncertainty:} The conjugate Student-$t$ predictive distribution covers all 24 holdout weeks within its 95\% credible band, providing reliable probabilistic bounds for procurement and inventory scheduling.
+    \item \textbf{Calibrated Predictive Uncertainty:} The conjugate Student-$t$ predictive distribution covers all 24 holdout weeks within its 95\% credible band (100.0\% empirical coverage, with 95\% binomial confidence interval $[85.8\%, 100\%]$ on 24 test points), providing reliable probabilistic bounds for procurement and inventory scheduling.
 \end{enumerate}
 
 \begin{thebibliography}{9}

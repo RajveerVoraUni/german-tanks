@@ -14,10 +14,10 @@ The **German Tank Problem** is a cornerstone of discrete parameter estimation: i
 While introductory statistics textbooks frequently treat this as a simple exercise in the classical Uniformly Minimum Variance Unbiased Estimator (UMVUE):
 $$\hat{N}_{\text{UMVUE}} = m \left(1 + \frac{1}{k}\right) - 1, \quad \text{where } m = \max(s_1, \dots, s_k),$$
 real-world data analysis presents significant mathematical and practical challenges:
-1. **Physical Boundary Admissibility:** Asymptotic Gaussian Wald confidence intervals assign substantial probability mass ($>30\%$) to physically impossible population ceilings ($N < m$), whereas Bayesian posteriors strictly enforce $P(N < m \mid \mathcal{D}) = 0$.
+1. **Physical Boundary Admissibility:** Asymptotic Gaussian Wald confidence intervals assign substantial probability mass ($17.5\%$ for $m=50, k=5$) to physically impossible population ceilings ($N < m$). In contrast, Bayesian posteriors strictly enforce $P(N < m \mid \mathcal{D}) = 0$. An exact frequentist pivotal interval $[m, m \cdot \alpha^{-1/k}] = [50.0, 91.0]$ also respects the boundary and matches the Bayesian reciprocal credible interval.
 2. **Moment Existence Thresholds:** Under a flat prior $\pi(N) \propto 1$, the posterior is improper for $k=1$, its expectation diverges for $k \le 2$, and its variance diverges for $k \le 3$. Conversely, the scale-invariant reference prior $\pi(N) \propto 1/N$ guarantees proper posteriors for all $k \ge 1$ and finite expectations for $k \ge 2$.
-3. **The Informative Prior Trap:** Naively fixing informative hyperparameters (e.g., setting a Poisson prior mean to half the true ceiling) causes 95\% credible coverage to **collapse to 0.45\%** ($k=20$), with the log-score exploding from 8.01 to 323.9.
-4. **Real-World Gapped Identifiers:** In real transaction logs (such as Online Retail II), cancellations and billing voids create a **51.2\% unrecorded integer void rate**. Applying the naive maximum rule yields a $+23,162$ bias (+105\% error) and **0.0\% coverage**. We demonstrate that **rank re-indexing** restores bias to $-4.2$ and recovers exact 95.2\% HPD coverage.
+3. **The Informative Prior Trap & Hierarchical Remedy:** Single-parameter $\text{Poisson}(\mu)$ priors tie variance to the mean ($\sigma = \sqrt{\mu} \approx 141$ on $N=20,000$, $\text{CV} \approx 0.7\%$), behaving as a dogmatic delta function. When misspecified by 50\%, 95\% credible coverage collapses to $< 1.0\%$. We prove that hierarchical Gamma-Poisson hyperpriors expand hyper-variance, completely restoring nominal $94.8\%$ coverage.
+4. **Estimand Disambiguation & Thinning Models:** In real transaction logs (such as Online Retail II), cancellations and billing voids create a **51.2\% unrecorded integer void rate**. Applying the raw maximum estimates the address allocation span ($N_{\text{span}} = 45,223$), NOT the net transaction count ($N_{\text{count}} = 22,061$). While rank re-indexing serves as a retrospective oracle benchmark, we formulate an operational **Bernoulli thinning model** ($N_{\text{count}} \sim \text{Binomial}(N_{\text{span}}, \rho)$ with $\hat{\rho} \approx 0.488$) that estimates both parameters simultaneously.
 5. **Modern Cross-Domain Translation:** The discrete ceiling principle translates directly into five mission-critical engineering and scientific domains: dynamic production tracking, software defect release certification, code complexity feature selection, civil aviation fleet surveillance, and wildlife mark-recapture.
 
 ---
@@ -37,29 +37,29 @@ To maintain a clean and focused core thesis on the primary invoice serial datase
 
 | # | Application Domain | Focus & Core Methodology | Key Empirical Result | Dedicated Deep Dive |
 |---|---|---|---|---|
-| **01** | **Dynamic Production Tracking** | Monotonic recursive filtering ($\hat{N}_t = \max(\hat{N}_t^{\text{raw}}, \hat{N}_{t-1})$) + Normal-Gamma predictive forecasting | **71.0\% RMSE reduction**; eliminates impossible negative rates; 100\% 24-week test coverage | [PDF](applications/application_1_dynamic_production.pdf) · [Report](applications/application_1_dynamic_production/application_1_dynamic_production.md) |
-| **02** | **Software Reliability & Bug Exhaustion** | Closed-form discrete marginal likelihood $P(\mathbf{t} \mid N)$ integrating out fault hazard $\phi$; commercial release rule $P(N-k \le 15) \ge 0.95$ | **Accepts release at $k = 136$ ($P = 94.2\%$)**; avoids asymptotic MLE divergence on small samples | [PDF](applications/application_2_software_reliability.pdf) · [Report](applications/application_2_software_reliability/application_2_software_reliability.md) |
-| **03** | **Code Defect Prioritization** | Conjugate Normal-Inverse-Gamma regression with collapsed Gibbs spike-and-slab variable selection | **Occam's Bayes Factor $BF = 1.3 \times 10^{15}$** isolating 4 core metrics (`max_cc`, `lcom`, `cbo`, `rfc`); $r = 0.68$ out-of-sample | [PDF](applications/application_3_defect_regression.pdf) · [Report](applications/application_3_defect_regression/application_3_defect_regression.md) |
-| **04** | **Civil Aviation Fleet Surveillance** | Dirichlet-Multinomial fleet share updating + Beta-Bernoulli mixture model for counterfeit part detection | **ROC AUC = 0.961**; detects in-range cloned parts completely invisible to classical maximum threshold rules | [PDF](applications/application_4_aviation_counterfeits.pdf) · [Report](applications/application_4_aviation_counterfeits/application_4_aviation_counterfeits.md) |
-| **05** | **Ecological Wildlife Abundance** | Two-stage Bayesian cascade ($N_{\text{pop}} = M/p$) coupling German Tank ear-tag inference with Beta-Binomial recapture | **Median 104.7 hares (95\% CI: [52.7, 284.5])**; encompasses Chapman ($97.6 \pm 30.8$) while propagating tag log uncertainty | [PDF](applications/application_5_wildlife_abundance.pdf) · [Report](applications/application_5_wildlife_abundance/application_5_wildlife_abundance.md) |
+| **01** | **Dynamic Production Tracking** | Monotonic state-space filtering ($N_t \ge N_{t-1}, N_t \ge \max_{\tau \le t} m_\tau$) + Normal-Gamma predictive forecasting | **71.0\% RMSE reduction**; eliminates impossible negative rates; calibrated 24-week test coverage | [PDF](applications/application_1_dynamic_production.pdf) · [Report](applications/application_1_dynamic_production/application_1_dynamic_production.md) |
+| **02** | **Software Reliability & Bug Exhaustion** | Closed-form discrete marginal likelihood $P(\mathbf{t} \mid N)$ integrating out fault hazard $\phi$; commercial release rule $P(N-k \le 15) \ge 0.95$ | **Reaches $94.2\%$ at $k=136$; certified at $k = 140$ ($P = 95.8\%$)**; avoids asymptotic MLE divergence | [PDF](applications/application_2_software_reliability.pdf) · [Report](applications/application_2_software_reliability/application_2_software_reliability.md) |
+| **03** | **Code Defect Prioritization** | Conjugate Normal-Inverse-Gamma regression with collapsed Gibbs spike-and-slab variable selection | **Occam's Bayes Factor $BF \approx 10^{15}$**; PIPs $> 0.90$ for `max_cc` & `lcom` robust across Zellner $g$-priors; $r = 0.68$ out-of-sample | [PDF](applications/application_3_defect_regression.pdf) · [Report](applications/application_3_defect_regression/application_3_defect_regression.md) |
+| **04** | **Civil Aviation Fleet Surveillance** | Semi-synthetic counterfeit injection benchmark on 9,102 FAA Cessnas; Dirichlet-Multinomial + Beta-Bernoulli mixture | **ROC AUC = 0.961**; detects in-range cloned parts completely invisible to classical maximum threshold rules | [PDF](applications/application_4_aviation_counterfeits.pdf) · [Report](applications/application_4_aviation_counterfeits/application_4_aviation_counterfeits.md) |
+| **05** | **Ecological Wildlife Abundance** | Two-stage Bayesian cascade ($N_{\text{pop}} = M/p$) with strict physical lower bound $N_{\text{pop}} \ge 68$ (68 unique hares caught) | **Median 104.7 hares (95\% CI: [68.0, 284.5])**; encompasses Chapman ($97.6 \pm 30.8$) and log-linear models ($77-81$) while propagating tag log uncertainty | [PDF](applications/application_5_wildlife_abundance.pdf) · [Report](applications/application_5_wildlife_abundance/application_5_wildlife_abundance.md) |
 
 ---
 
-## Core Empirical Leaderboard ($R = 2,000$ Monte Carlo Runs)
+## Core Empirical Leaderboard ($R = 4,000$ Monte Carlo Runs, $N_{\text{true}} = 20,000$, Seed 42)
 
-Simulated performance on $N_{\text{true}} = 20,000$ across sample sizes $k \in \{5, 50\}$:
-
-| Estimator / Prior | Sample $k$ | Mean Bias | RMSE | 95\% HPD Coverage | Mean CI Width | Log-Score |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **UMVUE (Frequentist)** | 5 | $-1.8$ | 8,241.1 | 94.8\% (Wald) | 32,840 | — |
-| **Bayes Flat Prior** | 5 | $+6,664.2$ | 14,812.5 | **95.1\%** | 36,419 | 9.42 |
-| **Bayes Reciprocal ($1/N$)** | 5 | $\mathbf{-1.2}$ | $\mathbf{8,241.1}$ | $\mathbf{95.2\%}$ | $\mathbf{29,812}$ | $\mathbf{9.40}$ |
-| Poisson ($\mu = 20,000$) | 5 | $+81.4$ | 4,210.6 | **96.4\%** | 16,104 | 5.91 |
-| Poisson ($\mu = 10,000$, Misspecified) | 5 | $\mathbf{-8,421.3}$ | 8,912.4 | $\mathbf{0.45\%}$ | 3,114 | 323.9 |
-| \midrule | | | | | | |
-| **UMVUE (Frequentist)** | 50 | $+0.2$ | 404.1 | 94.9\% | 1,570 | — |
-| **Bayes Flat Prior** | 50 | $+408.1$ | 412.3 | **95.0\%** | 1,582 | 6.44 |
-| **Bayes Reciprocal ($1/N$)** | 50 | $\mathbf{-0.4}$ | $\mathbf{404.1}$ | $\mathbf{95.1\%}$ | $\mathbf{1,520}$ | $\mathbf{6.42}$ |
+| Estimator / Framework | Point Estimator | Sample $k$ | Mean Bias $\pm$ SE | RMSE (Emp / Th) | 95\% Interval Cov. $\pm$ SE | Mean CI Width | Boundary Violations |
+|---|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **UMVUE (Frequentist)** | $\hat{N} = m(1 + 1/k) - 1$ | 5 | $-48.0 \pm 54.6$ | 3,455.2 / 3,380.3 | 90.0\% $\pm$ 0.47\% (Wald) | 13,219 | 100.0\% |
+| **Exact Frequentist CI** | Pivotal Bound | 5 | — | — | **94.4\%** $\pm$ 0.36\% | 13,644 | **0.0\%** |
+| **Bayes Flat Prior** | Posterior Mean | 5 | $+2,168.6 \pm 69.7$ | 4,409.0 / 4,363.9 | **97.4\%** $\pm$ 0.25\% | 18,535 | **0.0\%** |
+| **Bayes Flat Prior** | Posterior Median | 5 | $-226.5 \pm 54.2$ | 3,431.3 / — | **97.4\%** $\pm$ 0.25\% | 18,535 | **0.0\%** |
+| **Bayes Reciprocal ($1/N$)** | Posterior Mean | 5 | $+784.3 \pm 58.2$ | 3,683.3 / 3,618.6 | **94.4\%** $\pm$ 0.36\% | 13,644 | **0.0\%** |
+| **Bayes Reciprocal ($1/N$)** | Posterior Median | 5 | $-900.0 \pm 54.2$ | **3,427.5** / — | **94.4\%** $\pm$ 0.36\% | **13,644** | **0.0\%** |
+| \midrule | | | | | | | |
+| **UMVUE (Frequentist)** | $\hat{N} = m(1 + 1/k) - 1$ | 50 | $+1.6 \pm 6.1$ | 386.8 / 391.7 | 95.0\% $\pm$ 0.34\% (Wald) | 1,536 | 100.0\% |
+| **Exact Frequentist CI** | Pivotal Bound | 50 | — | — | **95.5\%** $\pm$ 0.33\% | 1,211 | **0.0\%** |
+| **Bayes Reciprocal ($1/N$)** | Posterior Mean | 50 | $+10.6 \pm 6.1$ | **387.1** / 391.7 | **95.5\%** $\pm$ 0.33\% | **1,211** | **0.0\%** |
+| **Bayes Flat Prior** | Posterior Mean | 50 | $+17.9 \pm 6.1$ | 387.5 / 391.7 | **95.8\%** $\pm$ 0.32\% | 1,236 | **0.0\%** |
 
 ---
 
@@ -87,6 +87,7 @@ Simulated performance on $N_{\text{true}} = 20,000$ across sample sizes $k \in \
 │   └── application_5_wildlife_abundance/             # App 5 source files (.tex, .pdf, .md)
 │
 ├── scripts/                                           # Experiment runners and figure generators
+│   ├── run_reproducible_benchmark.py                  # R=4,000 reproducible Monte Carlo benchmark
 │   ├── run_wp1_experiments.py                         # Core Monte Carlo simulation & leaderboard
 │   ├── run_wp2_experiments.py                         # Online Retail II invoice EDA & integer voids
 │   ├── run_wp3_experiments.py                         # App 1: Dynamic production tracking
@@ -127,33 +128,23 @@ Simulated performance on $N_{\text{true}} = 20,000$ across sample sizes $k \in \
 ### 1. Environment Setup
 Clone the repository and install the dependencies:
 ```bash
-git clone https://github.com/<your-username>/german-tanks-bayesian-inference.git
-cd german-tanks-bayesian-inference
+git clone https://github.com/RajveerVoraUni/german-tanks.git
+cd german-tanks
 
 # Create and activate virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
 
 # Install required dependencies
-pip install numpy scipy pandas matplotlib seaborn scikit-learn
+pip install numpy scipy matplotlib
 ```
 
-### 2. Running Experiments
-All simulation pipelines can be executed directly from root or from the `scripts/` folder:
+### 2. Running the Reproducible Benchmark
+To reproduce the full Monte Carlo simulation table ($R = 4,000$ replications, seed 42):
 ```bash
-# Run core Monte Carlo benchmark simulation
-python scripts/run_wp1_experiments.py
-
-# Run Exploratory Data Analysis on real invoice serials
-python scripts/run_wp2_experiments.py
-
-# Run the 5 modern application pipelines
-python scripts/run_wp3_experiments.py  # App 1: Dynamic Production
-python scripts/run_wp4_experiments.py  # App 2: Software Reliability
-python scripts/run_wp5_experiments.py  # App 3: Code Defect Prioritization
-python scripts/run_wp7_experiments.py  # App 4: Aviation Fleet Surveillance
-python scripts/run_wp8_experiments.py  # App 5: Wildlife Abundance
+python scripts/run_reproducible_benchmark.py
 ```
+Results will be output directly to `results/reproduced_benchmark_table.csv`.
 
 ### 3. Compiling LaTeX Documents
 Ensure TeX Live / MacTeX is installed, then compile the main report, slides, and application deep dives:
@@ -184,3 +175,4 @@ cd applications/application_5_wildlife_abundance && pdflatex application_5_wildl
 6. **Gelman, A., et al. (2013).** *Bayesian Data Analysis* (3rd ed.). CRC Press.
 7. **Jelinski, Z., & Moranda, P. (1972).** Software Reliability Research. In *Statistical Computer Performance Evaluation*, Academic Press, 465–484.
 8. **George, E. I., & McCulloch, R. E. (1993).** Variable Selection via Gibbs Sampling. *Journal of the American Statistical Association*, 88(423), 881–889.
+9. **Otis, D. L., et al. (1978).** Statistical Inference from Capture Data on Closed Animal Populations. *Wildlife Monographs*, (62), 3–135.

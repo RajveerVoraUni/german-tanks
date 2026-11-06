@@ -122,22 +122,22 @@ Cessna 182P & 293   & \textbf{3.23\%}  & 0.19\% & [2.87\%, 3.59\%] \\
 }
 \end{table}
 
-\subsection{Counterfeit Detection Experiment}
-Using the certified Cessna 172M production run ($N_{\text{legal}} = 7,923$), we draw inspection batches of $k = 100$ serials and inject synthetic counterfeits (50\% out-of-bounds, 50\% cloned duplicates) at rates $\epsilon \in \{0\%, 1\%, 5\%, 10\%\}$.
+\subsection{Semi-Synthetic Counterfeit Detection Experiment}
+Because open-source civil aviation databases do not publish labeled counterfeit parts records, we evaluate a controlled semi-synthetic injection experiment. Using the certified Cessna 172M airframe production run ($N_{\text{legal}} = 7,923$) from the FAA registry, we draw inspection batches of $k = 100$ serials and inject synthetic counterfeits (50\% out-of-bounds, 50\% cloned in-range duplicates) at rates $\epsilon \in \{0\%, 1\%, 5\%, 10\%\}$. We compare the Bayesian mixture model against two baselines: (1) the naive maximum threshold rule ($m > N_{\text{legal}}$); and (2) a standard duplicate frequency check.
 
 \begin{table}[H]
 \centering
-\caption{Counterfeit detection performance: Bayesian mixture vs naive classical maximum rule.}
+\caption{Counterfeit detection performance: Bayesian mixture vs baseline rules ($k = 100$).}
 \label{tab:counterfeit_results}
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{cccccc}
+\begin{tabular}{ccccccc}
 \toprule
-\textbf{True Contamination $\epsilon$} & \textbf{Injected Fakes} & \textbf{Observed Max $m$} & \textbf{Posterior Mean $\hat{\epsilon}$} & \textbf{95\% Credible Interval} & \textbf{Naive Max Rule} \\
+\textbf{True $\epsilon$} & \textbf{Injected} & \textbf{Observed Max $m$} & \textbf{Posterior Mean $\hat{\epsilon}$} & \textbf{95\% Credible Interval} & \textbf{Duplicate Check} & \textbf{Naive Max Rule} \\
 \midrule
-0.0\%  & 0  & 7,923  & 0.0159 & [0.0005, 0.0598] & Clean (Pass) \\
-1.0\%  & 1  & 7,918  & 0.0159 & [0.0005, 0.0598] & \textbf{Failed (Clone Missed)} \\
-5.0\%  & 5  & 10,910 & \textbf{0.0489} & [0.0111, 0.1197] & Detected (Alarm) \\
-10.0\% & 10 & 10,437 & \textbf{0.1315} & [0.0554, 0.2325] & Detected (Alarm) \\
+0.0\%  & 0  & 7,923  & 0.0159 & [0.0005, 0.0598] & Pass & Clean (Pass) \\
+1.0\%  & 1  & 7,918  & 0.0159 & [0.0005, 0.0598] & Missed (Single Sample) & \textbf{Failed (Clone Missed)} \\
+5.0\%  & 5  & 10,910 & \textbf{0.0489} & [0.0111, 0.1197] & Detected (Duplicates) & Detected (Alarm) \\
+10.0\% & 10 & 10,437 & \textbf{0.1315} & [0.0554, 0.2325] & Detected (Duplicates) & Detected (Alarm) \\
 \bottomrule
 \end{tabular}%
 }
