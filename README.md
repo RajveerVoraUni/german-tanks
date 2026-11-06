@@ -1,24 +1,28 @@
-# Bayesian Inference on the German Tank Problem: Theoretical Foundations, Decision Theory, and Modern Applications
+# Bayesian Data Analysis of the German Tank Problem: Theoretical Properties, Simulation Benchmarks, and Real-World Stress-Testing
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![LaTeX pdflatex](https://img.shields.io/badge/latex-pdflatex-success.svg)](https://www.latex-project.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Course Project](https://img.shields.io/badge/Course-Bayesian%20Inference-navy.svg)](#)
+[![Course Project](https://img.shields.io/badge/Course-Bayesian%20Data%20Analysis-navy.svg)](#)
 
 ---
 
-## Executive Overview
+## Executive Overview: One Cohesive Story
 
-The **German Tank Problem** is a cornerstone of discrete parameter estimation: inferring an unknown population ceiling $N \in \mathbb{N}$ from a sample of $k$ sequential serial numbers $s_1, \dots, s_k$ observed without replacement from $\{1, \dots, N\}$. 
+This repository presents a comprehensive Bayesian Data Analysis investigation of the **German Tank Problem**: inferring an unknown discrete population ceiling $N \in \mathbb{N}$ from a sample of $k$ sequential integer markers. 
 
-While introductory statistics textbooks frequently treat this as a simple exercise in the classical Uniformly Minimum Variance Unbiased Estimator (UMVUE):
-$$\hat{N}_{\text{UMVUE}} = m \left(1 + \frac{1}{k}\right) - 1, \quad \text{where } m = \max(s_1, \dots, s_k),$$
-real-world data analysis presents significant mathematical and practical challenges:
-1. **Physical Boundary Admissibility:** Asymptotic Gaussian Wald confidence intervals assign substantial probability mass ($17.5\%$ for $m=50, k=5$) to physically impossible population ceilings ($N < m$). In contrast, Bayesian posteriors strictly enforce $P(N < m \mid \mathcal{D}) = 0$. An exact frequentist pivotal interval $[m, m \cdot \alpha^{-1/k}] = [50.0, 91.0]$ also respects the boundary and matches the Bayesian reciprocal credible interval.
+Rather than presenting fragmented case studies, the project is structured around **one continuous research narrative**:
+$$\textbf{Theoretical Foundations} \longrightarrow \textbf{Controlled Simulation Benchmarks} \longrightarrow \textbf{Real-World Empirical Stress-Testing} \longrightarrow \textbf{Discussion}$$
+
+### Core Findings
+1. **Physical Boundary Admissibility ($P(N < m) = 0$):** Asymptotic Gaussian Wald confidence intervals assign substantial probability mass ($17.5\%$ for $m=50, k=5$) to physically impossible population ceilings ($N < m$). In contrast, objective Bayesian credible intervals under scale-invariant priors strictly enforce $P(N < m \mid \mathcal{D}) = 0$, exactly matching the frequentist pivotal bound $[m, m \cdot \alpha^{-1/k}] = [50.0, 91.0]$.
 2. **Moment Existence Thresholds:** Under a flat prior $\pi(N) \propto 1$, the posterior is improper for $k=1$, its expectation diverges for $k \le 2$, and its variance diverges for $k \le 3$. Conversely, the scale-invariant reference prior $\pi(N) \propto 1/N$ guarantees proper posteriors for all $k \ge 1$ and finite expectations for $k \ge 2$.
-3. **The Informative Prior Trap & Hierarchical Remedy:** Single-parameter $\text{Poisson}(\mu)$ priors tie variance to the mean ($\sigma = \sqrt{\mu} \approx 141$ on $N=20,000$, $\text{CV} \approx 0.7\%$), behaving as a dogmatic delta function. When misspecified by 50\%, 95\% credible coverage collapses to $< 1.0\%$. We prove that hierarchical Gamma-Poisson hyperpriors expand hyper-variance, completely restoring nominal $94.8\%$ coverage.
-4. **Estimand Disambiguation & Thinning Models:** In real transaction logs (such as Online Retail II), cancellations and billing voids create a **51.2\% unrecorded integer void rate**. Applying the raw maximum estimates the address allocation span ($N_{\text{span}} = 45,223$), NOT the net transaction count ($N_{\text{count}} = 22,061$). While rank re-indexing serves as a retrospective oracle benchmark, we formulate an operational **Bernoulli thinning model** ($N_{\text{count}} \sim \text{Binomial}(N_{\text{span}}, \rho)$ with $\hat{\rho} \approx 0.488$) that estimates both parameters simultaneously.
-5. **Modern Cross-Domain Translation:** The discrete ceiling principle translates directly into five mission-critical engineering and scientific domains: dynamic production tracking, software defect release certification, code complexity feature selection, civil aviation fleet surveillance, and wildlife mark-recapture.
+3. **The Informative Prior Trap & Hierarchical Remedy:** Single-parameter $\text{Poisson}(\mu)$ priors tie variance to the mean ($\sigma = \sqrt{\mu} \approx 141$ on $N=20,000$, $\text{CV} \approx 0.7\%$), behaving as a dogmatic delta function. When misspecified by 50\%, 95\% credible coverage collapses to $< 1.0\%$. Hierarchical Gamma--Poisson hyperpriors expand hyper-variance, completely restoring nominal $94.8\%$ coverage.
+4. **Real-World Empirical Stress-Testing:** We test textbook assumptions against historical WWII German tank production records (Speer Ministry ledgers) and 541,909 commercial transactions across 22,061 sequential invoices:
+   - *Chronological generation:* Invoices arrive over time with seasonal acceleration (300/wk to >800/wk), violating static simple random sampling exchangeability.
+   - *Integer voids (51.2%):* Operational mechanisms (cancellations with C-prefix, cart dropouts, database allocation blocks) create voids.
+   - *Goodness-of-fit fallacy:* A non-significant Kolmogorov--Smirnov test is **not proof** that the uniform sampling assumption holds.
+   - *Estimand disambiguation:* Classical rules estimate address capacity ($N_{\text{span}} = 45,223$), NOT transaction volume ($N_{\text{count}} = 22,061$). An operational **Bernoulli thinning model** ($N_{\text{count}} \sim \text{Binomial}(N_{\text{span}}, \rho)$ with $\hat{\rho} \approx 0.488$) resolves both without circular oracle rank re-indexing.
 
 ---
 
