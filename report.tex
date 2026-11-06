@@ -1,5 +1,7 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsfonts,amsthm}
 \usepackage{graphicx}
@@ -10,6 +12,8 @@
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{subcaption}
+\DeclareCaptionFont{captionsize}{\fontsize{7.5pt}{9.5pt}\selectfont}
+\captionsetup{font=captionsize,labelfont=bf}
 \usepackage{float}
 \usepackage{microtype}
 
@@ -28,9 +32,9 @@
 \title{\textbf{\Large Bayesian Data Analysis of the German Tank Problem:}\\
 \large Theoretical Properties, Simulation Benchmarks, and Real-World Empirical Stress-Testing}
 
-\author{\textbf{Bayesian Data Analysis Course Project} \\
-\textit{Department of Statistics / Data Science}}
-\date{\today}
+\author{\textbf{Aklanta Borah \qquad Amartya Amritanshu \qquad Rajveer Vora} \\
+\textit{Indian Statistical Institute, Kolkata}}
+\date{Oct--Nov 2026}
 
 \begin{document}
 
