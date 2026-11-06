@@ -37,7 +37,7 @@
 \maketitle
 
 \begin{abstract}
-The German Tank Problem represents a foundational paradigm in discrete parameter estimation: inferring an unknown population ceiling $N \in \mathbb{N}$ from a sample of $k$ sequential serial numbers. While introductory textbooks frequently frame this as a solved curiosity via the classical Uniformly Minimum Variance Unbiased Estimator (UMVUE), real-world deployments encounter profound theoretical and practical subtleties. In this course project, we present an exhaustive, mathematically rigorous Bayesian investigation of the problem. We conduct comprehensive Exploratory Data Analysis (EDA) on both historical WWII Speer Ministry production archives and 541,909 real-world commercial serial transactions. We formally address core theoretical questions that arise for Bayesian inference experts: (1) posterior propriety and exact moment existence thresholds ($k \ge 2$ for proper posteriors, $k \ge 3$ for finite expectations, $k \ge 4$ for finite variance under flat priors); (2) Bayesian decision theory across symmetric, absolute, and asymmetric risk-averse loss functions (pinball check loss); (3) physical boundary admissibility ($P(N < m) = 0$) versus frequentist Gaussian confidence interval collapse, alongside exact frequentist pivotal bounds; and (4) the impact of non-uniform capture mechanics (front-line combat deployment tilt). Through $R = 4,000$ Monte Carlo replications on $N = 20,000$, we quantify the performance of unbiased, mean, and median point estimators with empirical standard errors, clarify the failure modes of dogmatic Poisson priors, and resolve integer gaps by formalizing distinct address span ($N_{\text{span}}$) versus transaction count ($N_{\text{count}}$) estimands via Bernoulli thinning. Finally, we demonstrate how this discrete estimation framework translates directly into five high-impact modern applications: dynamic industrial output, software reliability release certification, defect metric feature selection, aviation counterfeit detection, and wildlife abundance.
+The German Tank Problem represents a foundational paradigm in discrete parameter estimation: inferring an unknown population ceiling $N \in \mathbb{N}$ from a sample of $k$ sequential serial numbers. While introductory textbooks frequently frame this as a solved curiosity via the classical Uniformly Minimum Variance Unbiased Estimator (UMVUE), real-world deployments encounter profound theoretical and practical subtleties. In this course project, we present an exhaustive, mathematically rigorous Bayesian investigation of the problem. We conduct comprehensive Exploratory Data Analysis (EDA) on both historical WWII Speer Ministry production archives and 541,909 real-world commercial serial transactions. We conduct an in-depth investigation into core theoretical foundations: (1) posterior propriety and exact moment existence thresholds ($k \ge 2$ for proper posteriors, $k \ge 3$ for finite expectations, $k \ge 4$ for finite variance under flat priors); (2) Bayesian decision theory across symmetric, absolute, and asymmetric risk-averse loss functions (pinball check loss); (3) physical boundary admissibility ($P(N < m) = 0$) versus frequentist Gaussian confidence interval collapse, alongside exact frequentist pivotal bounds; and (4) the impact of non-uniform capture mechanics (front-line combat deployment tilt). Through $R = 4,000$ Monte Carlo replications on $N = 20,000$, we quantify the performance of unbiased, mean, and median point estimators with empirical standard errors, clarify the failure modes of dogmatic Poisson priors, and resolve integer gaps by formalizing distinct address span ($N_{\text{span}}$) versus transaction count ($N_{\text{count}}$) estimands via Bernoulli thinning. Finally, we demonstrate how this discrete estimation framework translates directly into five high-impact modern applications: dynamic industrial output, software reliability release certification, defect metric feature selection, aviation counterfeit detection, and wildlife abundance.
 \end{abstract}
 
 \tableofcontents
@@ -214,18 +214,18 @@ with posterior expectation $\mathbb{E}[N \mid m, k] = \frac{k}{k - 1} m$ for $k 
 
 ---
 
-\section{Questions for the Bayesian Inference Expert}
+\section{Theoretical Analysis: Propriety, Decision Theory, and Sampling Mechanics}
 
-An expert in Bayesian inference evaluating this analysis will naturally interrogate foundational assumptions regarding prior propriety, decision-theoretic loss functions, boundary admissibility, and sampling exchangeability. We address each systematically below.
+In this section, we systematically analyze foundational mathematical and methodological properties of discrete population ceiling estimation: prior propriety, loss geometry, boundary admissibility, and non-uniform sampling.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/expert_bayesian_diagnostics.png}
-\caption{Expert Bayesian Diagnostics: (a) Point estimators under varying loss functions (MAP = 100, Median = 118, Mean = 132, and Asymmetric Check Loss $q=0.90 \implies \hat{N} = 175$); (b) Physical boundary violation in frequentist Wald intervals ($17.5\%$ impossible mass on $N < m$) versus exact Bayesian support and exact frequentist pivotal bounds; (c) Moment existence and propriety conditions across sample size $k$; and (d) Estimation bias induced by non-uniform combat deployment tilt ($w(s) \propto s^\gamma$) across $R = 1,000$ trials on $N = 20,000, k = 20$.}
+\caption{Theoretical Diagnostics and Decision Analysis: (a) Point estimators under varying loss functions (MAP = 100, Median = 118, Mean = 132, and Asymmetric Check Loss $q=0.90 \implies \hat{N} = 175$); (b) Physical boundary violation in frequentist Wald intervals ($17.5\%$ impossible mass on $N < m$) versus exact Bayesian support and exact frequentist pivotal bounds; (c) Moment existence and propriety conditions across sample size $k$; and (d) Estimation bias induced by non-uniform combat deployment tilt ($w(s) \propto s^\gamma$) across $R = 1,000$ trials on $N = 20,000, k = 20$.}
 \label{fig:expert_diagnostics}
 \end{figure}
 
-\subsection{Question 1: When is the Posterior Proper, and When Do Moments Exist?}
+\subsection{Posterior Propriety and Moment Existence Thresholds}
 Because the reference priors $\pi(N) \propto 1$ and $\pi(N) \propto 1/N$ are improper ($\sum_{N=1}^\infty \pi(N) = \infty$), verifying posterior propriety and finite moments is crucial:
 \begin{itemize}
     \item \textbf{Sample Size $k = 1$:} Under $\pi(N) \propto 1$, the posterior tail behaves as $N^{-1}$, which diverges logarithmically ($\sum 1/N = \infty$); the posterior is \textbf{improper}. However, under the scale-invariant prior $\pi(N) \propto 1/N$, the unnormalized posterior tail behaves as $N^{-2}$, yielding a \textbf{proper posterior} even for a single observed serial number ($k=1$), though its mean is infinite.
@@ -234,7 +234,7 @@ Because the reference priors $\pi(N) \propto 1$ and $\pi(N) \propto 1/N$ are imp
     \item \textbf{Sample Size $k \ge 4$:} Both posterior mean and posterior variance exist in closed form for all standard reference priors (Figure~\ref{fig:expert_diagnostics}(c)).
 \end{itemize}
 
-\subsection{Question 2: Which Estimator Under Which Loss Function?}
+\subsection{Decision-Theoretic Point Estimation Across Loss Functions}
 In Bayesian Decision Theory, point estimation requires specifying a loss function $L(N, \hat{N})$~\cite{berger1985,robert2007}:
 \begin{enumerate}
     \item \textbf{0--1 Loss ($L = \mathbb{I}(N \ne \hat{N})$):} The Bayes action is the posterior mode (MAP), $\hat{N}_{\text{MAP}} = m$. Because $P(N=m)$ is the maximum of a strictly decreasing discrete posterior, the MAP always equals the observed sample maximum, inducing severe negative bias ($-16.7\%$ error at $k=5, m=100$, Figure~\ref{fig:expert_diagnostics}(a)).
@@ -251,7 +251,7 @@ In Bayesian Decision Theory, point estimation requires specifying a loss functio
     For $m=100, k=5$, this evaluates to $\binom{n}{4} \ge 10 \binom{99}{4} = 37,643,760$, which solves to exactly $\hat{N}_{0.90} = 175$ (Figure~\ref{fig:expert_diagnostics}(a)), providing a principled $+75\%$ safety buffer without ad-hoc heuristic inflation.
 \end{enumerate}
 
-\subsection{Question 3: Physical Boundary Violations and Exact Frequentist Bounds}
+\subsection{Physical Boundary Admissibility and Pivotal Interval Concordance}
 A naive frequentist confidence interval based on asymptotic normality (Wald interval) is constructed as $\hat{N}_{\text{UMVUE}} \pm 1.96 \cdot \widehat{\text{SE}}$. For $m=50$ and $k=5$, we have $\hat{N} = 59$ and plug-in standard error $\widehat{\text{SE}} = \sqrt{\frac{(59-5)(59+1)}{5 \times 7}} = 9.62$. The resulting 95\% Wald interval is $[40.1, 77.9]$.
 
 Because $m = 50$, the region $[40.1, 50.0)$ represents physically impossible values ($N < m$). The probability mass placed in this impossible region is:
@@ -260,13 +260,13 @@ Because $m = 50$, the region $[40.1, 50.0)$ represents physically impossible val
 \end{equation}
 placing \textbf{$17.5\%$ of its confidence distribution below the observed maximum} (Figure~\ref{fig:expert_diagnostics}(b)).
 
-An expert will correctly note that the Wald interval is a crude normal approximation, and that frequentist theory offers an \textit{exact} confidence interval based on the pivotal quantity $M/N$. Because $P(M \le m \mid N) = \binom{m}{k}/\binom{N}{k} \approx (m/N)^k$, an exact frequentist $1-\alpha$ confidence interval is:
+While the Wald interval is a crude normal approximation prone to boundary collapse, classical frequentist theory also provides an \textit{exact} confidence interval based on the pivotal quantity $M/N$. Because $P(M \le m \mid N) = \binom{m}{k}/\binom{N}{k} \approx (m/N)^k$, an exact frequentist $1-\alpha$ confidence interval is:
 \begin{equation}
 \left[m, \; m \cdot \alpha^{-1/k}\right]
 \end{equation}
 For $m=50, k=5$, and $\alpha = 0.05$, $\alpha^{-1/k} = 0.05^{-0.2} \approx 1.8206$, yielding the exact interval $[50.0, 91.0]$. This exact frequentist interval naturally respects the physical boundary ($N \ge 50$) and achieves valid nominal coverage. Remarkably, this exact frequentist interval coincides precisely with the Bayesian 95\% credible interval under the scale-invariant reciprocal prior $\pi(N) \propto 1/N$ in the continuous Pareto limit. The Bayesian framework, however, yields the complete posterior probability mass function, enabling full decision-theoretic loss integration and risk quantification.
 
-\subsection{Question 4: What if Sampling is Non-Uniform (Deployment Tilt \texorpdfstring{$w(s) \propto s^\gamma$}{w(s) propto s\^gamma})?}
+\subsection{Sensitivity to Non-Uniform Sampling and Deployment Tilt \texorpdfstring{($w(s) \propto s^\gamma$)}{(w(s) propto s\^gamma)}}
 The classical derivation assumes exchangeable uniform sampling ($p(s) = 1/N$). In warfare, newer tanks (higher serials) may be rushed directly to active combat zones where capture rates are elevated (front-line deployment bias), or older tanks may accumulate more combat hours (survivorship bias). 
 
 We model this capture mechanics by parameterizing capture probability as $w(s) \propto s^\gamma$. Figure~\ref{fig:expert_diagnostics}(d) demonstrates the sensitivity across $R = 1,000$ simulation trials ($N = 20,000, k = 20$):
@@ -338,7 +338,7 @@ Standard textbook formulations assume contiguous serials $s \in \{1, 2, \dots, N
     \item \textbf{Estimand B ($N_{\text{count}} = 22,061$):} The net volume of realized customer transactions.
 \end{itemize}
 
-\textbf{The Rank Re-Indexing Oracle vs.\ Operational Thinning:} In retrospective benchmarks, mapping observed keys to contiguous ranks $\{1, \dots, 22061\}$ recovers $N_{\text{count}}$ with bias $-4.2$ and 95.2\% coverage. However, as an expert will recognize, \textit{rank re-indexing is an oracle test}: it requires knowing the complete set of valid labels in advance, which is impossible during live field sampling.
+\textbf{The Rank Re-Indexing Oracle vs.\ Operational Thinning:} In retrospective benchmarks, mapping observed keys to contiguous ranks $\{1, \dots, 22061\}$ recovers $N_{\text{count}}$ with bias $-4.2$ and 95.2\% coverage. However, \textit{rank re-indexing is inherently an oracle procedure}: it requires knowing the complete set of valid labels in advance, which is unavailable during live field sampling.
 
 \textbf{The Operational Solution: Bernoulli Thinning Model.} In active deployment, integer gaps are modeled as a thinning process. Each serial slot $j \in \{1, \dots, N_{\text{span}}\}$ represents an active transaction with probability $\rho$ (retention rate), where $1 - \rho$ reflects voided carts, credit cancellations, or reserved blocks:
 \begin{equation}
