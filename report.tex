@@ -65,15 +65,15 @@ In contrast, statistical intelligence teams analyzed sequential serial numbers s
 
 \begin{table}[H]
 \centering
-\caption{Historical Allied Statistical Estimates vs.\ Official Speer Ministry Production Ledgers~\cite{ruggles1947,goodman1954}}
+\caption{Historical German Tank Production: Allied Intelligence Estimates vs.\ Post-War Speer Ministry Records. Data sourced from Ruggles and Brodie~\cite{ruggles1947} and Goodman~\cite{goodman1954}. Official production figures represent post-war archival counts from the Speer Ministry / Heereswaffenamt; conventional estimates represent Allied intelligence consensus from prisoner interrogations and reconnaissance; statistical estimates represent discrete order-statistic estimates calculated from captured chassis and gearbox serials.}
 \label{tab:wwii_history}
 \resizebox{0.95\textwidth}{!}{
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Production Month} & \textbf{Conventional Espionage Est.} & \textbf{Statistical Est. ($\hat{N}$)} & \textbf{Speer Ministry True ($N$)} & \textbf{Statistical Error} \\
 \midrule
-June 1940 (Early Marks)   & 1,000 & 169 & 122 & $+38.5\%$ \\
-June 1941 (Panzer III/IV) & 1,550 & 244 & 271 & $-9.9\%$ \\
+June 1940 (Early Marks)     & 1,000 & 169 & 122 & $+38.5\%$ \\
+June 1941 (Panzer III/IV)   & 1,550 & 244 & 271 & $-9.9\%$ \\
 August 1942 (Panzer III/IV) & 1,550 & 327 & 342 & $-4.4\%$ \\
 \bottomrule
 \end{tabular}}
@@ -90,7 +90,7 @@ Introductory textbooks frequently present the German Tank Problem as a closed cu
 However, framing discrete population estimation solely through Eq.~\eqref{eq:umvue} overlooks critical questions in Bayesian data analysis:
 \begin{enumerate}
     \item \textbf{Loss Geometry:} Unbiasedness is an arbitrary mathematical criterion; under asymmetric real-world losses (e.g., military defense planning where underestimating enemy armor is far more costly than overestimating it), what is the optimal Bayes estimator?
-    \item \textbf{Physical Admissibility:} Because the maximum observed serial is $m$, any value $N < m$ is physically impossible ($P(N < m) = 0$). Standard frequentist Wald intervals based on asymptotic normality violate this lower boundary. How do objective Bayesian credible intervals resolve this issue, and how do they relate to exact frequentist pivotal bounds?
+    \item \textbf{Physical Admissibility:} Because the maximum observed serial is $m$, any value $N < m$ is physically impossible ($P(N < m) = 0$). Standard frequentist Wald intervals based on asymptotic normality violate this lower boundary. How do objective Bayesian credible intervals resolve this issue, and how do they relate to frequentist pivotal bounds?
     \item \textbf{Prior Misspecification:} What are the exact conditions for posterior propriety and moment existence, and why do standard informative priors (e.g., Poisson) suffer catastrophic coverage collapse under slight scale misspecification?
     \item \textbf{Real-World Operational Stress-Testing:} What happens when the core textbook assumptions---uniform random sampling, contiguous integer labels, and a static closed population---are applied to real sequential data?
 \end{enumerate}
@@ -134,15 +134,15 @@ The expectation condition requires:
 For $N = k$, the sum contains a single term, yielding $g(k) \binom{k-1}{k-1} = 0 \implies g(k) = 0$. By induction, subtracting the sum for $N-1$ from the sum for $N$ gives $g(N) \binom{N-1}{k-1} = 0 \implies g(N) = 0$ for all $N \ge k$. Thus, $M$ is complete.
 \end{proof}
 
-\begin{proposition}[Ancillarity of Lower Order Statistics]
-Conditional on the sample maximum $m$, the remaining order statistics $(s_{(1)}, \dots, s_{(k-1)})$ are ancillary for $N$.
+\begin{proposition}[Distribution of Lower Order Statistics Conditional on the Maximum]
+Conditional on the sample maximum $m$, the distribution of the remaining order statistics $(s_{(1)}, \dots, s_{(k-1)})$ is independent of $N$.
 \end{proposition}
 \begin{proof}
 The conditional distribution of the lower $k-1$ order statistics given $M = m$ is:
 \begin{equation}
-P(s_{(1)}, \dots, s_{(k-1)} \mid M = m, N) = \frac{P(\mathbf{s} \mid N, k)}{P(M = m \mid N, k)} = \frac{\binom{N}{k}^{-1}}{\binom{m-1}{k-1} / \binom{N}{k}} = \frac{1}{\binom{m-1}{k-1}}
+P(s_{(1)}, \dots, s_{(k-1)} \mid M = m, N) = \frac{P(\mathcal{D} \mid N, k)}{P(M = m \mid N, k)} = \frac{\binom{N}{k}^{-1}}{\binom{m-1}{k-1} / \binom{N}{k}} = \frac{1}{\binom{m-1}{k-1}}
 \end{equation}
-Because this conditional probability is strictly independent of $N$, the lower order statistics contain zero additional Fisher information regarding $N$. All sample information regarding $N$ is concentrated entirely in $m$.
+Because this conditional probability is strictly independent of $N$, the remaining order statistics carry no additional information regarding $N$ once the sample maximum $m$ is known. All sample information regarding $N$ is concentrated entirely in $m$.
 \end{proof}
 
 \subsection{Exact Discrete Bayesian Posteriors Under Reference Priors}
@@ -207,7 +207,12 @@ Under the flat prior $\pi(N) \propto 1$:
     \label{eq:flat_var}
     \end{equation}
 \end{enumerate}
-Under the scale-invariant reciprocal prior $\pi(N) \propto 1/N$, the posterior is proper for all $k \ge 1$, the posterior mean exists for all $k \ge 2$ ($\mathbb{E}_{\text{rec}}[N] = \frac{k(m-1)}{k-1} \approx m \frac{k}{k-1}$), and the variance exists for all $k \ge 3$.
+Under the scale-invariant reciprocal prior $\pi(N) \propto 1/N$, the posterior is proper for all $k \ge 1$, the posterior mean exists for all $k \ge 2$, and the variance exists for all $k \ge 3$. The posterior expectation is given by the ratio of infinite series:
+\begin{equation}
+\mathbb{E}_{\text{rec}}[N \mid m, k] = \frac{\sum_{n=m}^\infty \binom{n}{k}^{-1}}{\sum_{n=m}^\infty \frac{1}{n\binom{n}{k}}} = \frac{\frac{k}{k-1}\binom{m-1}{k-1}^{-1}}{Z(m, k)}, \quad \text{for } k \ge 2
+\label{eq:reciprocal_mean_series}
+\end{equation}
+This ratio does not admit a simple closed-form expression in finite samples and must be evaluated numerically from the normalized discrete posterior; for large $m$, it converges asymptotically to the continuous Pareto expectation $m \frac{k}{k-1}$.
 \end{theorem}
 \begin{proof}
 For the flat prior, the $p$-th moment involves $\sum_{n=m}^\infty n^p \binom{n}{k}^{-1}$. Using the asymptotic expansion $\binom{n}{k}^{-1} = \frac{k!}{n^k} [1 + \mathcal{O}(1/n)]$, the general term behaves as $n^{p-k}$. By the integral test, $\sum_{n=m}^\infty n^{p-k} < \infty$ if and only if $k - p > 1 \implies k \ge p + 2$.
@@ -267,7 +272,7 @@ P(N < m \mid \mathcal{D}) = 0
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.88\textwidth]{figures/expert_boundary_wald_vs_bayes.png}
-\caption{Physical Boundary Admissibility ($m=50, k=5$): Asymptotic Gaussian Wald confidence intervals place $17.5\%$ impossible probability mass below the observed maximum ($N < 50$). In contrast, the exact frequentist pivotal confidence interval $[50.0, 91.0]$ respects the boundary, perfectly coinciding with the 95\% Bayesian credible interval under the reciprocal prior.}
+\caption{Physical Boundary Admissibility ($m=50, k=5$): Asymptotic Gaussian Wald confidence intervals place $17.5\%$ impossible probability mass below the observed maximum ($N < 50$). In contrast, the large-$N$ approximate pivotal confidence interval $[50.0, 91.0]$ respects the boundary, approximately coinciding with the 95\% Bayesian credible interval under the reciprocal prior Pareto approximation.}
 \label{fig:boundary_admissibility}
 \end{figure}
 
@@ -294,13 +299,13 @@ Under the scale-invariant reciprocal prior $\pi(N) \propto 1/N$, the posterior s
 \end{equation}
 Thus, the objective Bayesian credible interval under $\pi(N) \propto 1/N$ \emph{approximately} matches the pivotal interval $[m, m \cdot \alpha^{-1/k}]$ derived under the same large-$N$ continuous approximation. Both intervals enforce strict physical admissibility ($P(N < m) = 0$) and avoid the artificial truncation that afflicts Wald intervals.
 
-\subsection{Sensitivity to Non-Uniform Sampling Tilt}
-A central assumption of the German Tank Problem is uniform random sampling without replacement ($P(s_i = j) = 1/N$). In military operations or commercial transactions, however, newer equipment or recent invoices are often more likely to be observed. We model non-uniform capture probability via a polynomial tilt parameter $\gamma \in \mathbb{R}$:
+\subsection{Sensitivity to Non-Uniform Sampling: A Weighted Sampling Model}
+A central assumption of the German Tank Problem is uniform random sampling without replacement ($P(s_i = j) = 1/N$). In military operations or commercial transactions, however, newer equipment or recent invoices are often more likely to be observed. To illustrate the impact of departures from uniformity, we examine a specific parametric weighted sampling-without-replacement design with polynomial tilt parameter $\gamma \in \mathbb{R}$:
 \begin{equation}
 w(s) \propto s^\gamma, \quad s \in \{1, \dots, N\}
 \label{eq:sampling_tilt}
 \end{equation}
-When $\gamma > 0$, newer tanks (higher serials) are prioritized for front-line deployment, pushing $m$ closer to $N$. When $\gamma < 0$, older tanks have endured longer exposure to capture (survivorship bias), pulling $m$ downward.
+We emphasize that this is one particular illustrative design rather than a unique general model of non-uniform capture in the field. When $\gamma > 0$, newer items (higher serials) are prioritized for capture/observation, pushing $m$ closer to $N$. When $\gamma < 0$, older items have endured longer exposure (e.g., survivorship bias), pulling $m$ downward.
 
 \begin{figure}[H]
 \centering
@@ -309,8 +314,8 @@ When $\gamma > 0$, newer tanks (higher serials) are prioritized for front-line d
 \label{fig:deployment_tilt}
 \end{figure}
 
-\begin{proposition}[Breakdown of Single-Statistic Sufficiency]
-If sampling weights follow $w(s) \propto s^\gamma$ with $\gamma \ne 0$, the sample maximum $M = \max_i s_i$ is no longer a sufficient statistic for $N$.
+\begin{proposition}[Breakdown of Single-Statistic Sufficiency Under Weighted Sampling]
+Under the weighted sampling-without-replacement design $w(s) \propto s^\gamma$ with $\gamma \ne 0$, the sample maximum $M = \max_i s_i$ is no longer a sufficient statistic for $N$.
 \end{proposition}
 \begin{proof}
 Under non-uniform sampling without replacement, the joint probability of the observed sample $\mathbf{s} = \{s_1, \dots, s_k\}$ is:
@@ -320,7 +325,7 @@ P(\mathbf{s} \mid N, k, \gamma) = \frac{\prod_{i=1}^k s_i^\gamma}{\sum_{\mathbf{
 where $\mathcal{C}(N, k)$ denotes all subsets of size $k$ from $\{1, \dots, N\}$. This likelihood cannot be factorized into a function depending on $\mathbf{s}$ solely through $m$ and a function independent of $N$. The sample spacings and product $\prod s_i$ provide information regarding $\gamma$ and $N$.
 \end{proof}
 
-As shown in Figure~\ref{fig:deployment_tilt}, positive deployment tilt ($\gamma = +0.5$) causes the standard flat-prior posterior to overestimate $N$ by $+2.41\%$, while negative tilt ($\gamma = -0.5$) induces a $-4.65\%$ negative bias. In field settings where non-uniformity is suspected, inference must incorporate the full sample vector via MCMC rather than relying solely on $m$.
+To quantify the resulting estimator sensitivity, we simulated this weighted sampling mechanism for $N = 20,000$ and $k = 20$ across $R = 1,000$ independent trials for $\gamma \in [-0.75, 1.0]$. As shown in Figure~\ref{fig:deployment_tilt}, applying standard estimators that assume uniform sampling introduces systematic bias: positive tilt ($\gamma = +0.5$) causes overestimation by $+1.6\%$, while negative tilt ($\gamma = -0.5$) induces a $-4.4\%$ downward bias (worsening to $-11.1\%$ at $\gamma = -0.75$). In operational settings where non-uniformity is suspected, inference cannot rely solely on the sample maximum $m$; a full likelihood evaluation or Markov chain Monte Carlo (MCMC) scheme incorporating the complete sample configuration and sampling weight model would be required.
 
 ---
 
@@ -338,7 +343,7 @@ To verify theoretical derivations and evaluate finite-sample estimator propertie
     \begin{enumerate}
         \item Frequentist UMVUE: $\hat{N} = m(1 + 1/k) - 1$.
         \item Frequentist Asymptotic Wald Interval: $\hat{N} \pm 1.96 \widehat{\text{SE}}$.
-        \item Exact Frequentist Pivotal Interval: $[m, m \cdot (0.05)^{-1/k}]$ (large-$N$ continuous approximation).
+        \item Approximate Pivotal Interval: $[m, m \cdot (0.05)^{-1/k}]$ (large-$N$ continuous approximation of the inverted discrete CDF $P(M \le m \mid N) = \binom{m}{k}/\binom{N}{k}$).
         \item Bayesian Flat Prior ($\pi(N) \propto 1$): Posterior mean and posterior median.
         \item Bayesian Scale-Invariant Reciprocal Prior ($\pi(N) \propto 1/N$): Posterior mean and posterior median.
     \end{enumerate}
@@ -349,36 +354,36 @@ Table~\ref{tab:simulation_results} summarizes empirical performance across all $
 
 \begin{table}[H]
 \centering
-\caption{Monte Carlo Benchmark Leaderboard ($R = 4,000$ Replications, $N_{\text{true}} = 20,000$, Seed 42)}
+\caption{Monte Carlo Benchmark Leaderboard ($R = 4,000$ Replications, $N_{\text{true}} = 20,000$, Seed 42). Theoretical RMSE (Th) is computed from the exact finite-sample variance and bias of each estimator under the discrete uniform distribution of $M$. Nonlinear estimators (posterior medians) have no simple closed-form theoretical RMSE and are marked with `---'.}
 \label{tab:simulation_results}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{llccccc}
 \toprule
 \textbf{Estimator / Framework} & \textbf{Point Estimator} & \textbf{Sample $k$} & \textbf{Mean Bias $\pm$ SE} & \textbf{RMSE (Emp / Th)} & \textbf{95\% Cov $\pm$ SE} & \textbf{Mean Interval Width} \\
 \midrule
-UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 5  & $-48.0 \pm 54.6$  & 3,455.2 / 3,380.3 & 90.0\% $\pm$ 0.47\% (Wald) & 13,219 \\
-Exact Frequentist CI     & --- (Pivotal Bound)        & 5  & ---               & ---               & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
-Bayes Flat Prior         & Posterior Mean             & 5  & $+2,168.6 \pm 69.7$& 4,409.0 / 4,363.9 & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
-Bayes Flat Prior         & Posterior Median           & 5  & $-226.5 \pm 54.2$ & 3,431.3 / ---     & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
-Bayes Reciprocal ($1/N$) & Posterior Mean             & 5  & $+784.3 \pm 58.2$ & 3,683.3 / 3,618.6 & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
-Bayes Reciprocal ($1/N$) & Posterior Median           & 5  & $-900.0 \pm 54.2$ & 3,427.5 / ---     & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
+UMVUE (Frequentist)       & $\hat{N} = m(1 + 1/k) - 1$ & 5  & $-48.0 \pm 54.6$  & 3,455.2 / 3,380.3 & 90.0\% $\pm$ 0.47\% (Wald) & 13,219 \\
+Approximate Pivotal CI    & --- (Pivotal Bound)        & 5  & ---               & ---               & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
+Bayes Flat Prior          & Posterior Mean             & 5  & $+2,168.6 \pm 69.7$& 4,409.0 / 4,363.9 & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
+Bayes Flat Prior          & Posterior Median           & 5  & $-226.5 \pm 54.2$ & 3,431.3 / ---     & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
+Bayes Reciprocal ($1/N$)  & Posterior Mean             & 5  & $+784.3 \pm 58.2$ & 3,683.3 / 3,618.6 & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
+Bayes Reciprocal ($1/N$)  & Posterior Median           & 5  & $-900.0 \pm 54.2$ & 3,427.5 / ---     & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
 \midrule
-UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 10 & $-7.2 \pm 28.5$   & 1,804.3 / 1,770.2 & 92.8\% $\pm$ 0.41\% (Wald) & 6,838 \\
-Exact Frequentist CI     & --- (Pivotal Bound)        & 10 & ---               & ---               & \textbf{94.9\%} $\pm$ 0.35\% & 6,707 \\
-Bayes Flat Prior         & Posterior Mean             & 10 & $+490.4 \pm 29.8$ & 1,885.6 / 1,863.0 & \textbf{96.8\%} $\pm$ 0.28\% & 7,651 \\
-Bayes Flat Prior         & Posterior Median           & 10 & $-103.5 \pm 28.4$ & 1,801.4 / ---     & \textbf{96.8\%} $\pm$ 0.28\% & 7,651 \\
-Bayes Reciprocal ($1/N$) & Posterior Mean             & 10 & $+213.6 \pm 28.8$ & 1,823.1 / 1,809.8 & \textbf{94.9\%} $\pm$ 0.35\% & 6,707 \\
-Bayes Reciprocal ($1/N$) & Posterior Median           & 10 & $-290.4 \pm 28.4$ & 1,805.2 / ---     & \textbf{94.9\%} $\pm$ 0.35\% & 6,707 \\
+UMVUE (Frequentist)       & $\hat{N} = m(1 + 1/k) - 1$ & 10 & $-7.2 \pm 28.5$   & 1,804.3 / 1,825.3 & 92.8\% $\pm$ 0.41\% (Wald) & 6,838 \\
+Approximate Pivotal CI    & --- (Pivotal Bound)        & 10 & ---               & ---               & \textbf{94.9\%} $\pm$ 0.35\% & 6,707 \\
+Bayes Flat Prior          & Posterior Mean             & 10 & $+490.4 \pm 29.8$ & 1,885.6 / 1,921.3 & \textbf{96.8\%} $\pm$ 0.28\% & 7,651 \\
+Bayes Flat Prior          & Posterior Median           & 10 & $-103.5 \pm 28.4$ & 1,801.4 / ---     & \textbf{96.8\%} $\pm$ 0.28\% & 7,651 \\
+Bayes Reciprocal ($1/N$)  & Posterior Mean             & 10 & $+213.6 \pm 28.8$ & 1,823.1 / 1,854.9 & \textbf{94.9\%} $\pm$ 0.35\% & 6,707 \\
+Bayes Reciprocal ($1/N$)  & Posterior Median           & 10 & $-290.4 \pm 28.4$ & 1,805.2 / ---     & \textbf{94.9\%} $\pm$ 0.35\% & 6,707 \\
 \midrule
-UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 25 & $+1.4 \pm 12.0$   & 760.1 / 766.4     & 94.3\% $\pm$ 0.37\% (Wald) & 2,971 \\
-Exact Frequentist CI     & --- (Pivotal Bound)        & 25 & ---               & ---               & \textbf{95.2\%} $\pm$ 0.34\% & 2,514 \\
-Bayes Reciprocal ($1/N$) & Posterior Mean             & 25 & $+33.4 \pm 12.0$  & 761.3 / 766.4     & \textbf{95.2\%} $\pm$ 0.34\% & 2,514 \\
-Bayes Flat Prior         & Posterior Mean             & 25 & $+75.8 \pm 12.1$  & 764.2 / 769.3     & \textbf{95.9\%} $\pm$ 0.31\% & 2,624 \\
+UMVUE (Frequentist)       & $\hat{N} = m(1 + 1/k) - 1$ & 25 & $+1.4 \pm 12.0$   & 760.1 / 769.3     & 94.3\% $\pm$ 0.37\% (Wald) & 2,971 \\
+Approximate Pivotal CI    & --- (Pivotal Bound)        & 25 & ---               & ---               & \textbf{95.2\%} $\pm$ 0.34\% & 2,514 \\
+Bayes Reciprocal ($1/N$)  & Posterior Mean             & 25 & $+33.4 \pm 12.0$  & 761.3 / 771.3     & \textbf{95.2\%} $\pm$ 0.34\% & 2,514 \\
+Bayes Flat Prior          & Posterior Mean             & 25 & $+75.8 \pm 12.1$  & 764.2 / 774.8     & \textbf{95.9\%} $\pm$ 0.31\% & 2,624 \\
 \midrule
-UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 50 & $+1.6 \pm 6.1$    & 386.8 / 391.7     & 95.0\% $\pm$ 0.34\% (Wald) & 1,536 \\
-Exact Frequentist CI     & --- (Pivotal Bound)        & 50 & ---               & ---               & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
-Bayes Reciprocal ($1/N$) & Posterior Mean             & 50 & $+10.6 \pm 6.1$   & 387.1 / 391.7     & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
-Bayes Flat Prior         & Posterior Mean             & 50 & $+17.9 \pm 6.1$   & 387.5 / 391.7     & \textbf{95.8\%} $\pm$ 0.32\% & 1,236 \\
+UMVUE (Frequentist)       & $\hat{N} = m(1 + 1/k) - 1$ & 50 & $+1.6 \pm 6.1$    & 386.8 / 391.7     & 95.0\% $\pm$ 0.34\% (Wald) & 1,536 \\
+Approximate Pivotal CI    & --- (Pivotal Bound)        & 50 & ---               & ---               & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
+Bayes Reciprocal ($1/N$)  & Posterior Mean             & 50 & $+10.6 \pm 6.1$   & 387.1 / 392.0     & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
+Bayes Flat Prior          & Posterior Mean             & 50 & $+17.9 \pm 6.1$   & 387.5 / 392.4     & \textbf{95.8\%} $\pm$ 0.32\% & 1,236 \\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -386,22 +391,24 @@ Bayes Flat Prior         & Posterior Mean             & 50 & $+17.9 \pm 6.1$   &
 \subsection{Key Empirical Findings from Simulation}
 \begin{enumerate}
     \item \textbf{RMSE Contraction and Theoretical Concordance:} At $k = 5$, the theoretical standard deviation of the UMVUE is $\sigma = \sqrt{\frac{(N-k)(N+1)}{k(k+2)}} = \sqrt{\frac{(19995)(20001)}{5(7)}} \approx 3,380.3$. The empirical simulation yielded an RMSE of $3,455.2$, closely matching theoretical prediction. At $k = 50$, the RMSE dropped to $386.8$ (theoretical: $391.7$), confirming $\mathcal{O}(1/k)$ variance contraction.
-    \item \textbf{Median Superiority Under Skewness:} For small sample sizes ($k = 5$), the posterior median under the reciprocal prior achieved an RMSE of $3,427.5$, outperforming both the reciprocal posterior mean ($3,683.3$) and the flat-prior mean ($4,409.0$). Because the finite-sample posterior is heavily right-skewed, the median provides a superior point summary under absolute loss.
-    \item \textbf{Wald Undercoverage vs.\ Pivotal/Bayes Calibration:} At $k = 5$, the frequentist Wald interval achieved only $90.0\% \pm 0.47\%$ coverage, significantly below the nominal 95\% level due to boundary truncation. In contrast, both the exact pivotal interval and the Bayesian reciprocal credible interval achieved $94.4\% \pm 0.36\%$, perfectly calibrated within Monte Carlo margin of error ($\pm 2 \times 0.36\%$).
+    \item \textbf{Median Superiority Under Skewness:} For small sample sizes ($k = 5$), the posterior median under the reciprocal prior achieved an empirical RMSE of $3,427.5$, outperforming both the reciprocal posterior mean ($3,683.3$) and the flat-prior mean ($4,409.0$). Because the finite-sample posterior is heavily right-skewed, the median provides a superior point summary under absolute loss.
+    \item \textbf{Wald Undercoverage vs.\ Pivotal/Bayes Calibration:} At $k = 5$, the frequentist Wald interval achieved only $90.0\% \pm 0.47\%$ coverage, significantly below the nominal 95\% level due to boundary truncation. In contrast, both the large-$N$ pivotal interval and the Bayesian reciprocal credible interval achieved $94.4\% \pm 0.36\%$ empirical coverage, demonstrating good finite-sample calibration close to the nominal 95\% level within Monte Carlo sampling variation ($\pm 2 \times 0.36\%$).
 \end{enumerate}
 
-\subsection{The Informative Prior Trap and Hierarchical Hyperpriors}
+\subsection{Sensitivity to Informative Prior Scale: The Poisson Prior Experiment}
 \label{sec:informative_trap}
-Introductory Bayesian guides sometimes recommend setting an informative prior $\pi(N) = \text{Poisson}(\mu)$ when domain expertise exists. However, fixing a single hyperparameter $\mu$ creates a severe statistical trap. In a Poisson distribution, the variance equals the mean ($\sigma = \sqrt{\mu}$). Consequently, for $\mu = 20,000$, the standard deviation is only $\sqrt{20,000} \approx 141.4$, corresponding to an extremely narrow coefficient of variation ($\text{CV} \approx 0.7\%$). 
+Introductory Bayesian guides sometimes recommend setting an informative prior $\pi(N) = \text{Poisson}(\mu)$ when domain expertise exists. However, fixing a single hyperparameter $\mu$ in an equidispersed distribution creates an artificially narrow prior. In a Poisson distribution, the variance equals the mean ($\sigma^2 = \mu$). Consequently, for $\mu = 20,000$, the standard deviation is only $\sqrt{20,000} \approx 141.4$, corresponding to an extremely narrow coefficient of variation ($\text{CV} = \sigma / \mu \approx 0.7\%$), effectively concentrating nearly all prior mass within $[19,576, 20,424]$.
 
-When the prior mean is misspecified (e.g., $\mu = 10,000$ when true $N = 20,000$), the prior behaves effectively as a point mass at the wrong value. Across $4,000$ simulation trials at $k = 20$, the 95\% credible interval collapsed to $[9,720, 10,280]$, yielding an empirical coverage of \textbf{0.0\%} ($< 1.0\%$).
+To examine the consequences of scale misspecification under such narrow priors, we simulated $R = 4,000$ trials ($N_{\text{true}} = 20,000$, $k = 20$) under a misspecified Poisson prior with mean $\mu = 10,000$ supported on $N \ge k$. The posterior $P(N = n \mid m, k) \propto \binom{n}{k}^{-1} \frac{\mu^n e^{-\mu}}{n!} \mathbb{I}(n \ge m)$ was evaluated on a discrete grid up to $N = 30,000$, and 95\% equal-tailed credible intervals were computed from the cumulative posterior sum. Because the sample size $k = 20$ provides insufficient likelihood mass to shift the dogmatically tight prior ($\text{SD} = 100$), the resulting posterior intervals concentrated around $[9,720, 10,280]$, yielding \textbf{0.0\%} empirical coverage across all $4,000$ trials.
 
-\textbf{Principled Resolution: Hierarchical Gamma--Poisson Hyperpriors.} To incorporate domain knowledge without creating a dogmatic trap, the scale parameter must be endowed with a hyperprior:
+We emphasize that this failure illustrates the danger of dogmatically narrow priors whose variance is artificially constrained, rather than informative Bayesian priors in general. When an informative prior is desired, prior scale uncertainty must be explicitly incorporated.
+
+\textbf{Hierarchical Gamma--Poisson Hyperpriors.} A principled Bayesian resolution is to endow the Poisson rate with a hyperprior:
 \begin{equation}
 N \mid \mu \sim \text{Poisson}(\mu), \quad \mu \sim \text{Gamma}(\alpha_0, \beta_0)
 \label{eq:gamma_poisson}
 \end{equation}
-Choosing weakly informative hyperparameters (e.g., $\alpha_0 = 1, \beta_0 = 1/20,000$, producing $\text{CV} \ge 1.0$) marginalizes into a negative binomial prior that accommodates scale uncertainty. Under this hyperprior, 95\% credible coverage was fully restored to $94.8\% \pm 0.35\%$ while retaining prior domain guidance.
+Marginalizing over $\mu$ yields a negative binomial prior with mean $\alpha_0 / \beta_0$ and variance $\frac{\alpha_0}{\beta_0} (1 + \frac{1}{\beta_0})$. Choosing weakly informative hyperparameters (e.g., $\alpha_0 = 1, \beta_0 = 1/20,000$, producing $\text{CV} \ge 1.0$) provides broad scale dispersion. Under this hierarchical hyperprior, empirical 95\% credible coverage across $4,000$ simulation trials was restored to $94.8\% \pm 0.35\%$, safely accommodating scale uncertainty while still allowing historical domain knowledge to guide the inference.
 
 ---
 
@@ -409,11 +416,11 @@ Choosing weakly informative hyperparameters (e.g., $\alpha_0 = 1, \beta_0 = 1/20
 
 Having established the theoretical behavior and simulation benchmarks of discrete estimators, we turn to the central question of Bayesian Data Analysis: \textbf{What happens when textbook assumptions are applied to real-world sequential data?}
 
-\textbf{Important caveat on data nature.} Neither the commercial invoice dataset nor the WWII archival records constitute a random sample in the sense assumed by the textbook German Tank model. The commercial invoices are a \emph{complete chronological record} of all transactions; the WWII serials are a \emph{non-probability sample} of captured equipment, subject to battlefield capture probabilities and reporting completeness. This section therefore examines the \emph{breakdown of textbook assumptions} rather than a straight validation of the estimator.
+\textbf{Important caveat on data nature and scope of empirical analysis.} Neither the commercial invoice dataset nor the WWII archival records constitute a random sample in the sense assumed by the textbook German Tank model. The commercial invoices represent a \emph{complete chronological census} of transactions generated by an enterprise system, not a random sample drawn from a fixed, static population ceiling. Consequently, our empirical analysis does not attempt to validate the German Tank estimator as a tool for invoice auditing; rather, it uses these real-world data to empirically demonstrate the failure of textbook sampling assumptions (exchangeability, stationarity, and gaplessness) in operational environments. Similarly, the WWII serial records are a non-probability sample of captured equipment, shaped by combat loss patterns and reporting completeness.
 
 We examine two empirical datasets:
 \begin{enumerate}
-    \item \textbf{Historical WWII German Tank Records:} Archival monthly chassis and component serial allocations compiled by the German Army Ordnance Office (Heereswaffenamt) and post-war Speer Ministry records.
+    \item \textbf{Historical WWII German Tank Records:} Archival monthly chassis and component serial allocations compiled by the German Army Ordnance Office (Heereswaffenamt) and post-war Speer Ministry records (distinguishing official production figures, Allied conventional espionage estimates, and serial-number-based statistical estimates~\cite{ruggles1947,goodman1954}).
     \item \textbf{Commercial Invoice Dataset (UCI Online Retail):} 541,909 individual commercial transaction line items representing 22,061 distinct sequential invoices recorded across an active enterprise resource planning (ERP) system.
 \end{enumerate}
 
@@ -495,7 +502,7 @@ provides a plug-in estimate of the fraction of addresses that correspond to real
 
 \section{Discussion: Cross-Domain Connections and Methodological Boundaries}
 
-The mathematical core of the German Tank Problem---\textit{inferring an unobserved discrete total from a sample of sequential markers}---generalizes across diverse domains in data science. Having established the theoretical foundations, simulation benchmarks, and operational pitfalls in the preceding sections, we briefly discuss how this discrete inference framework extends to modern engineering, software, aviation, and ecological problems:
+The mathematical core of the German Tank Problem---\textit{inferring an unobserved discrete total from a sample of sequential markers}---suggests several conceptual connections across data science. Having established the theoretical foundations, simulation benchmarks, and operational pitfalls in the preceding sections, we briefly outline these conceptual connections as potential avenues for future investigation (without presenting them as empirically validated implementations of this project):
 
 \begin{enumerate}
     \item \textbf{Dynamic Industrial Output Monitoring:} In operational manufacturing, production accumulates across successive weeks $t = 1, \dots, T$. Because completed goods cannot be un-manufactured, cumulative output must satisfy strict temporal monotonicity: $N_t \ge N_{t-1} \ge \dots \ge N_1$, with $N_t \ge \max_{\tau \le t} m_\tau$. Applying independent estimators week-by-week generates erratic fluctuations and impossible negative production increments. A Bayesian joint monotonic state-space model resolves this by placing conditional priors on production increments $\Delta N_t = N_t - N_{t-1}$, dramatically improving rate estimation stability.
@@ -520,7 +527,7 @@ This project has investigated the German Tank Problem through a unified, four-st
 
 Our theoretical derivations established that the sample maximum $m$ is minimal sufficient and complete, that scale-invariant reciprocal priors $\pi(N) \propto 1/N$ guarantee posterior propriety for all $k \ge 1$ with a normalizing constant $Z(m,k)=\sum_{j=m}^{\infty}1/[j\binom{j}{k}]$ that converges but has no simple closed form, and that posterior expectations and variances require $k \ge 3$ and $k \ge 4$ respectively under flat priors. Through Bayesian decision theory, we demonstrated that point estimates shift systematically with loss geometry: the posterior mode is negatively biased, the posterior median minimizes absolute error, and asymmetric check loss provides a principled buffer against catastrophic underestimation. We proved why Bayesian credible intervals preserve physical boundary admissibility ($P(N < m) = 0$), showing that objective Bayesian credible intervals under the Pareto approximation approximately match the large-$N$ frequentist pivotal bound $[m, m\alpha^{-1/k}]$, while both expose the failure of asymptotic Gaussian Wald intervals.
 
-Our simulation study on $N = 20,000$ confirmed theoretical RMSE contraction rates ($\mathcal{O}(1/k)$), quantified exact coverage calibration, and revealed the catastrophic coverage collapse of dogmatic Poisson priors alongside its hierarchical hyperprior remedy. Finally, our empirical stress-testing on historical WWII tank archives and 541,909 commercial transactions demonstrated that real-world deployment requires grappling with chronological non-stationarity, operational integer voids (51.2\%), and goodness-of-fit nuances. By formalizing distinct address capacity ($N_{\text{span}}$) and transaction volume ($N_{\text{count}}$) estimands via the Bernoulli thinning framework, we identified the estimand ambiguity that causes oracle rank re-indexing to fail in live operations, and outlined the identifiability conditions that a complete operational thinning estimator would need to satisfy. In summary, discrete Bayesian inference provides a mathematically complete, calibrated, and operational framework for population ceiling estimation, provided that the analyst explicitly models the data-generating mechanisms of the physical world.
+Our simulation study on $N = 20,000$ confirmed theoretical RMSE contraction rates ($\mathcal{O}(1/k)$), evaluated finite-sample empirical coverage calibration, and revealed the catastrophic coverage collapse of dogmatically narrow Poisson priors alongside its hierarchical hyperprior remedy. Finally, our empirical stress-testing on historical WWII tank archives and 541,909 commercial transactions demonstrated that real-world deployment requires grappling with chronological non-stationarity, operational integer voids (51.2\%), and goodness-of-fit nuances. By formalizing distinct address capacity ($N_{\text{span}}$) and transaction volume ($N_{\text{count}}$) estimands via the Bernoulli thinning framework, we identified the estimand ambiguity that causes oracle rank re-indexing to fail in live operations, and outlined the identifiability conditions that a complete operational thinning estimator would need to satisfy. In summary, discrete Bayesian inference provides a mathematically complete, calibrated, and operational framework for population ceiling estimation, provided that the analyst explicitly models the data-generating mechanisms of the physical world.
 
 \begin{thebibliography}{99}
 

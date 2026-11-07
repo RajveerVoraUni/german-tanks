@@ -178,21 +178,21 @@
 \begin{frame}[c]
   \begin{center}
     {\large \textbf{\color{headernavy} Sufficient Statistics \& Exact Discrete Posteriors}}\\[0.10cm]
-    {\scriptsize \color{subgray} Sample maximum $m = \max s_i$ is minimal sufficient; lower order statistics are ancillary.}
+    {\scriptsize \color{subgray} Sample maximum $m = \max s_i$ is minimal sufficient; lower order statistics carry no additional information given $m$.}
   \end{center}
   \vspace{0.38cm}
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{headernavy} Minimal Sufficiency \& Completeness}}\\[0.08cm]
-      {\scriptsize Ordered likelihood without replacement factorizes cleanly:
+      {\scriptsize Unordered likelihood without replacement:
       \begin{equation*}
-        P(\mathbf{s} \mid N, k) = \frac{1}{\binom{N}{k}} \mathbb{I}(N \ge m), \quad m = \max_{1 \le i \le k} s_i
+        P(\mathcal{D} \mid N, k) = \frac{1}{\binom{N}{k}} \mathbb{I}(N \ge m), \quad m = \max_{1 \le i \le k} s_i
       \end{equation*}
       \begin{itemize}
         \setlength{\itemsep}{0.06cm}
         \item Likelihood ratio test proves $m$ is \textbf{minimal sufficient} and \textbf{complete}.
-        \item Spacings $(s_{(1)}, \dots, s_{(k-1)})$ given $m$ are ancillary for $N$.
+        \item Given $m$, conditional distribution of remaining order statistics is independent of $N$.
         \item All sample information regarding $N$ resides entirely in $m$.
       \end{itemize}}
     \end{column}
@@ -510,16 +510,16 @@
       \textbf{Estimator / Framework} & \textbf{Point Estimator} & \textbf{Sample $k$} & \textbf{Mean Bias $\pm$ SE} & \textbf{RMSE (Emp / Th)} & \textbf{95\% Cov $\pm$ SE} & \textbf{Mean Width} \\
       \midrule
       UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 5  & $-48.0 \pm 54.6$  & 3,455.2 / 3,380.3 & 90.0\% $\pm$ 0.47\% (Wald) & 13,219 \\
-      Exact Frequentist CI     & --- (Pivotal Bound)        & 5  & ---               & ---               & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
+      Approximate Pivotal CI   & --- (Pivotal Bound)        & 5  & ---               & ---               & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
       Bayes Flat Prior         & Posterior Mean             & 5  & $+2,168.6 \pm 69.7$& 4,409.0 / 4,363.9 & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
       Bayes Flat Prior         & Posterior Median           & 5  & $-226.5 \pm 54.2$ & 3,431.3 / ---     & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
       Bayes Reciprocal ($1/N$) & Posterior Mean             & 5  & $+784.3 \pm 58.2$ & 3,683.3 / 3,618.6 & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
       Bayes Reciprocal ($1/N$) & Posterior Median           & 5  & $-900.0 \pm 54.2$ & 3,427.5 / ---     & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
       \midrule
       UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 50 & $+1.6 \pm 6.1$    & 386.8 / 391.7     & 95.0\% $\pm$ 0.34\% (Wald) & 1,536 \\
-      Exact Frequentist CI     & --- (Pivotal Bound)        & 50 & ---               & ---               & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
-      Bayes Reciprocal ($1/N$) & Posterior Mean             & 50 & $+10.6 \pm 6.1$   & 387.1 / 391.7     & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
-      Bayes Flat Prior         & Posterior Mean             & 50 & $+17.9 \pm 6.1$   & 387.5 / 391.7     & \textbf{95.8\%} $\pm$ 0.32\% & 1,236 \\
+      Approximate Pivotal CI   & --- (Pivotal Bound)        & 50 & ---               & ---               & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
+      Bayes Reciprocal ($1/N$) & Posterior Mean             & 50 & $+10.6 \pm 6.1$   & 387.1 / 392.0     & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
+      Bayes Flat Prior         & Posterior Mean             & 50 & $+17.9 \pm 6.1$   & 387.5 / 392.4     & \textbf{95.8\%} $\pm$ 0.32\% & 1,236 \\
       \bottomrule
     \end{tabular}}
   \end{center}
@@ -528,12 +528,12 @@
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{accentgreen} Top Tabular Performer: Bayes Reciprocal}}\\[0.03cm]
-      {\scriptsize Achieves lowest median RMSE ($3,427.5$), valid exact coverage ($94.4\%$), and strictly enforces physical admissibility ($P(N < m) = 0$).}
+      {\scriptsize Achieves lowest median RMSE ($3,427.5$), calibrated empirical coverage ($94.4\%$), and strictly enforces physical admissibility ($P(N < m) = 0$).}
     \end{column}
     
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{headernavy} Exact Pivotal Interval Concordance}}\\[0.03cm]
-      {\scriptsize Exact frequentist pivotal interval $[m, m \cdot \alpha^{-1/k}]$ achieves $94.4\% \pm 0.36\%$, matching the Bayesian reciprocal credible interval.}
+      {\small \textbf{\color{headernavy} Approximate Pivotal CI Concordance}}\\[0.03cm]
+      {\scriptsize Large-$N$ pivotal interval $[m, m \cdot \alpha^{-1/k}]$ achieves $94.4\% \pm 0.36\%$ empirical coverage, approximately matching the reciprocal Bayesian credible interval.}
     \end{column}
   \end{columns}
   
