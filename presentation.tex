@@ -209,7 +209,7 @@
         \begin{equation*}
           P(N = n \mid m, k) = \frac{k - 1}{k} \frac{\binom{m-1}{k-1}}{\binom{n}{k}}, \quad n \ge m
         \end{equation*}
-        \item \textbf{Reciprocal Prior ($\pi \propto 1/N$):} Scale-invariant discrete Haar measure; proper for $k \ge 1$; Pareto limit: $p(N) \approx k m^k / N^{k+1}$.
+        \item \textbf{Reciprocal Prior ($\pi \propto 1/N$):} Scale-invariant reference prior (motivated by invariance under multiplicative rescaling $N\to cN$); proper for all $k \ge 1$. The normalizing constant $Z(m,k)=\sum_{j=m}^{\infty}1/[j\binom{j}{k}]$ converges but has no simple closed form. Continuous Pareto approximation: $p(N) \approx k m^k / N^{k+1}$.
       \end{itemize}}
     \end{column}
   \end{columns}
@@ -321,11 +321,11 @@
       {\small \textbf{\color{accentred} Frequentist Wald Boundary Collapse}}\\[0.03cm]
       {\scriptsize Wald interval $\hat{N} \pm 1.96 \cdot \text{SE}$ yields $[40.1, 77.9]$ for $m=50, k=5$. It places \textbf{17.5\% impossible mass} on $N < m=50$.}\\[0.14cm]
       
-      {\small \textbf{\color{accentgreen} Exact Frequentist Pivotal CI}}\\[0.03cm]
-      {\scriptsize Exact pivotal interval $[m, m \cdot \alpha^{-1/k}] = [50.0, 91.0]$ respects the boundary and achieves exact 95\% coverage.}\\[0.14cm]
+      {\small \textbf{\color{accentgreen} Approximate Frequentist Pivotal CI}}\\[0.03cm]
+      {\scriptsize Large-$N$ pivotal interval $[m, m \cdot \alpha^{-1/k}] = [50.0, 91.0]$ respects the boundary. (Exact discrete inversion requires numerical solving; the approximation is accurate for $N \gg k$).}\\[0.14cm]
       
       {\small \textbf{\color{accentblue} Bayesian Credible Coherence}}\\[0.03cm]
-      {\scriptsize Reciprocal prior 95\% credible interval matches $[50.0, 91.0]$ exactly, while providing the full posterior for risk optimization.}
+      {\scriptsize Reciprocal prior 95\% credible interval \emph{approximately} matches $[50.0, 91.0]$ under the same large-$N$ Pareto approximation, while providing the full posterior for risk optimization.}
     \end{column}
   \end{columns}
   
@@ -753,7 +753,7 @@
         \begin{equation*}
           \hat{\rho} = \frac{k - 1}{s_{(k)} - s_{(1)}} \approx 0.4878
         \end{equation*}
-        \item Enables simultaneous, un-circular Bayesian inference on both $N_{\text{span}}$ and $N_{\text{count}}$.
+        \item Provides a conceptual framework for joint inference on $N_{\text{span}}$ and $N_{\text{count}}$; a complete operational estimator requires identifiability verification and simulation testing (future work).
       \end{itemize}}
     \end{column}
   \end{columns}
@@ -819,7 +819,7 @@
     \begin{column}{0.31\textwidth}
       \centering
       {\small \textbf{\color{accentcyan} 1. Objective Foundations}}\\[0.12cm]
-      {\scriptsize \color{white!85} Scale-invariant prior $\pi(N) \propto 1/N$ yields proper posteriors ($k \ge 1$) and admissible physical boundaries ($P(N < m) = 0$), matching exact frequentist pivotal bounds.}
+      {\scriptsize \color{white!85} Scale-invariant prior $\pi(N) \propto 1/N$ yields proper posteriors ($k \ge 1$) with normalizing constant $Z(m,k)=\sum_{j\ge m}1/[j\binom{j}{k}]$ (no closed form). Bayesian HPD intervals approximately match the large-$N$ frequentist pivotal bound and enforce admissible physical boundaries ($P(N < m) = 0$).}
     \end{column}
     
     \begin{column}{0.31\textwidth}

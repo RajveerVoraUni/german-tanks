@@ -43,9 +43,9 @@
 \begin{abstract}
 The German Tank Problem represents a foundational paradigm in discrete parameter estimation: inferring an unknown population ceiling $N \in \mathbb{N}$ from a sample of $k$ sequential integer markers. While introductory treatments present this as a solved curiosity via the classical Uniformly Minimum Variance Unbiased Estimator (UMVUE), real-world deployments encounter profound theoretical and practical subtleties. In this paper, we structure a complete Bayesian Data Analysis investigation around one cohesive narrative: we establish the core theoretical properties of discrete ceiling estimation, evaluate estimator behavior through controlled Monte Carlo simulation, and systematically stress-test textbook assumptions against real-world data. 
 
-Theoretically, we prove the minimal sufficiency and completeness of the sample maximum $m$, establish exact moment existence thresholds ($k \ge 2$ for proper posteriors, $k \ge 3$ for finite expectations, and $k \ge 4$ for finite variance under flat priors), and evaluate Bayesian decision theory across symmetric, absolute, and asymmetric risk-averse loss functions (pinball check loss). We examine physical boundary admissibility ($P(N < m) = 0$), showing why asymptotic Gaussian Wald intervals assign positive probability to physically impossible values, whereas objective Bayesian credible intervals under scale-invariant priors match exact frequentist pivotal bounds. In a controlled simulation study ($N = 20,000$, $R = 4,000$ replications), we verify theoretical RMSE contraction rates ($\mathcal{O}(1/k)$), quantify empirical coverage calibration, and demonstrate the catastrophic failure of naive informative Poisson priors alongside a hierarchical Gamma--Poisson hyperprior remedy. 
+Theoretically, we prove the minimal sufficiency and completeness of the sample maximum $m$, establish exact moment existence thresholds ($k \ge 2$ for proper posteriors, $k \ge 3$ for finite expectations, and $k \ge 4$ for finite variance under flat priors), and evaluate Bayesian decision theory across symmetric, absolute, and asymmetric risk-averse loss functions (pinball check loss). We examine physical boundary admissibility ($P(N < m) = 0$), showing why asymptotic Gaussian Wald intervals assign positive probability to physically impossible values, whereas objective Bayesian credible intervals under the scale-invariant reciprocal prior $\pi(N)\propto 1/N$ approximately match the large-$N$ frequentist pivotal bound $[m,m\alpha^{-1/k}]$. We show that the reciprocal prior yields a proper posterior for all $k\ge 1$ with normalizing constant $Z(m,k)=\sum_{j=m}^{\infty}1/[j\binom{j}{k}]$, which converges but has no simple closed form in general. In a controlled simulation study ($N = 20,000$, $R = 4,000$ replications), we verify theoretical RMSE contraction rates ($\mathcal{O}(1/k)$), quantify empirical coverage calibration, and demonstrate the catastrophic failure of naive informative Poisson priors alongside a hierarchical Gamma--Poisson hyperprior remedy. 
 
-Finally, we apply these methods to real-world data: archival WWII German tank production records and 541,909 commercial transaction records spanning 22,061 sequential invoices. We evaluate what happens when textbook assumptions meet operational reality: chronological generation induces non-stationary arrival dynamics, operational processes (cancellations, abandoned sessions, and database sequence blocks) generate large integer voids (51.2\%), and a non-significant goodness-of-fit test cannot be interpreted as proof of uniform sampling. We resolve the resulting estimand ambiguity between address allocation capacity ($N_{\text{span}}$) and transaction count ($N_{\text{count}}$) using an operational Bernoulli thinning model rather than an un-deployable oracle rank re-indexing. We conclude with a discussion of how this discrete inference framework connects to modern applications across dynamic industrial flow, software reliability, aviation surveillance, and mark-recapture ecology.
+Finally, we apply these methods to real-world data: archival WWII German tank production records and 541,909 commercial transaction records spanning 22,061 sequential invoices. We evaluate what happens when textbook assumptions meet operational reality: chronological generation induces non-stationary arrival dynamics, operational processes (cancellations, abandoned sessions, and database sequence blocks) generate large integer voids (51.2\%), and a non-significant goodness-of-fit test cannot be interpreted as proof of uniform sampling. We resolve the resulting estimand ambiguity between address allocation capacity ($N_{\text{span}}$) and transaction count ($N_{\text{count}}$) through a Bernoulli thinning framework that clarifies why oracle rank re-indexing is not deployable in live operations, while identifying the identifiability conditions a complete operational estimator would need to satisfy. We conclude with a discussion of how this discrete inference framework connects to modern applications across dynamic industrial flow, software reliability, aviation surveillance, and mark-recapture ecology.
 \end{abstract}
 
 \tableofcontents
@@ -65,7 +65,7 @@ In contrast, statistical intelligence teams analyzed sequential serial numbers s
 
 \begin{table}[H]
 \centering
-\caption{Historical Allied Statistical Estimates vs.\ Official Speer Ministry Production Ledgers}
+\caption{Historical Allied Statistical Estimates vs.\ Official Speer Ministry Production Ledgers~\cite{ruggles1947,goodman1954}}
 \label{tab:wwii_history}
 \resizebox{0.95\textwidth}{!}{
 \begin{tabular}{lcccc}
@@ -111,14 +111,14 @@ Let $N \in \mathbb{N}$ denote the unknown total population ceiling. We observe a
 The sample maximum $m = \max_{1 \le i \le k} s_i$ is a minimal sufficient and complete statistic for $N$.
 \end{proposition}
 \begin{proof}
-Let $\mathbf{s} = (s_{(1)}, \dots, s_{(k)})$ and $\mathbf{s}' = (s'_{(1)}, \dots, s'_{(k)})$ be two ordered samples with maxima $m = s_{(k)}$ and $m' = s'_{(k)}$. The joint likelihood of an ordered sample without replacement is:
+Let $\mathbf{s} = (s_{(1)}, \dots, s_{(k)})$ and $\mathbf{s}' = (s'_{(1)}, \dots, s'_{(k)})$ be two ordered samples with maxima $m = s_{(k)}$ and $m' = s'_{(k)}$. We model an \emph{unordered} sample of $k$ distinct integers.  Since all $\binom{N}{k}$ unordered subsets of $\{1,\dots,N\}$ are equally likely, the probability of observing the unordered set $\mathcal{D}=\{s_1,\dots,s_k\}$ is:
 \begin{equation}
-P(\mathbf{s} \mid N, k) = \frac{1}{\binom{N}{k}} \mathbb{I}(N \ge m) \mathbb{I}(1 \le s_{(1)} < \dots < s_{(k)})
+P(\mathcal{D} \mid N, k) = \frac{1}{\binom{N}{k}} \mathbb{I}(N \ge m)
 \label{eq:likelihood}
 \end{equation}
 The likelihood ratio between the two samples is:
 \begin{equation}
-\frac{P(\mathbf{s} \mid N, k)}{P(\mathbf{s}' \mid N, k)} = \frac{\mathbb{I}(N \ge m)}{\mathbb{I}(N \ge m')}
+\frac{P(\mathcal{D} \mid N, k)}{P(\mathcal{D}' \mid N, k)} = \frac{\mathbb{I}(N \ge m)}{\mathbb{I}(N \ge m')}
 \end{equation}
 This ratio is independent of the parameter $N$ for all $N \ge \max(m, m')$ if and only if $m = m'$. By the Lehmann--Scheff{\'e} criterion, $M = \max_i s_i$ is minimal sufficient for $N$.
 
@@ -164,22 +164,28 @@ P(N = n \mid m, k) = \frac{k - 1}{k} \frac{\binom{m-1}{k-1}}{\binom{n}{k}}, \qua
 \end{equation}
 
 \subsubsection{Scale-Invariant Reciprocal Prior (\texorpdfstring{$\pi(N) \propto 1/N$}{pi(N) propto 1/N})}
-The parameter $N$ represents an unknown scale/ceiling. By Jeffreys' invariance rule for scale parameters and group invariance under discrete dilation, the objective reference prior is $\pi(N) \propto 1/N$. Under this prior:
+A natural reference prior for an unknown population ceiling is $\pi(N) \propto 1/N$.  This choice is motivated by \emph{scale-invariance}: under the multiplicative reparametrization $N' = cN$, the Jacobian is $|dN/dN'| = 1/c$, so $\pi(N) \propto 1/N$ is the unique (up to normalization) prior that is left invariant under this group of transformations.  We adopt it on scale-invariance grounds; we do \emph{not} call it the Jeffreys prior, since deriving a formal Jeffreys prior requires Fisher information, which is not straightforwardly defined for this discrete, support-dependent model.
+
+Under the reciprocal prior, the posterior kernel is proportional to
 \begin{equation}
-\binom{n}{k}^{-1} \frac{1}{n} = \frac{(n-k)! k!}{n! \, n} = \frac{1}{k} \left[ \binom{n-1}{k}^{-1} - \binom{n}{k}^{-1} \right]
+\pi(N = n \mid m, k) \propto \frac{1}{n\binom{n}{k}}, \quad n \ge m.
+\label{eq:reciprocal_kernel}
 \end{equation}
-The normalizing sum telescopes cleanly for any $k \ge 1$:
+The normalizing constant is the series
 \begin{equation}
-\sum_{j=m}^\infty \frac{1}{j \binom{j}{k}} = \frac{1}{k \binom{m-1}{k}}
+Z(m, k) = \sum_{j=m}^{\infty} \frac{1}{j\binom{j}{k}}.
+\label{eq:reciprocal_normalizing}
 \end{equation}
-The resulting exact posterior under the reciprocal prior is:
+This series converges for every $k \ge 1$: the general term satisfies $1/[j\binom{j}{k}] = k!/[j \cdot j(j-1)\cdots(j-k+1)] \sim k!\,j^{-(k+1)}$ for large $j$, so convergence follows by comparison with the $p$-series $\sum j^{-(k+1)}$ ($k+1 \ge 2$).  However, $Z(m,k)$ does \emph{not} admit a simple closed form in general; it must be evaluated numerically for a given $m$ and $k$.
+
+The resulting normalized posterior is therefore
 \begin{equation}
-P(N = n \mid m, k) = \frac{\binom{m-1}{k}}{n \binom{n}{k}}, \quad n \ge m
+P(N = n \mid m, k) = \frac{1}{Z(m,k)} \cdot \frac{1}{n\binom{n}{k}}, \quad n \ge m.
 \label{eq:reciprocal_posterior}
 \end{equation}
-For large $n$, Stirling's approximation reveals that Eq.~\eqref{eq:reciprocal_posterior} converges to a continuous Pareto distribution:
+For large $n$, Stirling's approximation gives $n\binom{n}{k} \approx n^{k+1}/k!$, so the tail of Eq.~\eqref{eq:reciprocal_posterior} decays as $k!/n^{k+1}$.  This matches the density of a Pareto distribution, motivating the continuous approximation:
 \begin{equation}
-p(N \mid m, k) \approx \frac{k m^k}{N^{k+1}}, \quad N \ge m
+p(N \mid m, k) \approx \frac{k m^k}{N^{k+1}}, \quad N \ge m \quad \text{(continuous Pareto approximation for large } N\text{)}
 \label{eq:pareto_limit}
 \end{equation}
 
@@ -228,7 +234,11 @@ In Bayesian decision theory, a point estimate $\hat{N}$ is selected to minimize 
     \begin{equation}
     \hat{N}_{\text{MAP}} = m
     \end{equation}
-    While the mode maximizes point probability mass at the observed boundary, it is heavily biased downward ($\mathbb{E}[M] = \frac{k}{k+1}(N+1) - 1$, producing $-16.7\%$ bias at $k=5$).
+    While the mode maximizes point probability mass at the observed boundary, it is heavily biased downward. Using the PMF in Eq.~\eqref{eq:pmf_m}, the exact expectation of the sample maximum is $\mathbb{E}[M \mid N, k] = k(N+1)/(k+1)$, so the expected bias of the MAP estimate $\hat{N}_{\text{MAP}} = m$ relative to $N$ is:
+    \begin{equation}
+    \mathbb{E}[\hat{N}_{\text{MAP}} - N] = \mathbb{E}[M] - N = \frac{k(N+1)}{k+1} - N = \frac{k - N}{k+1} < 0,
+    \end{equation}
+    yielding a relative bias of $(k-N)/[N(k+1)] \approx -1/(k+1)$ for large $N$. At $k = 5$, this gives $-1/6 \approx -16.7\%$.
     \item \textbf{Linear Absolute Loss ($L_1(N, \hat{N}) = |N - \hat{N}|$):} The optimal action is the posterior median $\hat{N}_{\text{med}}$. Inverting the continuous Pareto approximation gives:
     \begin{equation}
     \int_m^{\hat{N}_{\text{med}}} \frac{(k-1) m^{k-1}}{N^k} \, dN = \frac{1}{2} \implies \hat{N}_{\text{med}} \approx m \cdot 2^{1/(k-1)}
@@ -271,18 +281,18 @@ For $m = 50$ and $k = 5$, $\hat{N}_{\text{UMVUE}} = 50(1 + 0.2) - 1 = 59$, with 
 \end{equation}
 As illustrated in Figure~\ref{fig:boundary_admissibility}, the Wald interval places substantial probability mass ($17.5\%$) on values $N < 50$, which is physically impossible. 
 
-In contrast, the exact frequentist confidence interval is derived from the pivotal quantity $U = M/N$. The cumulative distribution function of $M/N$ is $P(M/N \le u) \approx u^k$. Setting $P(M/N \le u_{\alpha}) = \alpha$ yields the exact $1-\alpha$ pivotal interval:
+In contrast, the frequentist confidence interval based on the pivotal quantity $U = M/N$ is derived as follows. For the discrete model, the exact CDF of $M$ is $P(M \le m \mid N) = \binom{m}{k}/\binom{N}{k}$. For large $N$ this converges to $P(M/N \le u) \approx u^k$, giving the closed-form large-$N$ pivotal interval:
 \begin{equation}
 \text{CI}_{\text{pivotal}} = \left[ m, \, m \cdot \alpha^{-1/k} \right]
 \label{eq:pivotal_ci}
 \end{equation}
-For $m = 50, k = 5, \alpha = 0.05$, Eq.~\eqref{eq:pivotal_ci} yields $[50, 50 \cdot (0.05)^{-0.2}] = [50.0, 91.0]$. 
+For $m = 50, k = 5, \alpha = 0.05$, Eq.~\eqref{eq:pivotal_ci} yields $[50, 50 \cdot (0.05)^{-0.2}] = [50.0, 91.0]$. (For exact discrete inversion, one would solve $\binom{m}{k}/\binom{N}{k} \ge \alpha$ for $N$ numerically; the continuous approximation above is accurate for realistic $N \gg k$.)
 
-Under the scale-invariant reciprocal prior $\pi(N) \propto 1/N$, the posterior survival function is $P(N \ge x \mid m, k) \approx (m/x)^k$. The 95\% Bayesian Highest Posterior Density (HPD) credible interval satisfies:
+Under the scale-invariant reciprocal prior $\pi(N) \propto 1/N$, the posterior survival function is approximated by $P(N \ge x \mid m, k) \approx (m/x)^k$ (from the Pareto approximation, Eq.~\eqref{eq:pareto_limit}). The 95\% Bayesian Highest Posterior Density (HPD) credible interval satisfies:
 \begin{equation}
 \int_m^{N_{\text{upper}}} \frac{k m^k}{N^{k+1}} \, dN = 0.95 \implies N_{\text{upper}} = m \cdot (0.05)^{-1/k} = 91.0
 \end{equation}
-Thus, the objective Bayesian credible interval under $\pi(N) \propto 1/N$ exactly matches the frequentist pivotal interval $[m, m \cdot \alpha^{-1/k}]$, enforcing strict physical admissibility ($P(N < m) = 0$) while avoiding artificial truncation.
+Thus, the objective Bayesian credible interval under $\pi(N) \propto 1/N$ \emph{approximately} matches the pivotal interval $[m, m \cdot \alpha^{-1/k}]$ derived under the same large-$N$ continuous approximation. Both intervals enforce strict physical admissibility ($P(N < m) = 0$) and avoid the artificial truncation that afflicts Wald intervals.
 
 \subsection{Sensitivity to Non-Uniform Sampling Tilt}
 A central assumption of the German Tank Problem is uniform random sampling without replacement ($P(s_i = j) = 1/N$). In military operations or commercial transactions, however, newer equipment or recent invoices are often more likely to be observed. We model non-uniform capture probability via a polynomial tilt parameter $\gamma \in \mathbb{R}$:
@@ -328,7 +338,7 @@ To verify theoretical derivations and evaluate finite-sample estimator propertie
     \begin{enumerate}
         \item Frequentist UMVUE: $\hat{N} = m(1 + 1/k) - 1$.
         \item Frequentist Asymptotic Wald Interval: $\hat{N} \pm 1.96 \widehat{\text{SE}}$.
-        \item Exact Frequentist Pivotal Interval: $[m, m \cdot (0.05)^{-1/k}]$.
+        \item Exact Frequentist Pivotal Interval: $[m, m \cdot (0.05)^{-1/k}]$ (large-$N$ continuous approximation).
         \item Bayesian Flat Prior ($\pi(N) \propto 1$): Posterior mean and posterior median.
         \item Bayesian Scale-Invariant Reciprocal Prior ($\pi(N) \propto 1/N$): Posterior mean and posterior median.
     \end{enumerate}
@@ -399,6 +409,8 @@ Choosing weakly informative hyperparameters (e.g., $\alpha_0 = 1, \beta_0 = 1/20
 
 Having established the theoretical behavior and simulation benchmarks of discrete estimators, we turn to the central question of Bayesian Data Analysis: \textbf{What happens when textbook assumptions are applied to real-world sequential data?}
 
+\textbf{Important caveat on data nature.} Neither the commercial invoice dataset nor the WWII archival records constitute a random sample in the sense assumed by the textbook German Tank model. The commercial invoices are a \emph{complete chronological record} of all transactions; the WWII serials are a \emph{non-probability sample} of captured equipment, subject to battlefield capture probabilities and reporting completeness. This section therefore examines the \emph{breakdown of textbook assumptions} rather than a straight validation of the estimator.
+
 We examine two empirical datasets:
 \begin{enumerate}
     \item \textbf{Historical WWII German Tank Records:} Archival monthly chassis and component serial allocations compiled by the German Army Ordnance Office (Heereswaffenamt) and post-war Speer Ministry records.
@@ -434,7 +446,7 @@ To ensure complete scientific rigor, we structure each empirical finding under f
     \text{Unrecorded Voids} = 45,223 - 22,061 = 23,162 \text{ slots} \quad \left( \frac{23,162}{45,223} = 51.22\% \text{ void rate} \right)
     \end{equation}
     \item \textbf{Why it matters to the research question:} The textbook German Tank Problem assumes a contiguous sequence $\{1, 2, \dots, N\}$ with zero internal gaps. A $51.2\%$ missing integer rate represents an apparent total failure of the contiguous assumption.
-    \item \textbf{What statistical conclusions can and cannot be drawn:} A naive interpretation might conclude that over half the records were lost or destroyed. Detailed audit of the raw data reveals the true operational mechanisms:
+    \item \textbf{What statistical conclusions can and cannot be drawn:} The 51.2\% figure is computed directly from the observed address span and the recorded invoice count; it does not, by itself, establish the reason for the voids. A naive interpretation might conclude that over half the records were lost. The following operational mechanisms are \emph{plausible} given standard ERP architecture, but would need direct verification from raw transaction logs (e.g., confirming the volume of C-prefixed records) or external documentation:
     \begin{itemize}
         \item \textit{Transaction Cancellations:} In commercial ERP databases, credit memos and cancelled orders are assigned sequential numbers prefixed with ``C'' (e.g., \texttt{C536379}). These entries consume sequential integer slots in the central database ledger but are filtered out of standard sales tables.
         \item \textit{Shopping Cart Abandonment \& Gateway Dropouts:} Payment gateway timeouts and abandoned web checkouts reserve invoice numbers that never materialize into completed sales records.
@@ -445,7 +457,7 @@ To ensure complete scientific rigor, we structure each empirical finding under f
 \subsection{Finding 3: Goodness-of-Fit and the Uniformity Fallacy}
 \begin{enumerate}
     \item \textbf{What was measured:} The empirical cumulative distribution function (ECDF) of observed normalized serial numbers against the theoretical continuous uniform distribution $F(u) = u$ on $[0, 1]$.
-    \item \textbf{How it was calculated:} Observed serials were normalized by the sample maximum $u_i = s_i / m$. A two-sample Kolmogorov--Smirnov (KS) test was conducted against the uniform null hypothesis, yielding test statistic $D = 0.012$ ($p = 0.28$) across the full invoice dataset, and $D = 0.018$ ($p = 8.94 \times 10^{-6}$) on the customer-associated subset ($n = 18,536$).
+    \item \textbf{How it was calculated:} Observed serials were normalized by the sample maximum $u_i = s_i / m$. A two-sample Kolmogorov--Smirnov (KS) test was conducted against the uniform null hypothesis, yielding test statistic $D = 0.012$ ($p = 0.28$) across the full invoice dataset, and $D = 0.018$ ($p = 8.94 \times 10^{-6}$) on the customer-associated subset ($n = 18,536$). \textbf{Methodological note:} Normalizing by the sample maximum $m$ (which is itself estimated from the data) introduces upward bias in the apparent fit: by construction $u_{(k)} = 1$ exactly, so the test cannot detect the upper-tail deviation that would distinguish a uniform from a near-uniform distribution. A fully calibrated test would account for this boundary constraint.
     \item \textbf{Why it matters to the research question:} Analysts frequently run a goodness-of-fit test to verify whether the uniform sampling assumption of the German Tank Problem is satisfied.
     \item \textbf{What statistical conclusions can and cannot be drawn:} \textbf{Crucial methodological nuance:} \textit{A non-significant goodness-of-fit test ($p > 0.05$) must NEVER be interpreted as proof that the uniform sampling assumption is true.} 
     \begin{itemize}
@@ -477,7 +489,7 @@ Estimating the retention rate $\rho$ from the observed sample spacings:
 \begin{equation}
 \hat{\rho} = \frac{k - 1}{s_{(k)} - s_{(1)}} \approx \frac{22061 - 1}{581587 - 536365} = \frac{22060}{45222} \approx 0.4878
 \end{equation}
-allows simultaneous, un-circular Bayesian inference on both system capacity $N_{\text{span}}$ and net transaction count $N_{\text{count}}$.
+provides a plug-in estimate of the fraction of addresses that correspond to realized transactions.  However, there is an important identifiability caveat: this estimate of $\hat{\rho}$ uses the \emph{full} observed invoice set to compute both the numerator ($k-1$) and the denominator (address span), so it is not usable for estimating unknown capacity from an incomplete field sample.  A complete operational solution would require a generative model in which $N_{\text{span}}$ is itself unknown and $\rho$ is estimated from spacings in a partial sample, with identifiability and simulation verification still to be established.  We present the Bernoulli thinning model as a \emph{conceptual framework} for future work, not as a solved, deployed estimator.
 
 ---
 
@@ -506,9 +518,9 @@ While discrete serial estimation is exceptionally powerful, analysts must respec
 
 This project has investigated the German Tank Problem through a unified, four-stage research narrative: mathematical foundations, controlled Monte Carlo simulation, real-world empirical stress-testing, and cross-domain synthesis.
 
-Our theoretical derivations established that the sample maximum $m$ is minimal sufficient and complete, that objective reciprocal priors $\pi(N) \propto 1/N$ guarantee posterior propriety for all $k \ge 1$, and that posterior expectations and variances require $k \ge 3$ and $k \ge 4$ respectively under flat priors. Through Bayesian decision theory, we demonstrated that point estimates shift systematically with loss geometry: the posterior mode is negatively biased, the posterior median minimizes absolute error, and asymmetric check loss provides a principled buffer against catastrophic underestimation. We proved why Bayesian credible intervals preserve physical boundary admissibility ($P(N < m) = 0$), reconciling objective Bayesian credible intervals with exact frequentist pivotal bounds while exposing the failure of asymptotic Gaussian Wald intervals.
+Our theoretical derivations established that the sample maximum $m$ is minimal sufficient and complete, that scale-invariant reciprocal priors $\pi(N) \propto 1/N$ guarantee posterior propriety for all $k \ge 1$ with a normalizing constant $Z(m,k)=\sum_{j=m}^{\infty}1/[j\binom{j}{k}]$ that converges but has no simple closed form, and that posterior expectations and variances require $k \ge 3$ and $k \ge 4$ respectively under flat priors. Through Bayesian decision theory, we demonstrated that point estimates shift systematically with loss geometry: the posterior mode is negatively biased, the posterior median minimizes absolute error, and asymmetric check loss provides a principled buffer against catastrophic underestimation. We proved why Bayesian credible intervals preserve physical boundary admissibility ($P(N < m) = 0$), showing that objective Bayesian credible intervals under the Pareto approximation approximately match the large-$N$ frequentist pivotal bound $[m, m\alpha^{-1/k}]$, while both expose the failure of asymptotic Gaussian Wald intervals.
 
-Our simulation study on $N = 20,000$ confirmed theoretical RMSE contraction rates ($\mathcal{O}(1/k)$), quantified exact coverage calibration, and revealed the catastrophic coverage collapse of dogmatic Poisson priors alongside its hierarchical hyperprior remedy. Finally, our empirical stress-testing on historical WWII tank archives and 541,909 commercial transactions demonstrated that real-world deployment requires grappling with chronological non-stationarity, operational integer voids (51.2\%), and goodness-of-fit nuances. By formalizing distinct address capacity ($N_{\text{span}}$) and transaction volume ($N_{\text{count}}$) estimands via Bernoulli thinning, we resolved integer voids without circular oracle re-indexing. In summary, discrete Bayesian inference provides a mathematically complete, calibrated, and operational framework for population ceiling estimation, provided that the analyst explicitly models the data-generating mechanisms of the physical world.
+Our simulation study on $N = 20,000$ confirmed theoretical RMSE contraction rates ($\mathcal{O}(1/k)$), quantified exact coverage calibration, and revealed the catastrophic coverage collapse of dogmatic Poisson priors alongside its hierarchical hyperprior remedy. Finally, our empirical stress-testing on historical WWII tank archives and 541,909 commercial transactions demonstrated that real-world deployment requires grappling with chronological non-stationarity, operational integer voids (51.2\%), and goodness-of-fit nuances. By formalizing distinct address capacity ($N_{\text{span}}$) and transaction volume ($N_{\text{count}}$) estimands via the Bernoulli thinning framework, we identified the estimand ambiguity that causes oracle rank re-indexing to fail in live operations, and outlined the identifiability conditions that a complete operational thinning estimator would need to satisfy. In summary, discrete Bayesian inference provides a mathematically complete, calibrated, and operational framework for population ceiling estimation, provided that the analyst explicitly models the data-generating mechanisms of the physical world.
 
 \begin{thebibliography}{99}
 
