@@ -68,7 +68,7 @@
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.31\textwidth}
       {\small \textbf{\color{headernavy} 1. Espionage Inflation}}\\[0.08cm]
-      {\scriptsize Conventional military intelligence relied on spy networks and prisoners, overstating production by a factor of \textbf{6--8$\times$} (1,000--1,550 tanks/mo).}
+      {\scriptsize Conventional military intelligence relied on spy networks and prisoners, overstating production by a factor of \textbf{4.5--8.2$\times$} (1,000--1,550 tanks/mo).}
     \end{column}
     
     \begin{column}{0.31\textwidth}
@@ -356,18 +356,18 @@
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.08cm}
-        \item $\gamma > 0$ (newer tanks deployed first) pushes $m \to N$, inducing $+2.41\%$ overestimation bias.
-        \item $\gamma < 0$ (survivorship bias / older units captured) produces $-4.65\%$ negative bias.
+        \item $\gamma > 0$ (newer tanks prioritized) pushes $m \to N$, inducing $+1.6\%$ bias ($\gamma = +0.5$).
+        \item $\gamma < 0$ (survivorship bias / older units) produces $-4.4\%$ bias ($-11.1\%$ at $\gamma = -0.75$).
       \end{itemize}}
       
       \vspace{0.14cm}
-      {\small \textbf{\color{accentred} Loss of Single-Statistic Sufficiency}}\\[0.06cm]
+      {\small \textbf{\color{accentred} Sufficiency Structure}}\\[0.06cm]
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.08cm}
-        \item When $\gamma \ne 0$, likelihood no longer factorizes purely through $m$.
-        \item Sample spacings contain information about tilt $\gamma$.
-        \item Requires full-sample MCMC evaluation rather than closed-form order statistics.
+        \item \textbf{Known $\gamma$:} $m$ remains sufficient for $N$ via Fisher--Neyman factorization.
+        \item \textbf{Unknown $\gamma$:} Joint minimal sufficient statistic is $(m, \sum_{i=1}^k \log s_i)$.
+        \item $m$ alone is no longer sufficient for $N$ when tilt $\gamma$ is an unknown nuisance.
       \end{itemize}}
     \end{column}
   \end{columns}
@@ -476,14 +476,14 @@
     \end{column}
     
     \begin{column}{0.44\textwidth}
-      {\small \textbf{\color{accentgreen} Perfect Reference Calibration}}\\[0.03cm]
-      {\scriptsize Reciprocal prior achieves \textbf{94.4\% $\pm$ 0.36\%} coverage at $k=5$ and \textbf{95.6\% $\pm$ 0.33\%} at $k=50$, matching exact nominal rates.}\\[0.14cm]
+      {\small \textbf{\color{accentgreen} Robust Reference Calibration}}\\[0.03cm]
+      {\scriptsize Reciprocal prior achieves \textbf{94.4\% $\pm$ 0.36\%} coverage at $k=5$ and \textbf{95.6\% $\pm$ 0.32\%} at $k=50$, closely tracking nominal rates.}\\[0.14cm]
       
-      {\small \textbf{\color{accentred} Informative Misspecification Collapse}}\\[0.03cm]
-      {\scriptsize Fixed Poisson($\mu=10k$) has tiny $\text{CV} \approx 0.7\%$, collapsing 95\% coverage to \textbf{$< 1.0\%$} when true $N=20k$.}\\[0.14cm]
+      {\small \textbf{\color{accentred} Informative Boundary Trapping}}\\[0.03cm]
+      {\scriptsize Misspecified Poisson($\mu=10k$) on $N \ge m \approx 19k$ traps posterior against boundary $[m, m+5]$, collapsing coverage to \textbf{0.3\%}.}\\[0.14cm]
       
       {\small \textbf{\color{accentblue} Hyperprior Solution}}\\[0.03cm]
-      {\scriptsize Gamma-Poisson hierarchical hyperprior restores nominal coverage to \textbf{94.8\% $\pm$ 0.35\%}.}
+      {\scriptsize Gamma-Poisson hyperprior ($\text{CV} \ge 1$) restores coverage to \textbf{94.6\%--95.0\%} even under 50\% prior misspecification.}
     \end{column}
   \end{columns}
   
@@ -511,15 +511,15 @@
       \midrule
       UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 5  & $-48.0 \pm 54.6$  & 3,455.2 / 3,380.3 & 90.0\% $\pm$ 0.47\% (Wald) & 13,219 \\
       Approximate Pivotal CI   & --- (Pivotal Bound)        & 5  & ---               & ---               & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
-      Bayes Flat Prior         & Posterior Mean             & 5  & $+2,168.6 \pm 69.7$& 4,409.0 / 4,363.9 & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
-      Bayes Flat Prior         & Posterior Median           & 5  & $-226.5 \pm 54.2$ & 3,431.3 / ---     & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
-      Bayes Reciprocal ($1/N$) & Posterior Mean             & 5  & $+784.3 \pm 58.2$ & 3,683.3 / 3,618.6 & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
-      Bayes Reciprocal ($1/N$) & Posterior Median           & 5  & $-900.0 \pm 54.2$ & 3,427.5 / ---     & \textbf{94.4\%} $\pm$ 0.36\% & 13,644 \\
+      Bayes Flat Prior         & Posterior Mean             & 5  & $+2,168.6 \pm 60.7$& 4,409.0 / 4,363.9 & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
+      Bayes Flat Prior         & Posterior Median           & 5  & $-226.5 \pm 54.1$ & 3,431.3 / ---     & \textbf{97.4\%} $\pm$ 0.25\% & 18,535 \\
+      Bayes Reciprocal ($1/N$) & Posterior Mean             & 5  & $+767.0 \pm 56.8$ & 3,671.1 / 3,618.6 & \textbf{94.4\%} $\pm$ 0.36\% & 13,622 \\
+      Bayes Reciprocal ($1/N$) & Posterior Median           & 5  & $-901.5 \pm 52.3$ & \textbf{3,427.5} / --- & \textbf{94.4\%} $\pm$ 0.36\% & 13,622 \\
       \midrule
-      UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 50 & $+1.6 \pm 6.1$    & 386.8 / 391.7     & 95.0\% $\pm$ 0.34\% (Wald) & 1,536 \\
-      Approximate Pivotal CI   & --- (Pivotal Bound)        & 50 & ---               & ---               & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
-      Bayes Reciprocal ($1/N$) & Posterior Mean             & 50 & $+10.6 \pm 6.1$   & 387.1 / 392.0     & \textbf{95.5\%} $\pm$ 0.33\% & 1,211 \\
-      Bayes Flat Prior         & Posterior Mean             & 50 & $+17.9 \pm 6.1$   & 387.5 / 392.4     & \textbf{95.8\%} $\pm$ 0.32\% & 1,236 \\
+      UMVUE (Frequentist)      & $\hat{N} = m(1 + 1/k) - 1$ & 50 & $+5.2 \pm 6.0$    & 382.5 / 391.8     & 95.1\% $\pm$ 0.34\% (Wald) & 1,536 \\
+      Approximate Pivotal CI   & --- (Pivotal Bound)        & 50 & ---               & ---               & \textbf{95.6\%} $\pm$ 0.32\% & 1,211 \\
+      Bayes Reciprocal ($1/N$) & Posterior Mean             & 50 & $+13.2 \pm 6.0$   & 382.8 / 392.0     & \textbf{95.6\%} $\pm$ 0.32\% & 1,209 \\
+      Bayes Flat Prior         & Posterior Mean             & 50 & $+21.6 \pm 6.1$   & 383.4 / 392.4     & \textbf{95.9\%} $\pm$ 0.31\% & 1,237 \\
       \bottomrule
     \end{tabular}}
   \end{center}
@@ -661,13 +661,13 @@
     \end{column}
     
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentblue} Operational Mechanisms Driving Gaps}}\\[0.10cm]
+      {\small \textbf{\color{accentblue} Quantified Void Breakdown}}\\[0.10cm]
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.10cm}
-        \item \textbf{Order Cancellations:} Credit memos take sequential slots with prefix ``C'' (e.g., \texttt{C536379}), filtered from sales tables.
-        \item \textbf{Cart Dropouts:} Abandoned checkouts and gateway timeouts reserve sequence keys that never finalize.
-        \item \textbf{Factory Quota Blocks:} Wartime Waffenamt pre-allocated chassis blocks to plants; diversions to assault guns left voids.
+        \item \textbf{Order Cancellations:} Exactly 3,836 C-prefixed invoice numbers fall in the span, directly explaining \textbf{16.56\% of voids} (8.48\% of span).
+        \item \textbf{Unexplained Voids (19,326):} 83.44\% of voids reflect cart abandonments, payment gateway dropouts, or database sequence caching.
+        \item \textbf{Factory Quota Blocks:} Similarly, wartime Waffenamt pre-allocated chassis blocks to plants; diversions to assault guns created sequence voids.
       \end{itemize}}
     \end{column}
   \end{columns}
@@ -694,9 +694,10 @@
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.10cm}
-        \item Normalized serials $u_i = s_i / m$ evaluated against uniform CDF $F(u) = u$.
-        \item \textbf{Full Sample:} Kolmogorov--Smirnov statistic $D = 0.012$ ($p = 0.28$).
-        \item \textbf{Customer Subset ($n = 18,536$):} $D = 0.018$ ($p = 8.94 \times 10^{-6}$).
+        \item Normalized span positions $u_i = (s_i - s_{\min}) / (s_{\max} - s_{\min})$ evaluated against uniform CDF $F(u) = u$.
+        \item \textbf{One-Sample KS Test:} $D = 0.012$ ($n = 22,061$).
+        \item \textbf{High-Power Rejection:} Scaled statistic $\sqrt{n}D \approx 1.76$ yields $p = 0.0041$ ($p < 0.01$).
+        \item Massive sample size detects tiny localized deviations despite smooth global dispersion.
       \end{itemize}}
     \end{column}
     
@@ -705,9 +706,9 @@
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.10cm}
-        \item \textbf{Fallacy:} Interpreting $p = 0.28$ as ``proof'' of uniform sampling.
-        \item \textbf{Reality:} Non-significance merely shows global deviation from linearity is modest.
-        \item \textbf{Exchangeability Violation:} Local chronological bursts and clustering violate simple random sampling despite linear ECDF.
+        \item \textbf{Fallacy:} Believing goodness-of-fit evaluates exchangeability.
+        \item \textbf{Reality:} A linear ECDF merely shows even allocation across the year.
+        \item \textbf{Exchangeability Violation:} Chronological arrival induces strong temporal autocorrelation, breaking the simple random sampling assumption.
       \end{itemize}}
     \end{column}
   \end{columns}
@@ -734,8 +735,8 @@
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.10cm}
-        \item \textbf{Estimand A ($N_{\text{span}} = 45,223$):} Total address sequence allocation capacity. Raw max estimator targets this accurately.
-        \item \textbf{Estimand B ($N_{\text{count}} = 22,061$):} Net volume of completed transactions. Naive raw max gives $+105\%$ error.
+        \item \textbf{Estimand A ($N_{\text{span}} = 45,223$):} Sequence span $s_{\max} - s_{\min} + 1$. Note: applying raw formula without base offset yields $\approx 593k$.
+        \item \textbf{Estimand B ($N_{\text{count}} = 22,061$):} Net volume of completed transactions. Shifting by $s_{\min}$ gives $+105\%$ error over active count.
         \item \textbf{Oracle Trap:} Rank re-indexing requires knowing all valid keys in advance (impossible in live field deployment).
       \end{itemize}}
     \end{column}
@@ -760,7 +761,7 @@
   
   \vspace{0.25cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Solution: } \textit{Bernoulli thinning resolves the estimand mismatch operationally without circular oracle ranking.}}
+    {\footnotesize \textbf{\color{headernavy} Insight: } \textit{Bernoulli thinning clarifies the estimand distinction conceptually without circular oracle ranking.}}
   \end{center}
 \end{frame}
 
