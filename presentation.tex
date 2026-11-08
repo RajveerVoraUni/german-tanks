@@ -209,7 +209,7 @@
         \begin{equation*}
           P(N = n \mid m, k) = \frac{k - 1}{k} \frac{\binom{m-1}{k-1}}{\binom{n}{k}}, \quad n \ge m
         \end{equation*}
-        \item \textbf{Reciprocal Prior ($\pi \propto 1/N$):} Scale-invariant reference prior (motivated by invariance under multiplicative rescaling $N\to cN$); proper for all $k \ge 1$. The normalizing constant $Z(m,k)=\sum_{j=m}^{\infty}1/[j\binom{j}{k}]$ converges but has no simple closed form. Continuous Pareto approximation: $p(N) \approx k m^k / N^{k+1}$.
+        \item \textbf{Reciprocal Prior ($\pi \propto 1/N$):} Discrete analog of scale invariance (equal mass on decades/octaves; motivated by continuous rescaling $N\to cN$); proper for all $k \ge 1$. Normalizing constant $Z(m,k)=\sum_{j=m}^{\infty}1/[j\binom{j}{k}]$ converges but has no simple closed form. Continuous Pareto approximation: $p(N) \approx k m^k / N^{k+1}$.
       \end{itemize}}
     \end{column}
   \end{columns}
@@ -341,7 +341,7 @@
 \begin{frame}[c]
   \begin{center}
     {\large \textbf{\color{headernavy} Sampling Mechanics: Non-Uniform Deployment Tilt}}\\[0.10cm]
-    {\scriptsize \color{subgray} When capture weights vary ($w(s) \propto s^\gamma$), the maximum statistic ceases to be sufficient.}
+    {\scriptsize \color{subgray} When capture weights vary ($w(s) \propto s^\gamma$), sufficiency depends on whether tilt parameter $\gamma$ is known or unknown.}
   \end{center}
   \vspace{0.38cm}
   
@@ -442,8 +442,8 @@
     \end{column}
     
     \begin{column}{0.44\textwidth}
-      {\small \textbf{\color{accentgreen} Theory vs.\ Empirical Concordance}}\\[0.03cm]
-      {\scriptsize At $k=5$, theoretical UMVUE standard deviation is $3,380.3$; empirical simulation matches at $3,455.2$. At $k=50$, drops to $386.8$ (Th: $391.7$).}\\[0.14cm]
+      {\small \textbf{\color{accentgreen} Super-Efficient $\mathcal{O}(k^{-1})$ Contraction}}\\[0.03cm]
+      {\scriptsize $\operatorname{Var}(\hat{N}) = \frac{(N-k)(N+1)}{k(k+2)} = \mathcal{O}(k^{-2}) \implies \text{RMSE} = \mathcal{O}(k^{-1})$. A $10\times$ increase in $k$ yields $\approx 9\times$ error reduction ($k=5$: $\text{SD}=3,380.3$; $k=50$: $391.7$), far outperforming regular $\mathcal{O}(k^{-1/2})$ CLT scaling.}\\[0.14cm]
       
       {\small \textbf{\color{accentblue} Median RMSE Superiority}}\\[0.03cm]
       {\scriptsize Posterior median under reciprocal prior achieves RMSE of $3,427.5$ at $k=5$, outperforming both mean ($3,683.3$) and flat prior ($4,409.0$).}\\[0.14cm]
@@ -666,7 +666,7 @@
       \begin{itemize}
         \setlength{\itemsep}{0.10cm}
         \item \textbf{Order Cancellations:} Exactly 3,836 C-prefixed invoice numbers fall in the span, directly explaining \textbf{16.56\% of voids} (8.48\% of span).
-        \item \textbf{Unexplained Voids (19,326):} 83.44\% of voids reflect cart abandonments, payment gateway dropouts, or database sequence caching.
+        \item \textbf{Operational Hypotheses (19,326):} Without internal server logs, remaining 83.44\% voids plausibly reflect uncommitted cart sessions, gateway dropouts, or distributed sequence caching blocks.
         \item \textbf{Factory Quota Blocks:} Similarly, wartime Waffenamt pre-allocated chassis blocks to plants; diversions to assault guns created sequence voids.
       \end{itemize}}
     \end{column}
@@ -694,10 +694,10 @@
       {\scriptsize
       \begin{itemize}
         \setlength{\itemsep}{0.10cm}
-        \item Normalized span positions $u_i = (s_i - s_{\min}) / (s_{\max} - s_{\min})$ evaluated against uniform CDF $F(u) = u$.
-        \item \textbf{One-Sample KS Test:} $D = 0.012$ ($n = 22,061$).
-        \item \textbf{High-Power Rejection:} Scaled statistic $\sqrt{n}D \approx 1.76$ yields $p = 0.0041$ ($p < 0.01$).
-        \item Massive sample size detects tiny localized deviations despite smooth global dispersion.
+        \item Normalized span positions $u_i = (s_i - s_{\min}) / (s_{\max} - s_{\min})$ evaluated against continuous uniform CDF $F(u) = u$.
+        \item \textbf{Maximum Absolute Discrepancy:} $D = \sup_u |F_n(u) - u| = 0.012$ ($n = 22,061$).
+        \item \textbf{Invalidity of Standard KS Table:} Estimating endpoints from data pins $u_{(1)} = 0$ and $u_{(n)} = 1$. Textbook KS distributions do not apply; formal testing requires parametric bootstrap.
+        \item \textbf{Descriptive Smoothness:} Small $D \approx 0.012$ indicates uniform dispersion across the 45k span without large unallocated gaps.
       \end{itemize}}
     \end{column}
     
