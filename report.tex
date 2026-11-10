@@ -48,9 +48,6 @@ Theoretically, we prove the minimal sufficiency and completeness of the sample m
 Finally, we apply these methods to real-world data: archival WWII German tank production records and 541,909 commercial transaction records spanning 22,061 sequential invoices. We evaluate what happens when textbook assumptions meet operational reality: chronological generation induces non-stationary arrival dynamics, operational processes (cancellations, abandoned sessions, and database sequence blocks) generate large integer voids (51.2\%), and a non-significant goodness-of-fit test cannot be interpreted as proof of uniform sampling. We resolve the resulting estimand ambiguity between address allocation capacity ($N_{\text{span}}$) and transaction count ($N_{\text{count}}$) through a Bernoulli thinning framework that clarifies why oracle rank re-indexing is not deployable in live operations, while identifying the identifiability conditions a complete operational estimator would need to satisfy. We conclude with a discussion of how this discrete inference framework connects to modern applications across dynamic industrial flow, software reliability, aviation surveillance, and mark-recapture ecology.
 \end{abstract}
 
-\tableofcontents
-\newpage
-
 \section{Introduction and Research Question}
 
 \subsection{The German Tank Problem}
