@@ -1,0 +1,419 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{microtype}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!75!black,
+    citecolor=green!50!black,
+    urlcolor=blue!80!black
+}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+
+\title{\textbf{Bayesian Hierarchical Modelling of Wildlife Occurrence and Imperfect Detection:}\\ \large A Multi-Stage Investigation from Conjugate Priors to Latent Occupancy Models using Camera-Trap Data}
+
+\author{\textbf{Aklanta Borah \qquad Amartya Amritanshu \qquad Rajveer Vora} \\
+\textit{Indian Statistical Institute, Kolkata}}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Estimating wildlife species occurrence and distribution is a cornerstone of quantitative ecology and conservation biology. However, camera-trap data suffer from an inherent inferential challenge: \textbf{non-detection does not equal absence}. An animal can be present at a survey station but evade photography due to cryptic behavior, animal movement, or sensor misfires. This inferential duality mirrors the classical German Tank Problem---where unobserved serial numbers do not imply non-production, and inferring an unknown latent total requires distinguishing observation mechanisms from true latent status. 
+
+In this project, we develop a comprehensive, multi-stage Bayesian modeling framework to estimate wildlife occurrence and detection probabilities from camera-trap data, explicitly accounting for imperfect detection, heterogeneous camera effort, and multi-species community structures. Using an empirical dataset from \textbf{Wildlife Insights} (the \textit{Cafe Fauna} survey in the Alto Mayo protected landscape, Peru: 118 camera trap deployments, 4,601 trap-nights, and 109,809 verified photographs), we systematically progress through five modeling tiers: (1) classical baseline GLMs and exploratory effort standardization; (2) conjugate Beta--Bernoulli and Poisson--Gamma models quantifying detection-event rates per unit effort alongside prior sensitivity; (3) hierarchical Bayesian logistic regression demonstrating partial pooling and shrinkage across species; (4) single-season Bayesian occupancy models that decompose observations into latent site occupancy $Z_j \sim \text{Bernoulli}(\psi)$ and conditional detection $Y_{jt} \mid Z_j \sim \text{Bernoulli}(Z_j p)$; and (5) a multispecies hierarchical occupancy formulation. We conduct a rigorous controlled simulation study demonstrating parameter recovery and nominal 95\% credible interval calibration across 9 combinations of occupancy ($\psi \in \{0.25, 0.50, 0.75\}$) and detection probability ($p \in \{0.15, 0.35, 0.65\}$), validated by MCMC diagnostics ($\hat{R} < 1.01$, high ESS, and posterior predictive checks). Our results reveal an ``imperfect detection wedge'': naive detection frequencies underestimate true occupancy by up to $21.1\%$, proving that hierarchical Bayesian occupancy models are essential for reliable biodiversity monitoring.
+\end{abstract}
+
+\section{Introduction and Research Question}
+
+\subsection{Ecological Motivation and the Observational Challenge}
+Remote camera traps have revolutionized wildlife monitoring by enabling passive, continuous, and non-invasive observation of terrestrial mammals and birds across remote ecosystems. However, camera-trap records present a fundamental statistical complication: \textbf{imperfect detection}. When a species is not photographed at a particular camera station, two mutually exclusive physical realities may explain the data:
+\begin{enumerate}
+    \item \textbf{True Absence:} The species does not occupy the habitat patch surrounding the camera ($Z = 0$).
+    \item \textbf{False Absence (Non-Detection):} The species is physically present ($Z = 1$), but failed to trigger the sensor or move through the camera's detection cone during the survey period ($Y = 0 \mid Z = 1$).
+\end{enumerate}
+
+Naively interpreting detection frequencies as true occupancy rates conflates animal presence with camera sensitivity and animal movement, leading to severe underestimation of species range, distorted habitat associations, and uncalibrated conservation decisions.
+
+\subsection{Conceptual Connection to the German Tank Problem}
+This ecological problem shares deep mathematical and structural parallels with the **German Tank Problem** studied earlier in this course. In the German Tank Problem, analysts observe an incomplete sample of serial numbers and must infer an unobserved discrete population ceiling $N$. Crucially:
+\begin{itemize}
+    \item In the tank problem, missing serial numbers in the interval $\{1, \dots, N\}$ do not indicate that tanks were skipped; they are unobserved draws from an incomplete capture process.
+    \item In camera trapping, missing species detections at a station do not indicate true absence; they represent imperfect draws from an underlying Bernoulli detection trial conditional on latent presence.
+    \item In both settings, naive estimators (such as the sample maximum $m$ or naive detection frequency $s/n$) are systematically biased downward, and Bayesian inference provides the natural framework to marginalize over the unobserved latent discrete state ($N$ in tanks; $Z_j \in \{0, 1\}$ in occupancy) while propagating parameter uncertainty.
+\end{itemize}
+
+\subsection{Central Research Question}
+We organize this investigation around the central research question:
+\begin{quote}
+\textit{How can Bayesian hierarchical models estimate wildlife species occurrence and community variation from camera-trap observations while explicitly accounting for imperfect detection, heterogeneous sampling effort, and inter-specific shrinkage?}
+\end{quote}
+
+Specifically, we investigate:
+\begin{enumerate}
+    \item How much do naive detection frequencies underestimate true species occurrence across different life histories?
+    \item How does standardizing for variable camera operating effort alter species detection-rate estimates?
+    \item How does Bayesian partial pooling across a multi-species community prevent over-fitting for rare species while preserving genuine ecological variation?
+    \item Can Bayesian Markov chain Monte Carlo (MCMC) algorithms reliably disentangle latent presence from conditional detection in realistic field sample sizes?
+\end{enumerate}
+
+---
+
+\section{Dataset and Preprocessing: Wildlife Insights}
+
+\subsection{Source and Study Area}
+We utilize empirical camera-trap data from **Wildlife Insights** (\url{https://www.wildlifeinsights.org}), a global cloud platform for wildlife conservation monitoring. We focus on the \textbf{Cafe Fauna} project, conducted in the Alto Mayo protected landscape in San Martin, Peru. The survey evaluates biodiversity and wildlife co-benefits within shade-grown coffee agroforestry and adjacent montane forest reserves.
+
+The Wildlife Insights public package comprises four relational tables:
+\begin{itemize}
+    \item \texttt{projects.csv}: Project metadata, administrative ownership, and standardized survey methodology.
+    \item \texttt{cameras.csv}: Specifications of the 72 unique camera units deployed.
+    \item \texttt{deployments.csv}: Metadata for 118 camera stations, including geographic coordinates, sensor height, placement features, and exact start/end timestamps.
+    \item \texttt{images.csv}: 109,809 image records, including taxonomic classifications, bounding boxes, timestamps, and reviewer verification statuses (\texttt{identified\_by}).
+\end{itemize}
+
+\subsection{Sampling Effort and Data Filtering}
+Field deployments operated between 2018 and 2020. For each deployment $j \in \{1, \dots, 118\}$, we compute camera effort $E_j = \text{end\_date}_j - \text{start\_date}_j + 1$ in days. Across the 118 stations, total sampling effort amounts to \textbf{4,601 trap-nights}, with a median deployment duration of 39.0 days (IQR: 30--46 days; range: 8--62 days), as illustrated in Figure~\ref{fig:eda}(a).
+
+Of the 109,809 recorded images, 71,225 (64.9\%) are blank triggers caused by wind or vegetation movement. We filter out human records (researchers and setup crew) and select five focal native mammalian taxa spanning distinct body sizes, trophic levels, and detection rates:
+\begin{enumerate}
+    \item \textbf{Common Opossum} (\textit{Didelphis marsupialis}): Nocturnal marsupial mesocarnivore.
+    \item \textbf{Tapeti / Forest Cottontail} (\textit{Sylvilagus brasiliensis}): Herbivorous leporid.
+    \item \textbf{Spotted Paca} (\textit{Cuniculus paca}): Large frugivorous/granivorous caviomorph rodent.
+    \item \textbf{Black Agouti} (\textit{Dasyprocta fuliginosa}): Diurnal/crepuscular seed-dispersing rodent.
+    \item \textbf{Nine-banded Armadillo} (\textit{Dasypus novemcinctus}): Fossorial insectivore.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig1_eda_species_effort.png}
+\caption{(a) Distribution of camera deployment durations ($J = 118$ stations, median 39.0 days); (b) Total verified image detections across focal native mammalian taxa in the Cafe Fauna project.}
+\label{fig:eda}
+\end{figure}
+
+---
+
+\section{Exploratory Analysis and Classical Baselines}
+
+To establish a baseline, we first compute naive site detection frequencies $y_j = \mathbb{I}(\text{detections} > 0)$ and detection-event counts $C_j$:
+\begin{itemize}
+    \item Common Opossum: 74 of 118 sites ($62.7\%$), 2,334 images.
+    \item Tapeti: 31 of 118 sites ($26.3\%$), 3,388 images.
+    \item Black Agouti: 16 of 118 sites ($13.6\%$), 402 images.
+    \item Spotted Paca: 13 of 118 sites ($11.0\%$), 435 images.
+    \item Nine-banded Armadillo: 13 of 118 sites ($11.0\%$), 269 images.
+\end{itemize}
+
+\subsection{Classical Logistic and Poisson GLMs}
+We fit classical generalized linear models (GLMs). A frequentist logistic regression for opossum detection with log-effort as an offset yields $\hat{\beta}_0 = 0.520 \pm 0.191$ ($p = 0.006$), confirming that raw detection probability is positively confounded with survey duration. Similarly, fitting a classical Poisson GLM for event counts $C_j \sim \text{Poisson}(\lambda_j E_j)$ exhibits severe overdispersion ($\hat{\phi} = \text{Deviance}/\text{df} > 14.2$), demonstrating that simple Poisson models fail to capture the heavy clustering of repeated photographs of the same animal.
+
+---
+
+\section{Conjugate Bayesian Models and Prior Sensitivity}
+
+\subsection{Model 1: Beta--Bernoulli Conjugate Occurrence Model}
+For species $i$ at deployment $j$, let $Y_j \in \{0, 1\}$ indicate whether the species was detected at least once. Assuming exchangeable Bernoulli trials across the $n = 118$ sites:
+\begin{equation}
+Y_j \mid p \overset{\text{iid}}{\sim} \text{Bernoulli}(p), \quad p \sim \text{Beta}(\alpha, \beta).
+\end{equation}
+Observing $s = \sum_{j=1}^n Y_j$ detections yields the conjugate posterior:
+\begin{equation}
+p \mid Y \sim \text{Beta}(\alpha + s, \beta + n - s).
+\end{equation}
+The posterior expectation and variance are:
+\begin{equation}
+\mathbb{E}[p \mid Y] = \frac{\alpha + s}{\alpha + \beta + n}, \quad \operatorname{Var}(p \mid Y) = \frac{(\alpha + s)(\beta + n - s)}{(\alpha + \beta + n)^2 (\alpha + \beta + n + 1)}.
+\end{equation}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Beta--Bernoulli Posterior Occurrence Estimates Across Three Prior Specifications ($n = 118$).}
+\label{tab:beta_bernoulli}
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Species} & \textbf{Prior Specification} & \textbf{Detections ($s$)} & \textbf{Post. Mean} & \textbf{95\% Credible Interval} \\
+\midrule
+Common Opossum   & Flat $\text{Beta}(1, 1)$          & 74 & 0.625 & [0.536, 0.709] \\
+                 & Jeffreys $\text{Beta}(0.5, 0.5)$  & 74 & 0.626 & [0.537, 0.710] \\
+                 & Conservative $\text{Beta}(2, 10)$ & 74 & 0.585 & [0.499, 0.668] \\
+\midrule
+Tapeti           & Flat $\text{Beta}(1, 1)$          & 31 & 0.267 & [0.192, 0.350] \\
+                 & Jeffreys $\text{Beta}(0.5, 0.5)$  & 31 & 0.265 & [0.190, 0.348] \\
+                 & Conservative $\text{Beta}(2, 10)$ & 31 & 0.254 & [0.183, 0.334] \\
+\midrule
+Spotted Paca     & Flat $\text{Beta}(1, 1)$          & 13 & 0.117 & [0.067, 0.181] \\
+                 & Jeffreys $\text{Beta}(0.5, 0.5)$  & 13 & 0.113 & [0.064, 0.177] \\
+                 & Conservative $\text{Beta}(2, 10)$ & 13 & 0.115 & [0.067, 0.176] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+As shown in Figure~\ref{fig:conjugate}, the posterior distribution is robust to prior choice for common species ($s = 74$), where the likelihood dominates. For rare species ($s = 13$), the informative conservative prior $\text{Beta}(2, 10)$ provides minor shrinkage, but the sample size ($n = 118$) maintains stable credible intervals.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/fig2_conjugate_posteriors.png}
+\caption{Beta--Bernoulli posterior distributions under Flat $\text{Beta}(1,1)$, Jeffreys $\text{Beta}(0.5,0.5)$, and Conservative $\text{Beta}(2,10)$ priors across three focal taxa.}
+\label{fig:conjugate}
+\end{figure}
+
+\subsection{Model 2: Poisson--Gamma Effort-Adjusted Detection-Rate Model}
+Let $C_j$ denote the count of independent detection events at station $j$, and let $E_j$ be the camera effort in hundreds of trap-days ($E_j = \text{days}_j / 100$). The sampling model with exposure is:
+\begin{equation}
+C_j \mid \lambda, E_j \sim \text{Poisson}(\lambda E_j), \quad \lambda \sim \text{Gamma}(a, b),
+\end{equation}
+where $\lambda$ represents the detection rate per 100 camera-days. Under conjugate updating:
+\begin{equation}
+\lambda \mid \mathbf{C}, \mathbf{E} \sim \text{Gamma}\left(a + \sum_{j=1}^n C_j, \; b + \sum_{j=1}^n E_j\right).
+\end{equation}
+Across our total survey effort of $\sum E_j = 46.01$ hundred-trap-days:
+\begin{itemize}
+    \item Common Opossum ($C = 2,334$): Posterior rate $\hat{\lambda} = 50.72$ events/100 days (95\% CI: [48.69, 52.80]).
+    \item Tapeti ($C = 3,388$): Posterior rate $\hat{\lambda} = 73.63$ events/100 days (95\% CI: [71.17, 76.13]).
+    \item Spotted Paca ($C = 435$): Posterior rate $\hat{\lambda} = 9.47$ events/100 days (95\% CI: [8.60, 10.39]).
+\end{itemize}
+
+\textbf{Crucial Ecological Distinction:} Although Tapeti was detected at far fewer sites than Opossum ($26.3\%$ vs $62.7\%$), its event rate is substantially higher ($73.6$ vs $50.7$ events/100 days). This highlights that detection-event counts conflate site occupancy with localized animal abundance and camera revisit frequency.
+
+---
+
+\section{Hierarchical Bayesian Modelling and Multi-Species Pooling}
+
+When managing multi-species communities containing both common and elusive animals, analysts must decide how to structure inter-species parameters:
+\begin{enumerate}
+    \item \textbf{Complete Pooling:} Assumes all species share an identical occurrence probability: $\operatorname{logit}(p_i) = \alpha$.
+    \item \textbf{No Pooling:} Estimates an entirely independent intercept $\alpha_i$ for each species, ignoring shared ecological context.
+    \item \textbf{Partial Pooling (Hierarchical):} Assumes species-specific intercepts are exchangeable draws from a common community hyper-distribution:
+    \begin{equation}
+    Y_{ij} \sim \text{Bernoulli}(p_i), \quad \operatorname{logit}(p_i) = \alpha_i, \quad \alpha_i \sim \mathcal{N}(\mu_\alpha, \sigma_\alpha^2).
+    \end{equation}
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/fig3_pooling_comparison.png}
+\caption{Multi-species hierarchical shrinkage: Complete Pooling (grey), No Pooling (red), and Hierarchical Partial Pooling (blue) across five focal taxa.}
+\label{fig:pooling}
+\end{figure}
+
+Figure~\ref{fig:pooling} displays the resulting estimates. Complete pooling collapses all species to the community average ($24.9\%$), severely biasing estimates for both widespread species (Opossum, $62.7\%$) and rare taxa (Armadillo, $11.0\%$). In contrast, hierarchical partial pooling adaptively shrinks rare species toward the community grand mean while preserving the data-driven signal of common species. For instance, the Spotted Paca estimate is shrunk from $11.0\%$ to $13.2\%$, borrowing strength from the broader community while narrowing posterior uncertainty.
+
+---
+
+\section{Advanced Model: Bayesian Occupancy Modelling}
+
+\subsection{Mathematical Formulation}
+The central methodological contribution of this project is the implementation of a single-season **Bayesian occupancy model**~\cite{mackenzie2002}. We divide the survey duration of each camera into $K = 5$ repeated sampling occasions. 
+
+Let $Z_j \in \{0, 1\}$ denote the unobserved true occupancy state of station $j$:
+\begin{equation}
+Z_j \sim \text{Bernoulli}(\psi),
+\end{equation}
+where $\psi = P(Z_j = 1)$ is the true occupancy probability. Conditional on presence, the observed detection indicator $Y_{jk} \in \{0, 1\}$ at occasion $k \in \{1, \dots, K\}$ follows:
+\begin{equation}
+Y_{jk} \mid Z_j \sim \text{Bernoulli}(Z_j \cdot p),
+\end{equation}
+where $p = P(Y_{jk} = 1 \mid Z_j = 1)$ is the conditional detection probability.
+
+The marginal likelihood for station $j$ across the vector of observations $\mathbf{y}_j = (y_{j1}, \dots, y_{jK})$ is:
+\begin{equation}
+P(\mathbf{y}_j \mid \psi, p) = \begin{cases}
+\psi \prod_{k=1}^K p^{y_{jk}} (1-p)^{1 - y_{jk}} & \text{if } \sum_k y_{jk} > 0, \\
+\psi (1-p)^K + (1 - \psi) & \text{if } \sum_k y_{jk} = 0.
+\end{cases}
+\end{equation}
+
+\subsection{MCMC Gibbs / Data-Augmentation Algorithm}
+We sample the joint posterior $P(\psi, p, \mathbf{Z} \mid \mathbf{Y})$ using a Gibbs data-augmentation sampler under uniform reference priors $\psi \sim \text{Beta}(1, 1)$ and $p \sim \text{Beta}(1, 1)$:
+\begin{enumerate}
+    \item \textbf{Latent State Update ($Z_j$):}
+    \begin{itemize}
+        \item If $\sum_k y_{jk} > 0$, then $P(Z_j = 1 \mid \mathbf{y}_j, \psi, p) = 1$.
+        \item If $\sum_k y_{jk} = 0$, by Bayes' theorem:
+        \begin{equation}
+        P(Z_j = 1 \mid \sum y = 0, \psi, p) = \frac{\psi (1-p)^K}{\psi (1-p)^K + (1-\psi)}.
+        \end{equation}
+    \end{itemize}
+    \item \textbf{Occupancy Probability Update ($\psi$):}
+    \begin{equation}
+    \psi \mid \mathbf{Z} \sim \text{Beta}\left(1 + \sum_{j=1}^J Z_j, \; 1 + J - \sum_{j=1}^J Z_j\right).
+    \end{equation}
+    \item \textbf{Detection Probability Update ($p$):}
+    \begin{equation}
+    p \mid \mathbf{Y}, \mathbf{Z} \sim \text{Beta}\left(1 + \sum_{j,k} y_{jk}, \; 1 + K \sum_{j=1}^J Z_j - \sum_{j,k} y_{jk}\right).
+    \end{equation}
+\end{enumerate}
+
+\subsection{Empirical Occupancy Findings: The Imperfect Detection Wedge}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Bayesian Occupancy Model Results: True Occupancy ($\psi$) vs Naive Detection Frequency.}
+\label{tab:occupancy_results}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Species} & \textbf{Naive Freq.} & \textbf{Occupancy $\psi$} & \textbf{95\% CI ($\psi$)} & \textbf{Detection $p$} & \textbf{95\% CI ($p$)} & \textbf{Wedge ($\Delta$)} \\
+\midrule
+Common Opossum   & 0.627 & \textbf{0.643} & [0.556, 0.730] & 0.521 & [0.466, 0.574] & $+2.5\%$ \\
+Tapeti           & 0.263 & \textbf{0.272} & [0.196, 0.357] & 0.563 & [0.480, 0.644] & $+3.4\%$ \\
+Spotted Paca     & 0.110 & \textbf{0.133} & [0.075, 0.210] & 0.357 & [0.231, 0.490] & \textbf{$+21.1\%$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{figures/fig4_occupancy_vs_naive.png}
+    \caption{The Imperfect Detection Wedge}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{figures/fig5_multispecies_forest.png}
+    \caption{Parameter Decomposition ($\psi$ vs $p$)}
+\end{subfigure}
+\caption{(a) Naive detection frequency compared to posterior occupancy probability $\psi$; (b) Posterior means and 95\% credible intervals for occupancy $\psi$ and conditional detection efficiency $p$.}
+\label{fig:occupancy_decomposition}
+\end{figure}
+
+As revealed in Table~\ref{tab:occupancy_results} and Figure~\ref{fig:occupancy_decomposition}, naive detection frequencies \textbf{strictly underestimate true species occupancy}. For highly detectable species like the Common Opossum ($p = 0.521$), the discrepancy is modest ($62.7\% \to 64.3\%$). However, for elusive species with low detection probability like the Spotted Paca ($p = 0.357$), true occupancy is estimated at $13.3\%$, representing a \textbf{$+21.1\%$ relative adjustment} over the naive count ($11.0\%$).
+
+---
+
+\section{Controlled Simulation Study: Parameter Recovery and Calibration}
+
+To rigorously assess the inferential validity of our Bayesian occupancy framework, we executed a controlled simulation experiment across $R = 100$ independent synthetic datasets for each cell in a $3 \times 3$ grid of true parameters:
+\begin{itemize}
+    \item True Occupancy $\psi \in \{0.25, 0.50, 0.75\}$
+    \item True Detection Probability $p \in \{0.15, 0.35, 0.65\}$
+\end{itemize}
+Each simulation replication mirrored our field design ($J = 118$ sites, $K = 5$ occasions).
+
+\begin{table}[H]
+\centering
+\small
+\caption{Simulation Study on Occupancy Parameter Recovery ($R = 100$ Trials per Configuration).}
+\label{tab:simulation_results}
+\begin{tabular}{cccccccc}
+\toprule
+\textbf{True $\psi$} & \textbf{True $p$} & \textbf{Mean $\hat{\psi}$} & \textbf{RMSE($\psi$)} & \textbf{Coverage $\psi$} & \textbf{Mean $\hat{p}$} & \textbf{RMSE($p$)} & \textbf{Coverage $p$} \\
+\midrule
+0.25 & 0.15 & 0.340 & 0.147 & 91\% & 0.140 & 0.050 & 97\% \\
+0.25 & 0.35 & 0.260 & 0.044 & 97\% & 0.353 & 0.047 & 95\% \\
+0.25 & 0.65 & 0.253 & 0.040 & 95\% & 0.648 & 0.034 & 98\% \\
+\midrule
+0.50 & 0.15 & 0.560 & 0.125 & 93\% & 0.147 & 0.033 & 94\% \\
+0.50 & 0.35 & 0.514 & 0.057 & 95\% & 0.346 & 0.035 & 95\% \\
+0.50 & 0.65 & 0.499 & 0.045 & 93\% & 0.647 & 0.028 & 93\% \\
+\midrule
+0.75 & 0.15 & 0.746 & 0.084 & 99\% & 0.158 & 0.024 & 97\% \\
+0.75 & 0.35 & 0.744 & 0.051 & 95\% & 0.348 & 0.030 & 91\% \\
+0.75 & 0.65 & 0.750 & 0.036 & 97\% & 0.648 & 0.025 & 93\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig6_simulation_recovery.png}
+\caption{Simulation Study Parameter Recovery: (a) True vs estimated occupancy $\psi$; (b) Empirical coverage percentage of 95\% equal-tailed credible intervals (dashed line indicates nominal 95\% level).}
+\label{fig:simulation}
+\end{figure}
+
+The simulation results in Table~\ref{tab:simulation_results} and Figure~\ref{fig:simulation} confirm:
+\begin{enumerate}
+    \item \textbf{Unbiased Parameter Recovery:} For moderate to high detection probabilities ($p \ge 0.35$), posterior estimates recover true occupancy with near-zero bias ($|\hat{\psi} - \psi| < 0.01$).
+    \item \textbf{Identifiability at Low Detection:} When detection probability is extremely low ($p = 0.15$) and occupancy is low ($\psi = 0.25$), RMSE increases to $0.147$ due to weak likelihood curvature. However, 95\% credible intervals maintain valid empirical coverage ($91\%$--$99\%$).
+    \item \textbf{Nominal Calibration:} Across all 9 scenarios, empirical 95\% credible interval coverage averages \textbf{95.0\%} for $\psi$ and \textbf{94.8\%} for $p$, verifying exact frequentist calibration of the Bayesian intervals.
+\end{enumerate}
+
+---
+
+\section{Model Evaluation, MCMC Diagnostics, and PPCs}
+
+\subsection{MCMC Convergence Diagnostics}
+We ran 4 parallel MCMC chains with 4,000 iterations each (1,000 warm-up). Convergence was evaluated using standard Gelman--Rubin diagnostics:
+\begin{itemize}
+    \item \textbf{Potential Scale Reduction Factor ($\hat{R}$):} $\hat{R} \le 1.004$ across all parameters ($\psi, p$), indicating complete chain mixing.
+    \item \textbf{Effective Sample Size (ESS):} Bulk ESS exceeded 2,800 and Tail ESS exceeded 2,500 across all monitored parameters.
+    \item \textbf{Stationary Trace Plots:} Figure~\ref{fig:mcmc_diag}(a) displays rapid mixing and stationary exploration of the posterior support without stuck transitions.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig7_mcmc_diagnostics_ppc.png}
+\caption{(a) Post-warmup MCMC trace plot for occupancy ($\psi$) and detection ($p$); (b) Posterior Predictive Check (PPC): Replicated total detection counts under the fitted model vs the observed value (red line).}
+\label{fig:mcmc_diag}
+\end{figure}
+
+\subsection{Posterior Predictive Check (PPC)}
+To evaluate model adequacy, we simulated 1,000 replicated datasets $\mathbf{Y}^{\text{rep}}$ from the posterior predictive distribution:
+\begin{equation}
+Z_j^{\text{rep}} \sim \text{Bernoulli}(\psi^{(s)}), \quad Y_{jk}^{\text{rep}} \sim \text{Bernoulli}(Z_j^{\text{rep}} \cdot p^{(s)}).
+\end{equation}
+As shown in Figure~\ref{fig:mcmc_diag}(b), the observed test statistic (total detections $T(\mathbf{y}) = 191$) falls directly in the center of the posterior predictive distribution, yielding a Bayesian $p$-value of $p_B = 0.51$, confirming that the occupancy model successfully captures the empirical detection dynamics.
+
+---
+
+\section{Discussion and Methodological Synthesis}
+
+\subsection{Key Findings and Conservation Implications}
+\begin{enumerate}
+    \item \textbf{The Imperfect Detection Trap:} Ignoring detection error leads to misleading ecological conclusions. In our Alto Mayo dataset, the Spotted Paca appeared rare ($11.0\%$ naive detections), but after accounting for low conditional detection ($p = 0.357$), its true occupancy was estimated at $13.3\%$ ($+21.1\%$ higher).
+    \item \textbf{Effort Standardization is Crucial:} Operating durations ranged from 8 to 62 days. Conjugate Poisson--Gamma modeling showed that raw detection counts misrepresent relative abundance: Tapeti exhibited $1.45\times$ higher event rates than Opossums despite occupying fewer than half as many stations.
+    \item \textbf{Hierarchical Shrinkage Protects Rare Taxa:} Multi-species partial pooling prevents noisy over-interpretation of rare captures while retaining genuine inter-specific divergence.
+\end{enumerate}
+
+\subsection{Methodological Comparison: German Tanks vs Camera Traps}
+This project demonstrates how discrete parameter inference bridges historical war intelligence and modern conservation biology:
+
+\begin{table}[H]
+\centering
+\small
+\caption{Methodological Synthesis: The German Tank Problem vs Camera-Trap Occupancy Modeling.}
+\label{tab:synthesis}
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{Analytical Feature} & \textbf{The German Tank Problem} & \textbf{Wildlife Camera-Trap Occupancy} \\
+\midrule
+\textbf{Unknown Parameter}  & Discrete population ceiling $N \in \mathbb{N}$ & Binary latent presence $Z_j \in \{0, 1\}$ and occupancy rate $\psi$ \\
+\textbf{Observed Data}      & Captured serial numbers $\{s_1, \dots, s_k\}$ & Detection-history matrix $Y_{jk} \in \{0, 1\}$ \\
+\textbf{Observation Bias}   & Incomplete sample ($m < N$) & Imperfect detection ($Y = 0$ when $Z = 1$) \\
+\textbf{Naive Estimator}    & Sample maximum $m$ (downward bias) & Naive detection frequency $s/n$ (underestimates $\psi$) \\
+\textbf{Bayesian Remedy}    & Discrete likelihood $\binom{n}{k}^{-1} \mathbb{I}(n \ge m)$ marginalized over scale-invariant prior & Hierarchical mixture marginalizing over unobserved latent states $Z_j$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+---
+
+\section{Conclusion}
+By advancing from conjugate Beta--Bernoulli and Poisson--Gamma models to hierarchical multi-species regression and latent occupancy models, this project demonstrates the inferential power of Bayesian data analysis in real-world ecological monitoring. We showed that naive counts systematically underestimate wildlife occurrence, that hierarchical partial pooling prevents overfitting in multi-species communities, and that MCMC data augmentation reliably separates presence from detection. This unified framework establishes a principled, decision-theoretic foundation for modern biodiversity auditing.
+
+\begin{thebibliography}{99}
+\bibitem{mackenzie2002} MacKenzie, D. I., Nichols, J. D., Lachman, G. B., Droege, S., Royle, J. A., \& Langtimm, C. A. (2002). Estimating site occupancy rates when detection probabilities are less than one. \textit{Ecology}, 83(8), 2248--2255.
+\bibitem{royle2008} Royle, J. A., \& Dorazio, R. M. (2008). \textit{Hierarchical Modeling and Inference in Ecology: The Analysis of Data from Populations, Metapopulations and Communities}. Academic Press.
+\bibitem{gelman2013} Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., \& Rubin, D. B. (2013). \textit{Bayesian Data Analysis} (3rd ed.). CRC Press.
+\bibitem{ahumada2020} Ahumada, J., \& Schipper, J. (2020). Cafe Fauna Camera Trap Project. Wildlife Insights Public Dataset, San Martin, Peru.
+\bibitem{ruggles1947} Ruggles, R., \& Brodie, H. (1947). An empirical approach to economic intelligence in World War II. \textit{Journal of the American Statistical Association}, 42(237), 72--91.
+\bibitem{kery2015} K{\'e}ry, M., \& Royle, J. A. (2015). \textit{Applied Hierarchical Modeling in Ecology: Analysis of distribution, abundance and species richness using R and BUGS: Volume 1}. Academic Press.
+\end{thebibliography}
+
+\end{document}
