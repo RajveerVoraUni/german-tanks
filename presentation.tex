@@ -827,331 +827,419 @@
   \centering
   {\scriptsize \textbf{\color{accentcyan} SECTION 03}}\\[0.25cm]
   {\LARGE \textbf{\color{white} Real-World Stress-Testing}}\\[0.35cm]
-  {\small \color{white!70} Does the German Tank Problem still work when we apply it to real-world data?}
+  {\small \color{white!80} Does the textbook German Tank model actually work on modern data?}\\[0.50cm]
+  
+  \setlength{\fboxrule}{1pt}
+  \fcolorbox{cardborder}{navybg!80!white}{
+    \begin{minipage}{0.80\textwidth}
+      \centering \scriptsize \color{white}
+      \textbf{The Investigation:} Moving from clean mathematical simulations to messy operational reality. We stress-test textbook assumptions against historical WWII records and 541,909 modern e-commerce transaction lines.
+    \end{minipage}
+  }
 \end{frame}
 }
 
 % =========================================================
-% Slide 20: The Reality Check: Two Real-World Datasets
+% Slide 20: The Premise: Spying on an Online Store
 % =========================================================
 \begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} The Reality Check: Two Real-World Datasets}}\\[0.08cm]
-    {\scriptsize \color{subgray} Why we move from textbook simulations to physical operational data.}
+    {\large \textbf{\color{headernavy} The Premise: Spying on an Online Store}}\\[0.08cm]
+    {\scriptsize \color{subgray} In WWII, Allies used serial numbers to count tanks. Can we do the same to count e-commerce sales?}
   \end{center}
-  \vspace{0.30cm}
+  \vspace{0.25cm}
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentblue} 1. Archival WWII German Tank Records}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{Data Source:} Waffenamt ordnance records and Speer Ministry production registers.
-        \item \textbf{Physical Artifacts:} Sequential serial numbers stamped on physical tank chassis and gearbox castings.
-        \item \textbf{Historical Benchmark:} Validates that discrete order statistics successfully estimated production ceiling within $-4.4\%$.
-      \end{itemize}}
-    \end{column}
-    
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentblue!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentblue} The Observed Evidence}}\\[0.08cm]
+          {\scriptsize
+          We collected an annual customer transaction ledger from a real e-commerce retailer:
+          \begin{itemize}
+            \setlength{\itemsep}{0.06cm}
+            \item \textbf{541,909} individual item line purchases.
+            \item Grouped into \textbf{22,061 distinct sales invoices}.
+            \item Numbered sequentially from \textbf{536,365} to \textbf{581,587}.
+          \end{itemize}
+          \textbf{The observed sequence span:}
+          \begin{equation*}
+            581{,}587 - 536{,}365 + 1 = \mathbf{45{,}223 \text{ slots}}
+          \end{equation*}}
+          \vspace{0.04cm}
+        \end{minipage}
+      }
+    \end{column}%
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentred} 2. Modern Enterprise Invoices (E-Commerce)}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{Data Source:} 541,909 transaction line items across 4,372 customer accounts.
-        \item \textbf{Sequential Identifiers:} \textbf{22,061 distinct sales invoice numbers}.
-        \item \textbf{Crucial Distinction:} 541,909 represents multi-item line purchases; 22,061 represents the distinct sequential invoice numbers.
-      \end{itemize}}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentred!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentred} The Immediate Mystery}}\\[0.08cm]
+          {\scriptsize
+          If the store issued numbers between 536,365 and 581,587 (a span of 45,223 slots):
+          \begin{itemize}
+            \setlength{\itemsep}{0.06cm}
+            \item Why are there only \textbf{22,061 active sales}?
+            \item \textbf{23,162 numbers (51.2\%)} are missing!
+          \end{itemize}
+          \vspace{0.06cm}
+          \textbf{The Central Question:}\\[0.04cm]
+          The textbook assumes no gaps and random draws. What happens to our Bayesian estimates when applied to this messy operational stream?}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
     \end{column}
   \end{columns}
   
-  \vspace{0.25cm}
+  \vspace{0.20cm}
   \begin{center}
     \setlength{\fboxrule}{1pt}
     \fcolorbox{cardborder}{cardbg}{
       \parbox{0.94\textwidth}{\centering
-        \scriptsize \textbf{\color{headernavy} The Core Question: }
-        We are not claiming commercial retail behaves like wartime manufacturing. We use these datasets as an \textbf{empirical stress-test} to ask: \textit{what happens to our estimators when textbook assumptions fail?}
+        \scriptsize \textbf{\color{headernavy} Pedagogical Objective: }
+        We are not claiming commercial retail behaves like military tank manufacturing. We use this dataset to stress-test textbook assumptions: \textit{how numbers are created, missing values, and what we are actually counting.}
       }
     }
-  \end{center}
-  
-  \vspace{0.10cm}
-  \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Investigation Goal: } \textit{Examine model assumptions against reality: how numbers are generated, missing values, and what we are counting.}}
   \end{center}
 \end{frame}
 
 % =========================================================
-% Slide 21: Assumption 1: How Numbers Are Created
+% Slide 21: Surprise 1: Numbers Flow Like a River (Not Picked from a Hat)
 % =========================================================
 \begin{frame}[c]
   \begin{center}
-    {\large \textbf{\color{headernavy} Assumption 1: How Identifiers Are Created (Fixed Hat vs.\ Flow of Time)}}\\[0.08cm]
-    {\scriptsize \color{subgray} A random sample from a fixed population is fundamentally different from a stream generated over time.}
+    {\large \textbf{\color{headernavy} Surprise 1: Numbers Flow in Time (Not Picked from a Hat)}}\\[0.08cm]
+    {\scriptsize \color{subgray} Drawing balls from a static lottery jar is fundamentally different from watching a live stream.}
   \end{center}
-  \vspace{0.30cm}
-  
-  \begin{columns}[t,onlytextwidth]
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentblue} The Textbook Model: "The Fixed Hat"}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item Assumes a \textbf{static, complete population} $\{1, 2, \ldots, N\}$.
-        \item All $N$ objects exist simultaneously before observation begins.
-        \item An observer draws a simple random sample of $k$ numbers.
-        \item Every serial number has an equal probability of capture.
-      \end{itemize}}
-    \end{column}
-    
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentred} Operational Reality: "The River Stream"}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item Numbers are created sequentially as transactions occur.
-        \item \textbf{Changing Invoice-Generation Intensity:}
-        \begin{itemize}
-          \setlength{\itemsep}{0.04cm}
-          \item Q1 Baseline: $\approx \mathbf{370}$ invoices/week.
-          \item Q4 Acceleration: $>\mathbf{790}$ invoices/week.
-          \item Peak Holiday Surge: $\mathbf{894}$ invoices in mid-November.
-        \end{itemize}
-        \item \textbf{Why This Matters:} Identifiers reflect seasonal activity; later numbers appear only late in the year.
-      \end{itemize}}
-    \end{column}
-  \end{columns}
-  
   \vspace{0.25cm}
-  \begin{center}
-    \setlength{\fboxrule}{1pt}
-    \fcolorbox{cardborder}{cardbg}{
-      \parbox{0.94\textwidth}{\centering
-        \scriptsize \textbf{\color{accentred} Statistical Lesson: }
-        A static population model cannot automatically be applied to a live stream where generation intensity changes over time.
+  
+  \begin{columns}[t,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentblue!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentblue} Textbook Model: ``The Static Hat''}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item All $N$ tanks exist in a warehouse before the spy begins sampling.
+            \item An observer draws $k$ numbers at random without replacement.
+            \item Every tank has an equal, time-invariant probability of being observed.
+            \item Order of observation carries no parameter information once sorted.
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
       }
-    }
-  \end{center}
-  
-  \vspace{0.10cm}
-  \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Takeaway: } \textit{Textbook sampling draws from a completed jar; real operations observe an ongoing process that speeds up and slows down.}}
-  \end{center}
-\end{frame}
-
-% =========================================================
-% Slide 22: Assumption 2: Are Numbers Contiguous?
-% =========================================================
-\begin{frame}[c]
-  \begin{center}
-    {\large \textbf{\color{headernavy} Assumption 2: Are Numbers Contiguous? (The Missing Number Mystery)}}\\[0.08cm]
-    {\scriptsize \color{subgray} The textbook assumes continuous numbering $1, 2, \dots, N$. Real data has massive integer voids.}
-  \end{center}
-  \vspace{0.30cm}
-  
-  \begin{columns}[t,onlytextwidth]
+    \end{column}%
     \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{headernavy} The "Numbered Slots" Analogy}}\\[0.06cm]
-      {\scriptsize Imagine a row of 45,223 numbered parking slots:
-      \begin{center}
-        \textbf{Slot Address Span:} $[536,365 \;\text{to}\; 581,587] \implies \mathbf{45,223}$ slots
-      \end{center}
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{Occupied Slots (Active Sales):} $\mathbf{22,061}$ ($48.8\%$).
-        \item \textbf{Empty Slots (Missing Numbers):} $\mathbf{23,162}$ ($\mathbf{51.2\%}$ void rate!).
-        \item \textit{More than half of the numerical address slots have no completed sales invoice!}
-      \end{itemize}}
-    \end{column}
-    
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentblue} Investigating the 23,162 Missing Numbers}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{1. Verified Cancellations (3,836 numbers):} Exactly 3,836 records bear a 'C-' prefix in raw logs. These represent verified customer cancellations (\textbf{16.6\% of voids}).
-        \item \textbf{2. Operational Hypotheses (19,326 numbers):} In the absence of server logs, plausible hypotheses include: abandoned shopping carts, payment gateway timeouts, and database sequence caching blocks.
-        \item \textbf{Critical Distinction:} 3,836 are verified; the remaining 19,326 remain plausible operational hypotheses, not verified findings.
-      \end{itemize}}
-    \end{column}
-  \end{columns}
-  
-  \vspace{0.25cm}
-  \begin{center}
-    \setlength{\fboxrule}{1pt}
-    \fcolorbox{cardborder}{cardbg}{
-      \parbox{0.94\textwidth}{\centering
-        \scriptsize \textbf{\color{accentblue} Historical Parallel: }
-        In WWII, Waffenamt pre-allocated chassis blocks to plants; when chassis were diverted to assault guns (StuG III/IV), voids appeared in standard tank sequences.
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentred!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentred} Operational Reality: ``The River Stream''}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item Invoices are generated sequentially on the calendar clock as customers buy.
+            \item \textbf{Seasonal Arrival Acceleration:}
+            \begin{itemize}
+              \setlength{\itemsep}{0.04cm}
+              \item Q1 Baseline: $\approx \mathbf{370}$ invoices/week.
+              \item Q4 Holiday Surge: $>\mathbf{790}$ invoices/week.
+              \item Peak Week: $\mathbf{894}$ invoices in mid-November.
+            \end{itemize}
+            \item High numbers (e.g., 580,000+) \textbf{did not exist} earlier in the year!
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
       }
-    }
-  \end{center}
-  
-  \vspace{0.10cm}
-  \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Takeaway: } \textit{Missing serial numbers are not random corruption; they reflect cancellations, system architecture, and block allocations.}}
-  \end{center}
-\end{frame}
-
-% =========================================================
-% Slide 23: Assumption 3: Are Numbers Evenly Spread?
-% =========================================================
-\begin{frame}[c]
-  \begin{center}
-    {\large \textbf{\color{headernavy} Assumption 3: Are Numbers Evenly Spread? (The Uniformity Trap)}}\\[0.08cm]
-    {\scriptsize \color{subgray} A dataset can look evenly spread across its range while still failing to be a random sample.}
-  \end{center}
-  \vspace{0.28cm}
-  
-  \begin{columns}[t,onlytextwidth]
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{headernavy} Measuring the Spread of Invoice Numbers}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{The Question:} Are invoice numbers clustered in tight clumps or spread smoothly across the 45,223 slots?
-        \item \textbf{Cumulative Comparison (ECDF):} We map observed numbers onto $[0, 1]$ and measure the maximum difference $D$ from a straight line.
-        \item \textbf{Small Observed Difference:} $D \approx \mathbf{0.012}$ ($n = 22,061$).
-        \item \textbf{Intuitive Meaning:} The numbers are spread with high aggregate smoothness across the year—there are no massive multi-thousand-block gaps.
-      \end{itemize}}
-    \end{column}
-    
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentred} The Critical Pitfall: Even Spread $\ne$ Random Sample}}\\[0.06cm]
-      {\scriptsize
-      \begin{center}
-        \resizebox{\linewidth}{!}{
-        \begin{tabular}{ll}
-          \toprule
-          \textbf{What the Even Spread Tells Us} & \textbf{What It Does NOT Tell Us} \\
-          \midrule
-          Even distribution across span   & Whether observations are random draws \\
-          Absence of massive block gaps   & Whether textbook sampling holds \\
-          Descriptive numerical smoothness& Whether observations are exchangeable \\
-          \bottomrule
-        \end{tabular}}
-      \end{center}
-      \vspace{0.06cm}
-      \textbf{Why Standard KS Tests Do Not Apply Here:}
-      \begin{itemize}
-        \setlength{\itemsep}{0.04cm}
-        \item Standard KS tables require fixed, pre-specified endpoints.
-        \item Here, endpoints are estimated from the data ($s_{\min}, s_{\max}$), pinning boundaries at 0 and 1. A formal test would require simulation-based calibration.
-      \end{itemize}}
-    \end{column}
-  \end{columns}
-  
-  \vspace{0.18cm}
-  \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Methodological Rule: } \textit{Never mistake an evenly spread set of numbers for a random sample. Numerical dispersion across an address span is not random sampling.}}
-  \end{center}
-\end{frame}
-
-% =========================================================
-% Slide 24: The Core Dilemma: What Exactly Are We Trying to Count?
-% =========================================================
-\begin{frame}[c]
-  \begin{center}
-    {\large \textbf{\color{headernavy} The Core Dilemma: What Exactly Are We Trying to Count?}}\\[0.08cm]
-    {\scriptsize \color{subgray} When identifiers have gaps, there are two completely different population sizes.}
-  \end{center}
-  \vspace{0.30cm}
-  
-  \begin{columns}[t,onlytextwidth]
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentred} Two Conflicting Targets}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{Target A: Address Capacity ($N_{\mathrm{span}} = \mathbf{45,223}$)}\\
-        The total number of integer slots between the first and last invoice ($s_{\max} - s_{\min} + 1$).
-        \item \textbf{Target B: Realized Sales ($N_{\mathrm{count}} = \mathbf{22,061}$)}\\
-        The actual count of completed transactions.
-      \end{itemize}
-      \vspace{0.08cm}
-      \textbf{Analogy:} Estimating the total number of hotel rooms vs.\ estimating the number of occupied rooms!}
-    \end{column}
-    
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentblue} What Happens if an Analyst Is Careless?}}\\[0.06cm]
-      {\scriptsize
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{Raw Formula:} Applying $\widehat{N} = m(1 + 1/k) - 1$ directly to raw numbers predicts $\approx \mathbf{593,000}$ (because it assumes numbering starts at 1).
-        \item \textbf{Shifted Formula:} Subtracting $s_{\min}$ estimates address capacity $N_{\mathrm{span}} \approx 45,223$, overshooting active sales (22,061) by $\mathbf{+105\%}$ error!
-        \item \textbf{The "Oracle" Trap:} Relabeling observed invoices $\{1, 2, \dots, 22061\}$ recovers active count, but requires knowing all valid numbers in advance!
-      \end{itemize}}
-    \end{column}
-  \end{columns}
-  
-  \vspace{0.25cm}
-  \begin{center}
-    \setlength{\fboxrule}{1pt}
-    \fcolorbox{cardborder}{cardbg}{
-      \parbox{0.94\textwidth}{\centering
-        \scriptsize \textbf{\color{accentred} Fundamental Lesson: }
-        You cannot calculate an estimate until you define what you are counting: the total sequence capacity, or the completed items inside it.
-      }
-    }
-  \end{center}
-  
-  \vspace{0.10cm}
-  \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Estimand Rule: } \textit{Confusing sequence capacity with realized volume produces a 105\% estimation disaster.}}
-  \end{center}
-\end{frame}
-
-% =========================================================
-% Slide 25: The Occupancy Model: Why Incomplete Samples Cannot Count Both
-% =========================================================
-\begin{frame}[c]
-  \begin{center}
-    {\large \textbf{\color{headernavy} The Occupancy Model: Why Incomplete Samples Cannot Count Both}}\\[0.08cm]
-    {\scriptsize \color{subgray} Connecting address capacity to active sales through an intuitive coin-flip model.}
-  \end{center}
-  \vspace{0.30cm}
-  
-  \begin{columns}[t,onlytextwidth]
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentgreen} The Coin-Flip Occupancy Model}}\\[0.06cm]
-      {\scriptsize Imagine each numbered slot $j \in \{1, \dots, N_{\mathrm{span}}\}$ is filled with probability $\rho$ (retention rate):
-      \begin{equation*}
-        N_{\mathrm{count}} \mid N_{\mathrm{span}}, \rho \sim \mathrm{Binomial}(N_{\mathrm{span}}, \rho)
-      \end{equation*}
-      \begin{itemize}
-        \setlength{\itemsep}{0.06cm}
-        \item $N_{\mathrm{span}}$: Total numbered slots (address capacity).
-        \item $N_{\mathrm{count}}$: Number of slots with completed sales.
-        \item $\rho$: Proportion of slots that become active sales.
-      \end{itemize}
-      \vspace{0.04cm}
-      \textbf{Retrospective Rate on Full Dataset:}
-      \begin{equation*}
-        \widehat{\rho}_{\mathrm{retrospective}} = \frac{22,061}{45,223} \approx 0.4878 \quad (48.8\%)
-      \end{equation*}}
-    \end{column}
-    
-    \begin{column}{0.48\textwidth}
-      {\small \textbf{\color{accentred} The "Two Knobs" Dilemma in Field Samples}}\\[0.06cm]
-      {\scriptsize What if we only observe an incomplete field sample ($k \ll N$, e.g., $k=50$)?
-      \begin{itemize}
-        \setlength{\itemsep}{0.08cm}
-        \item \textbf{The Core Dilemma:} Seeing 20 invoices across a 40-slot sample span could mean:
-        \begin{enumerate}
-          \setlength{\itemsep}{0.03cm}
-          \item A huge capacity ($N_{\mathrm{span}} = 100$) with a low completion rate ($\rho = 0.20$), OR
-          \item A smaller capacity ($N_{\mathrm{span}} = 40$) with a high completion rate ($\rho = 0.50$).
-        \end{enumerate}
-        \item Both scenarios produce similar observed sample spacings!
-        \item \textbf{Conclusion:} A single incomplete sample cannot disentangle capacity $N_{\mathrm{span}}$ from rate $\rho$ without extra information (like audit logs).
-      \end{itemize}}
     \end{column}
   \end{columns}
   
   \vspace{0.22cm}
   \begin{center}
-    {\footnotesize \textbf{\color{headernavy} Intuitive Takeaway: } \textit{The occupancy model explains the math conceptually, but estimating both capacity and void rate from an incomplete sample requires external data.}}
+    \setlength{\fboxrule}{1pt}
+    \fcolorbox{cardborder}{cardbg}{
+      \parbox{0.94\textwidth}{\centering
+        \scriptsize \textbf{\color{headernavy} The Core Lesson: }
+        If you take a sample of invoices in March, you can never observe a high serial number. Sampling a live chronological process is \textbf{not} uniform random sampling from a static population.
+      }
+    }
+  \end{center}
+\end{frame}
+
+% =========================================================
+% Slide 22: Surprise 2: Half the Numbers Are Missing! (The 51.2% Void Mystery)
+% =========================================================
+\begin{frame}[c]
+  \begin{center}
+    {\large \textbf{\color{headernavy} Surprise 2: Half the Numbers Are Missing! (The 51.2\% Void Mystery)}}\\[0.08cm]
+    {\scriptsize \color{subgray} In the textbook, every number $1, 2, \dots, N$ is a real tank. In e-commerce, 23,162 slots are empty.}
+  \end{center}
+  \vspace{0.25cm}
+  
+  \begin{columns}[t,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentblue!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentblue} 1. Verified Cancellations (3,836 numbers)}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item Account for \textbf{16.6\% of all missing numbers}.
+            \item \textbf{Confirmed in data:} Explicitly recorded with a \texttt{'C-'} prefix in the database (e.g., \texttt{C536379}).
+            \item Represents customer returns, cancelled orders, and refunded transactions.
+            \item These numbers were generated by the system, but the sale was reversed.
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}%
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentred!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentred} 2. Unrecorded Gaps (19,326 numbers)}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item Account for \textbf{83.4\% of all missing numbers}.
+            \item \textbf{Completely absent} from the transaction ledger.
+            \item \textbf{Plausible Software Hypotheses:}
+            \begin{itemize}
+              \setlength{\itemsep}{0.04cm}
+              \item Abandoned online shopping carts.
+              \item Payment gateway timeouts before confirmation.
+              \item Clustered database servers reserving ID blocks that never completed.
+            \end{itemize}
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}
+  \end{columns}
+  
+  \vspace{0.22cm}
+  \begin{center}
+    \setlength{\fboxrule}{1pt}
+    \fcolorbox{cardborder}{cardbg}{
+      \parbox{0.94\textwidth}{\centering
+        \scriptsize \textbf{\color{headernavy} The Core Lesson: }
+        In mechanical factories, stamping a serial number creates a physical tank. In modern enterprise software, \textbf{``number generated'' does not mean ``product sold''}.
+      }
+    }
+  \end{center}
+\end{frame}
+
+% =========================================================
+% Slide 23: Surprise 3: Evenly Spread Does NOT Mean Randomly Sampled
+% =========================================================
+\begin{frame}[c]
+  \begin{center}
+    {\large \textbf{\color{headernavy} Surprise 3: Evenly Spread Does NOT Mean Randomly Sampled}}\\[0.08cm]
+    {\scriptsize \color{subgray} Why a smooth Kolmogorov--Smirnov test can trap an unsuspecting statistician.}
+  \end{center}
+  \vspace{0.25cm}
+  
+  \begin{columns}[t,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentblue!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentblue} The Tempting Test ($D \approx 0.012$)}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item An analyst normalizes the observed invoice numbers into $[0, 1]$:
+            \begin{equation*}
+              u_i = \frac{s_i - s_{\min}}{s_{\max} - s_{\min}}
+            \end{equation*}
+            \item The empirical CDF is plotted against the uniform line $F(u) = u$.
+            \item The maximum gap is tiny: $D = \sup |F_n(u) - u| \approx \mathbf{0.012}$.
+            \item \textbf{Naive Temptation:} ``The numbers look evenly spread across $[0, 1]$, so uniform sampling holds!''
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}%
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentred!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentred} Why That Logic Collapses}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item \textbf{1. Statistical Trap:} Standard KS $p$-values are \textbf{invalid} because we estimated $s_{\min}$ and $s_{\max}$ from the data. The endpoints are forced to 0 and 1 by construction!
+            \item \textbf{2. Conceptual Trap (Street Address Analogy):}
+            \begin{itemize}
+              \setlength{\itemsep}{0.04cm}
+              \item House numbers along a road ($1, 2, \dots, 100$) are spread perfectly evenly.
+              \item That does \textbf{not} mean packages delivered to houses were drawn from a random hat!
+            \end{itemize}
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}
+  \end{columns}
+  
+  \vspace{0.22cm}
+  \begin{center}
+    \setlength{\fboxrule}{1pt}
+    \fcolorbox{cardborder}{cardbg}{
+      \parbox{0.94\textwidth}{\centering
+        \scriptsize \textbf{\color{headernavy} The Core Lesson: }
+        Goodness-of-fit measures spatial spread over the year, \textbf{not exchangeability or random sampling}. A steady river looks evenly spread along its banks, but it is still a flowing river.
+      }
+    }
+  \end{center}
+\end{frame}
+
+% =========================================================
+% Slide 24: The Big Trap: What Exactly Are We Trying to Count?
+% =========================================================
+\begin{frame}[c]
+  \begin{center}
+    {\large \textbf{\color{headernavy} The Big Trap: What Exactly Are We Trying to Count?}}\\[0.08cm]
+    {\scriptsize \color{subgray} In the textbook, $N$ is just ``the number of tanks''. In the real world, there are two different targets.}
+  \end{center}
+  \vspace{0.25cm}
+  
+  \begin{columns}[t,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentblue!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentblue} Target A: Sequence Capacity ($N_{\mathrm{span}}$)}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item \textbf{Definition:} The total numeric address range opened by the database:
+            \begin{equation*}
+              N_{\mathrm{span}} = s_{\max} - s_{\min} + 1 = \mathbf{45{,}223}
+            \end{equation*}
+            \item \textbf{What it tells you:} How high the company's internal software counter ticked.
+            \item Includes empty slots, cancelled carts, and abandoned sessions.
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}%
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentred!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentred} Target B: Realized Sales ($N_{\mathrm{count}}$)}}\\[0.08cm]
+          {\scriptsize
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item \textbf{Definition:} The actual number of completed, paying customer orders:
+            \begin{equation*}
+              N_{\mathrm{count}} = \mathbf{22{,}061 \text{ sales}}
+            \end{equation*}
+            \item \textbf{What it tells you:} The commercial revenue volume of your competitor.
+            \item Excludes all voided, cancelled, and empty sequence slots.
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}
+  \end{columns}
+  
+  \vspace{0.22cm}
+  \begin{center}
+    \setlength{\fboxrule}{1pt}
+    \fcolorbox{accentred!50}{cardbg}{
+      \parbox{0.94\textwidth}{\centering
+        \scriptsize \textbf{\color{accentred} The $+105\%$ Catastrophe: }
+        If you blindly plug the observed invoices into the textbook formula $\widehat{N} = m(1 + 1/k) - 1$, it estimates the capacity ($\approx 45{,}223$). If your executive thinks this represents customer sales, \textbf{your estimate is overstated by $+105\%$!}
+      }
+    }
+  \end{center}
+  
+  \vspace{0.06cm}
+  \begin{center}
+    {\footnotesize \textbf{\color{headernavy} Analogy: } \textit{It is like estimating hotel rooms (capacity) when you were asked to count the number of guests staying tonight.}}
+  \end{center}
+\end{frame}
+
+% =========================================================
+% Slide 25: The Occupancy Model: The ``Two Knobs'' Dilemma
+% =========================================================
+\begin{frame}[c]
+  \begin{center}
+    {\large \textbf{\color{headernavy} The Occupancy Model: The ``Two Knobs'' Dilemma}}\\[0.08cm]
+    {\scriptsize \color{subgray} Connecting address capacity to active sales through an intuitive coin-flip framework.}
+  \end{center}
+  \vspace{0.25cm}
+  
+  \begin{columns}[t,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentblue!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentblue} The Coin-Flip Model (Thinning)}}\\[0.08cm]
+          {\scriptsize
+          Imagine each of the $N_{\mathrm{span}}$ address slots becomes an active sale with probability $\rho$:
+          \begin{equation*}
+            N_{\mathrm{count}} \sim \operatorname{Binomial}(N_{\mathrm{span}}, \rho)
+          \end{equation*}
+          Across our complete annual dataset, the retrospective fill rate is:
+          \begin{equation*}
+            \widehat{\rho} = \frac{22{,}061}{45{,}223} \approx \mathbf{0.4878 \quad (48.8\%)}
+          \end{equation*}
+          \textbf{The Relationship:}\\[0.04cm]
+          $\mathbb{E}[N_{\mathrm{count}}] = \rho \times N_{\mathrm{span}}$. If you know the capacity and the rate $\rho$, you can recover true sales!}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}%
+    \begin{column}{0.48\textwidth}
+      \setlength{\fboxrule}{1pt}
+      \fcolorbox{accentred!40}{cardbg}{
+        \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+          \vspace{0.08cm}
+          {\small \textbf{\color{accentred} The ``Two Knobs'' Dilemma}}\\[0.08cm]
+          {\scriptsize
+          What if you only have a small sample of $k = 30$ invoices from a competitor?
+          \begin{itemize}
+            \setlength{\itemsep}{0.08cm}
+            \item You observe gaps between numbers, but \textbf{two different worlds produce the exact same data}:
+            \begin{enumerate}
+              \setlength{\itemsep}{0.03cm}
+              \item Huge capacity ($N_{\mathrm{span}} = 100{,}000$) with a low completion rate ($\rho = 22\%$).
+              \item Moderate capacity ($N_{\mathrm{span}} = 45{,}000$) with a moderate completion rate ($\rho = 49\%$).
+            \end{enumerate}
+            \item A small sample cannot turn both knobs at the same time!
+          \end{itemize}}
+          \vspace{0.08cm}
+        \end{minipage}
+      }
+    \end{column}
+  \end{columns}
+  
+  \vspace{0.22cm}
+  \begin{center}
+    \setlength{\fboxrule}{1pt}
+    \fcolorbox{cardborder}{cardbg}{
+      \parbox{0.94\textwidth}{\centering
+        \scriptsize \textbf{\color{headernavy} The Takeaway: }
+        The occupancy model gives a sound theoretical bridge, but you \textbf{cannot estimate both capacity and fill rate from a small field sample alone} without an external audit of the company's software.
+      }
+    }
   \end{center}
 \end{frame}
 
@@ -1163,10 +1251,10 @@
     {\large \textbf{\color{headernavy} Section 3 Verdict: When Does the German Tank Model Work?}}\\[0.08cm]
     {\scriptsize \color{subgray} Answering the central question: bringing the empirical findings together.}
   \end{center}
-  \vspace{0.28cm}
+  \vspace{0.25cm}
   
   \begin{columns}[t,onlytextwidth]
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.50\textwidth}
       {\small \textbf{\color{headernavy} The Scorecard: Comparing Two Worlds}}\\[0.06cm]
       {\scriptsize
       \begin{center}
@@ -1178,13 +1266,12 @@
           Fixed monthly batches           & Ongoing streaming transactions \\
           Continuous sequential stamping  & 51.2\% missing integer voids \\
           Independent field captures      & Changing seasonal arrival intensity \\
-          Target is clear (physical tanks)& Ambiguity: capacity vs.\ sales count \\
+          Single target (physical tanks)  & Ambiguity: capacity vs.\ sales count \\
           \textbf{Statistical error: $-4.4\%$} & \textbf{Naive formula error: $+105\%$} \\
           \bottomrule
         \end{tabular}}
       \end{center}}
-    \end{column}
-    
+    \end{column}%
     \begin{column}{0.48\textwidth}
       {\small \textbf{\color{accentblue} Three Golden Rules for Practitioners}}\\[0.06cm]
       {\scriptsize
@@ -1208,7 +1295,7 @@
     }
   \end{center}
   
-  \vspace{0.08cm}
+  \vspace{0.06cm}
   \begin{center}
     {\footnotesize \textbf{\color{headernavy} Bottom Line: } \textit{Statistical elegance cannot rescue a model whose data-generating assumptions are violated.}}
   \end{center}
@@ -1222,7 +1309,7 @@
 \begin{frame}[c,plain]
   \centering
   {\scriptsize \textbf{\color{accentcyan} SUMMARY \& CONCLUSIONS}}\\[0.12cm]
-  {\Large \textbf{\color{white} Key Takeaways for Bayesian Discrete Inference}}\\[0.40cm]
+  {\Large \textbf{\color{white} Key Takeaways for Bayesian Discrete Inference}}\\[0.35cm]
   
   \begin{columns}[t,onlytextwidth]
     \begin{column}{0.31\textwidth}
@@ -1244,7 +1331,7 @@
     \end{column}
   \end{columns}
   
-  \vspace{0.35cm}
+  \vspace{0.30cm}
   \begin{center}
     \setlength{\fboxrule}{1pt}
     \fcolorbox{cardborder}{navybg!80!white}{
@@ -1256,8 +1343,8 @@
     }
   \end{center}
   
-  \vspace{0.20cm}
-  {\scriptsize \color{white!60} Aklanta Borah, Amartya Amritanshu, Rajveer Vora --- Indian Statistical Institute, Kolkata (Nov 2026)}
+  \vspace{0.35cm}
+  {\Large \textbf{\color{accentcyan} Thank You}}
 \end{frame}
 }
 
